@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,6 +11,8 @@ import {
   StatusBar,
   Platform
 } from 'react-native';
+import { normalizeDiseaseResult } from './utils/diseaseResponse';
+import { normalizeIrrigationResult } from './utils/irrigationResponse';
 
 const API_BASE_URL = Platform.OS === 'web' ? 'http://localhost:5000/api' : 'http://192.168.1.3:5000/api';
 
@@ -72,6 +74,9 @@ export default function App() {
   // Disease State
   const [diseaseLoading, setDiseaseLoading] = useState(false);
   const [diseaseResult, setDiseaseResult] = useState(null);
+  const [diseaseCrop, setDiseaseCrop] = useState('tomato');
+  const [diseaseImageName, setDiseaseImageName] = useState('');
+  const fileInputRef = useRef(null);
 
   // Bot State
   const [botCommand, setBotCommand] = useState('WATER');
@@ -80,6 +85,9 @@ export default function App() {
 
   // Voice Search State
   const [speechText, setSpeechText] = useState('');
+  const [isListening, setIsListening] = useState(false);
+  const [speechError, setSpeechError] = useState('');
+  const recognitionRef = useRef(null);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/health`)
@@ -90,12 +98,63 @@ export default function App() {
     fetchIrrigationAdvice('wheat', 'loam');
   }, []);
 
+  useEffect(() => {
+    if (Platform.OS !== 'web' || typeof window === 'undefined') return;
+
+    const SpeechRecognitionCtor = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognitionCtor) {
+      setSpeechError('Voice search is not supported in this browser.');
+      return;
+    }
+
+    const recognition = new SpeechRecognitionCtor();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-IN';
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = (event) => {
+      const transcript = Array.from(event.results)
+        .map((result) => result[0]?.transcript || '')
+        .join(' ')
+        .trim();
+
+      if (transcript) {
+        setSpeechText(transcript);
+        setSpeechError('');
+      }
+      setIsListening(false);
+    };
+
+    recognition.onerror = (event) => {
+      const errorMessage = event.error === 'network'
+        ? 'Microphone/network issue detected. Please try again in a quieter environment with browser mic permission.'
+        : `Voice input error: ${event.error}`;
+      setSpeechError(errorMessage);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognitionRef.current = recognition;
+
+    return () => {
+      recognition.stop?.();
+    };
+  }, []);
+
   const fetchIrrigationAdvice = (crop, soil) => {
     setIrrigationLoading(true);
     fetch(`${API_BASE_URL}/irrigation/schedule?crop=${crop}&soil=${soil}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.success) setIrrigationData(data.data);
+        if (data.success) {
+          setIrrigationData(normalizeIrrigationResult(data));
+        } else {
+          setIrrigationData(null);
+        }
         setIrrigationLoading(false);
       })
       .catch(() => setIrrigationLoading(false));
@@ -150,20 +209,63 @@ export default function App() {
       });
   };
 
-  const scanLeaf = () => {
+  const toggleVoiceSearch = () => {
+    if (Platform.OS !== 'web') {
+      setSpeechError('Voice input works in a browser with Web Speech API support.');
+      return;
+    }
+
+    if (!recognitionRef.current) {
+      setSpeechError('Speech recognition is not supported in this browser.');
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current.stop?.();
+      setIsListening(false);
+      return;
+    }
+
+    try {
+      setSpeechError('');
+      setIsListening(true);
+      recognitionRef.current.start();
+    } catch (error) {
+      setSpeechError('Could not start voice recognition. Please allow microphone access in your browser.');
+      setIsListening(false);
+    }
+  };
+
+  const scanLeaf = (imageBase64 = null, cropHint = diseaseCrop) => {
     setDiseaseLoading(true);
-    const dummyBase64 = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD...';
+    const fallbackBase64 = imageBase64 || 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD...';
     fetch(`${API_BASE_URL}/disease/scan`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: dummyBase64 })
+      body: JSON.stringify({ imageBase64: fallbackBase64, cropHint })
     })
       .then((res) => res.json())
       .then((data) => {
         setDiseaseLoading(false);
-        if (data.success) setDiseaseResult(data.data);
+        if (data.success) {
+          setDiseaseResult(normalizeDiseaseResult(data));
+        } else {
+          setDiseaseResult(null);
+        }
       })
       .catch(() => setDiseaseLoading(false));
+  };
+
+  const handleDiseaseImageUpload = (event) => {
+    const file = event.target?.files?.[0];
+    if (!file) return;
+
+    setDiseaseImageName(file.name);
+    const reader = new FileReader();
+    reader.onload = () => {
+      scanLeaf(reader.result, diseaseCrop);
+    };
+    reader.readAsDataURL(file);
   };
 
   const sendBotCmd = (cmd) => {
@@ -363,9 +465,47 @@ export default function App() {
           <View style={styles.yellowCard}>
             <Text style={styles.yellowCardTitle}>🔬 Plant.id AI Crop Leaf Disease Scanner</Text>
 
-            <TouchableOpacity style={styles.scanBtn} onPress={scanLeaf} disabled={diseaseLoading}>
+            <View style={styles.pillRow}>
+              {['tomato', 'wheat', 'rice', 'mustard', 'cotton'].map((crop) => (
+                <TouchableOpacity
+                  key={crop}
+                  style={[styles.pill, diseaseCrop === crop && styles.pillActive]}
+                  onPress={() => setDiseaseCrop(crop)}
+                >
+                  <Text style={[styles.pillText, diseaseCrop === crop && styles.pillTextActive]}>
+                    {crop.charAt(0).toUpperCase() + crop.slice(1)}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            <TouchableOpacity
+              style={styles.scanBtn}
+              onPress={() => {
+                if (Platform.OS === 'web') {
+                  fileInputRef.current?.click?.();
+                } else {
+                  scanLeaf();
+                }
+              }}
+              disabled={diseaseLoading}
+            >
               <Text style={styles.btnText}>{diseaseLoading ? 'Analyzing Leaf Image...' : '📸 Upload & Scan Diseased Leaf Photo'}</Text>
             </TouchableOpacity>
+
+            {Platform.OS === 'web' && (
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={handleDiseaseImageUpload}
+              />
+            )}
+
+            {diseaseImageName ? (
+              <Text style={{ fontSize: 12, color: '#854d0e', marginTop: 8 }}>Selected image: {diseaseImageName}</Text>
+            ) : null}
 
             {diseaseResult ? (
               <View style={styles.innerResultCard}>
@@ -438,10 +578,16 @@ export default function App() {
                 onChangeText={setSpeechText}
                 placeholder="Spoken search term will appear here..."
               />
-              <TouchableOpacity style={styles.greenBtn} onPress={() => setSpeechText('Mandi price of wheat in Kolkata')}>
-                <Text style={styles.btnText}>🎙️ Speak</Text>
+              <TouchableOpacity style={styles.greenBtn} onPress={toggleVoiceSearch}>
+                <Text style={styles.btnText}>{isListening ? '🛑 Stop' : '🎙️ Speak'}</Text>
               </TouchableOpacity>
             </View>
+            {speechError ? (
+              <Text style={{ fontSize: 12, color: '#b91c1c', marginTop: 6 }}>{speechError}</Text>
+            ) : null}
+            {isListening ? (
+              <Text style={{ fontSize: 12, color: '#166534', marginTop: 6 }}>Listening for your voice input...</Text>
+            ) : null}
           </View>
 
           {/* 3. GPS Mandi Finder */}

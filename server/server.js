@@ -1,4 +1,6 @@
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
@@ -17,8 +19,10 @@ import irrigationRoutes from './src/routes/irrigationRoutes.js';
 import diseaseRoutes from './src/routes/diseaseRoutes.js';
 import twilioRoutes from './src/routes/twilioRoutes.js';
 
-// Initialize env vars
-dotenv.config();
+// Initialize env vars from the server folder, regardless of where Node is launched from
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
