@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import heroImg from './assets/hero.png';
 import './App.css';
 
@@ -29,6 +30,7 @@ import PhoneOtpAuth from './Components/PhoneOtpAuth';
 import TwilioBotSimulator from './Components/TwilioBotSimulator';
 
 function MainHome() {
+  const { t } = useTranslation();
   const [health, setHealth] = useState('Checking...');
   const [speechText, setSpeechText] = useState('');
 
@@ -44,14 +46,12 @@ function MainHome() {
       {/* Hero Section */}
       <section className="hero-card">
         <div className="hero-copy">
-          <p className="eyebrow">Hackathon-ready MERN app</p>
-          <h1>KrishiSync</h1>
-          <p className="subtitle">
-            A modern full-stack platform built for fast demos, clean UI, and a reliable backend.
-          </p>
+          <p className="eyebrow">{t('eyebrow')}</p>
+          <h1>{t('title')}</h1>
+          <p className="subtitle">{t('subtitle')}</p>
           <div className="hero-actions">
             <a className="primary-btn" href="https://github.com/pritishhere/KrishiSync" target="_blank" rel="noreferrer">
-              View on GitHub
+              {t('view_github')}
             </a>
             <span className="status-pill">Backend: {health}</span>
           </div>
@@ -73,7 +73,7 @@ function MainHome() {
         gap: '20px'
       }}>
         <h2 style={{ fontSize: '22px', fontWeight: 'bold', color: '#166534', margin: 0, borderBottom: '2px solid #e5e7eb', paddingBottom: '8px' }}>
-          🚀 X-Factor & Intelligence Subsystem
+          {t('xfactor_title')}
         </h2>
         <PhoneOtpAuth />
         <SmartIrrigation />
@@ -92,31 +92,31 @@ function MainHome() {
         color: '#1a1a1a'
       }}>
         <h2 style={{ fontSize: '22px', fontWeight: 'bold', color: '#166534', marginBottom: '16px', borderBottom: '2px solid #e5e7eb', paddingBottom: '8px' }}>
-          🌾 Smart Integrations Module
+          {t('smart_integrations')}
         </h2>
         <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151', marginBottom: '8px' }}>Multilingual Switcher</h3>
+          <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151', marginBottom: '8px' }}>{t('multilingual_switcher')}</h3>
           <LanguageSwitcher />
         </div>
         <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151', marginBottom: '8px' }}>Voice Search (Web Speech API)</h3>
+          <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151', marginBottom: '8px' }}>{t('voice_search')}</h3>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             <input
               type="text"
               value={speechText}
               onChange={(e) => setSpeechText(e.target.value)}
-              placeholder="Spoken search term will appear here..."
+              placeholder={t('voice_placeholder')}
               style={{ flex: 1, padding: '10px', borderRadius: '6px', border: '1px solid #d1d5db', backgroundColor: '#ffffff', color: '#000000' }}
             />
             <VoiceSearch onSpeechResult={(text) => setSpeechText(text)} />
           </div>
         </div>
         <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151', marginBottom: '8px' }}>GPS Mandi Finder</h3>
+          <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151', marginBottom: '8px' }}>{t('gps_mandi')}</h3>
           <LocationTracker onLocationFound={(loc) => console.log("Current Coordinates:", loc)} />
         </div>
         <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151', marginBottom: '8px' }}>Net Profit Routing Calculator</h3>
+          <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151', marginBottom: '8px' }}>{t('profit_calc')}</h3>
           <MandiCalculator mandiName="Kolkata Central Mandi" cropPricePerKg={30} distanceInKm={25} />
         </div>
       </section>

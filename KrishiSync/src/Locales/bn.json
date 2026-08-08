@@ -1,5 +1,14 @@
 {
-  "welcome": "কৃষক ভাইদের স্বাগতম",
-  "search_placeholder": "ফসল বা মান্ডি খুঁজুন...",
-  "calculate_profit": "নিট লাভ হিসাব করুন"
+  "welcome": "স্বাগতম কৃষক ভাই",
+  "eyebrow": "হ্যাকথন-রেডি MERN অ্যাপ",
+  "title": "কৃষিসিংক (KrishiSync)",
+  "subtitle": "দ্রুত ডেমো, আধুনিক UI এবং নির্ভরযোগ্য ব্যাকএন্ড সহ একটি ফুল-স্ট্যাক প্ল্যাটফর্ম।",
+  "xfactor_title": "🚀 এক্স-ফ্যাক্টর এবং ইন্টেলিজেন্স সাবসিস্টেম",
+  "smart_integrations": "🌾 স্মার্ট ইন্টিগ্রেশন মডিউল",
+  "multilingual_switcher": "বহুভাষী ভাষা সুইচার (Multilingual Switcher)",
+  "voice_search": "ভয়েস অনুসন্ধান (ওয়েব স্পিচ API)",
+  "voice_placeholder": "কথিত শব্দ এখানে দেখাবে...",
+  "gps_mandi": "জিপিএস মান্ডি সন্ধানকারী",
+  "profit_calc": "নীট লাভ রাউটিং ক্যালকুলেটর",
+  "view_github": "গিটহাবে দেখুন"
 }

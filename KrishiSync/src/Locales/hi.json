@@ -1,5 +1,14 @@
 {
-  "welcome": "किसान भाई का स्वागत है",
-  "search_placeholder": "फसल या मंडी खोजें...",
-  "calculate_profit": "शुद्ध लाभ की गणना करें"
+  "welcome": "स्वागत है किसान भाई",
+  "eyebrow": "हैकथॉन-रेडी MERN ऐप",
+  "title": "कृषिसिंक्स (KrishiSync)",
+  "subtitle": "आधुनिक फुल-स्टैक प्लेटफॉर्म - त्वरित प्रदर्शन, स्वच्छ UI और विश्वसनीय बैकएंड।",
+  "xfactor_title": "🚀 एक्स-फैक्टर और इंटेलिजेंस सबसिस्टम",
+  "smart_integrations": "🌾 स्मार्ट इंटीग्रेशन मॉड्यूल",
+  "multilingual_switcher": "बहुभाषी भाषा स्वीचर (Multilingual Switcher)",
+  "voice_search": "वॉइस खोज (वेब स्पीच API)",
+  "voice_placeholder": "बोले गए शब्द यहां दिखाई देंगे...",
+  "gps_mandi": "GPS मंडी खोजक",
+  "profit_calc": "शुद्ध लाभ मार्ग कैलकुलेटर",
+  "view_github": "गिटहब पर देखें"
 }

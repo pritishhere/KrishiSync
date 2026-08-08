@@ -1,5 +1,14 @@
 {
   "welcome": "Welcome Farmer",
-  "search_placeholder": "Search crops or mandis...",
-  "calculate_profit": "Calculate Net Profit"
+  "eyebrow": "Hackathon-ready MERN app",
+  "title": "KrishiSync",
+  "subtitle": "A modern full-stack platform built for fast demos, clean UI, and a reliable backend.",
+  "xfactor_title": "🚀 X-Factor & Intelligence Subsystem",
+  "smart_integrations": "🌾 Smart Integrations Module",
+  "multilingual_switcher": "Multilingual Switcher",
+  "voice_search": "Voice Search (Web Speech API)",
+  "voice_placeholder": "Spoken search term will appear here...",
+  "gps_mandi": "GPS Mandi Finder",
+  "profit_calc": "Net Profit Routing Calculator",
+  "view_github": "View on GitHub"
 }
