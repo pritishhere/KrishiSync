@@ -2,12 +2,18 @@ import { useState, useEffect } from 'react'
 import heroImg from './assets/hero.png'
 import './App.css'
 
-// Importing Member 2 (Aritra) Components
+// Importing Member 2 Components
 import './Utils/i18n'
 import LanguageSwitcher from './Components/LanguageSwitcher'
 import VoiceSearch from './Components/VoiceSearch'
 import MandiCalculator from './Components/MandiCalculator'
 import LocationTracker from './Components/LocationTracker'
+
+// Importing Member 4 (X-Factor & Pitch Captain) Components
+import SmartIrrigation from './Components/SmartIrrigation'
+import DiseaseScanner from './Components/DiseaseScanner'
+import PhoneOtpAuth from './Components/PhoneOtpAuth'
+import TwilioBotSimulator from './Components/TwilioBotSimulator'
 
 function App() {
   const [health, setHealth] = useState('Checking...')
@@ -38,6 +44,36 @@ function App() {
           </div>
         </div>
         <img src={heroImg} className="hero-image" alt="KrishiSync illustration" />
+      </section>
+
+      {/* CODE BUILT BY MEMBER 4 (THE X-FACTOR & PITCH CAPTAIN) */}
+      <section style={{
+        margin: '20px 0',
+        padding: '24px',
+        backgroundColor: '#ffffff',
+        borderRadius: '12px',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+        textAlign: 'left',
+        color: '#1a1a1a',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '20px'
+      }}>
+        <h2 style={{ fontSize: '22px', fontWeight: 'bold', color: '#166534', margin: 0, borderBottom: '2px solid #e5e7eb', paddingBottom: '8px' }}>
+          🚀 X-Factor & Intelligence Subsystem
+        </h2>
+
+        {/* 1. Phone Number OTP Auth */}
+        <PhoneOtpAuth />
+
+        {/* 2. Smart Rule-Based Irrigation */}
+        <SmartIrrigation />
+
+        {/* 3. Plant.id AI Leaf Disease Scanner */}
+        <DiseaseScanner />
+
+        {/* 4. Twilio SMS & WhatsApp Bot Simulator */}
+        <TwilioBotSimulator />
       </section>
 
       {/* CODE BUILT BY ARITRA (MEMBER 2: DATA & MAPS INTEGRATOR) */}
