@@ -1,19 +1,19 @@
 import { useState } from 'react';
+import { API_BASE_URL } from '../services/apiConfig';
 
 export default function PhoneOtpAuth() {
   const [phoneNumber, setPhoneNumber] = useState('+919876543210');
   const [otp, setOtp] = useState('');
-  const [step, setStep] = useState('SEND'); // SEND | VERIFY | LOGGED_IN
+  const [step, setStep] = useState('SEND');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState('');
 
   const handleSendOtp = (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage('');
-    fetch('http://localhost:5000/api/auth/send-otp', {
+    fetch(`${API_BASE_URL}/api/auth/send-otp`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ phoneNumber })
@@ -23,12 +23,12 @@ export default function PhoneOtpAuth() {
         setLoading(false);
         if (data.success) {
           setStep('VERIFY');
-          setMessage(`OTP dispatched via Twilio SMS to ${phoneNumber}. (Dev OTP: ${data.devOtp || '123456'})`);
+          setMessage(`OTP dispatched to ${phoneNumber}. (Dev OTP: ${data.devOtp || '123456'})`);
         } else {
           setMessage(data.error || 'Failed to send OTP');
         }
       })
-      .catch((err) => {
+      .catch((_err) => {
         setLoading(false);
         setMessage('Network error sending OTP');
       });
@@ -38,7 +38,7 @@ export default function PhoneOtpAuth() {
     e.preventDefault();
     setLoading(true);
     setMessage('');
-    fetch('http://localhost:5000/api/auth/verify-otp', {
+    fetch(`${API_BASE_URL}/api/auth/verify-otp`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ phoneNumber, otp })
@@ -49,120 +49,89 @@ export default function PhoneOtpAuth() {
         if (data.success) {
           setStep('LOGGED_IN');
           setUser(data.user);
-          setToken(data.token);
-          setMessage('Verified successfully! JWT Session Token generated.');
+          setMessage('Verified successfully! Session Token generated.');
         } else {
           setMessage(data.error || 'Invalid OTP');
         }
       })
-      .catch((err) => {
+      .catch((_err) => {
         setLoading(false);
         setMessage('Network error verifying OTP');
       });
   };
 
   return (
-    <div style={{
-      padding: '16px',
-      backgroundColor: '#eff6ff',
-      borderRadius: '8px',
-      border: '1px solid #bfdbfe',
-      color: '#1e3a8a'
-    }}>
-      <h3 style={{ fontSize: '16px', fontWeight: 'bold', margin: '0 0 12px 0', color: '#1d4ed8' }}>
-        📱 Farmer Mobile OTP Authentication (Twilio SMS + JWT)
-      </h3>
+    <div className="w-full h-full flex flex-col justify-between space-y-3">
+      <p className="text-xs text-gray-600">
+        Passwordless mobile authentication via Twilio SMS OTP & 30-day JWT sessions:
+      </p>
 
       {step === 'SEND' && (
-        <form onSubmit={handleSendOtp} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <form onSubmit={handleSendOtp} className="space-y-2">
           <input
             type="text"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
-            placeholder="Enter Mobile Number (+91...)"
-            style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #93c5fd', flex: 1 }}
+            placeholder="Mobile Number (+91...)"
+            className="w-full px-3 py-2 border border-gray-300 rounded-xl text-xs font-bold bg-white text-gray-900 focus:ring-2 focus:ring-[#166534] focus:outline-none"
             required
           />
           <button
             type="submit"
             disabled={loading}
-            style={{
-              padding: '8px 16px',
-              backgroundColor: '#2563eb',
-              color: '#ffffff',
-              border: 'none',
-              borderRadius: '6px',
-              fontWeight: '600',
-              cursor: 'pointer'
-            }}
+            className="w-full bg-[#166534] hover:bg-green-800 text-white font-bold py-2.5 px-4 rounded-xl transition shadow-sm text-xs flex items-center justify-center gap-2"
           >
-            {loading ? 'Sending...' : '📲 Send OTP SMS'}
+            {loading ? 'Sending OTP...' : '📲 Dispatch SMS OTP'}
           </button>
         </form>
       )}
 
       {step === 'VERIFY' && (
-        <form onSubmit={handleVerifyOtp} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <form onSubmit={handleVerifyOtp} className="space-y-2">
           <input
             type="text"
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
-            placeholder="Enter 6-digit OTP (e.g. 123456)"
-            style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #93c5fd', flex: 1 }}
+            placeholder="Enter 6-digit OTP (123456)"
+            className="w-full px-3 py-2 border border-gray-300 rounded-xl text-xs font-bold text-center bg-white text-gray-900 focus:ring-2 focus:ring-[#166534] focus:outline-none"
             required
           />
           <button
             type="submit"
             disabled={loading}
-            style={{
-              padding: '8px 16px',
-              backgroundColor: '#16a34a',
-              color: '#ffffff',
-              border: 'none',
-              borderRadius: '6px',
-              fontWeight: '600',
-              cursor: 'pointer'
-            }}
+            className="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 px-4 rounded-xl transition shadow-sm text-xs flex items-center justify-center gap-2"
           >
-            {loading ? 'Verifying...' : '✅ Verify OTP'}
+            {loading ? 'Verifying...' : '✅ Confirm OTP & Login'}
           </button>
         </form>
       )}
 
       {step === 'LOGGED_IN' && user && (
-        <div style={{ backgroundColor: '#ffffff', padding: '12px 16px', borderRadius: '6px', border: '1px solid #93c5fd', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="bg-indigo-50/80 p-3 rounded-xl border border-indigo-200 text-xs flex justify-between items-center">
           <div>
-            <p style={{ margin: 0, fontWeight: 'bold', color: '#15803d', fontSize: '14px' }}>
-              🎉 Authenticated Farmer: {user.name} ({user.phoneNumber})
+            <p className="font-extrabold text-indigo-900 m-0">
+              🎉 Farmer: {user.name} ({user.phoneNumber})
             </p>
-            <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#0369a1', fontWeight: '600' }}>
-              🔒 Session Status: Active & Verified (30-Day Encrypted Auth)
+            <p className="text-[10px] text-indigo-700 m-0 mt-0.5 font-bold">
+              🔒 Session Status: Active & Verified
             </p>
           </div>
           <button
+            type="button"
             onClick={() => {
               setStep('SEND');
               setUser(null);
-              setToken('');
               setMessage('');
             }}
-            style={{
-              padding: '4px 10px',
-              backgroundColor: '#f1f5f9',
-              color: '#475569',
-              border: '1px solid #cbd5e1',
-              borderRadius: '4px',
-              fontSize: '12px',
-              cursor: 'pointer'
-            }}
+            className="px-2.5 py-1 bg-white text-gray-700 rounded-lg text-[10px] font-bold border border-gray-300"
           >
-            Logout
+            Reset
           </button>
         </div>
       )}
 
       {message && (
-        <p style={{ marginTop: '8px', marginBottom: 0, fontSize: '12px', fontWeight: '500', color: '#1e40af' }}>
+        <p className="text-[11px] font-semibold text-indigo-800 m-0">
           {message}
         </p>
       )}
