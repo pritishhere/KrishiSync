@@ -68,7 +68,6 @@ export async function sendAlertNotification(toPhone, alertText) {
 
   if (accountSid && authToken && accountSid !== 'YOUR_TWILIO_ACCOUNT_SID') {
     try {
-      // Dynamic import for Twilio if configured
       const response = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`, {
         method: 'POST',
         headers: {
