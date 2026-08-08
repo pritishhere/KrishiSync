@@ -5,3 +5,4 @@ server/.env
 .env
 .DS_Store
 dist/
+pitch_deck.md
