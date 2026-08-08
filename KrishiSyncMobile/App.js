@@ -14,7 +14,7 @@ import {
 import { normalizeDiseaseResult } from './utils/diseaseResponse';
 import { normalizeIrrigationResult } from './utils/irrigationResponse';
 
-const API_BASE_URL = Platform.OS === 'web' ? 'http://localhost:5000/api' : 'http://192.168.1.3:5000/api';
+const API_BASE_URL = 'https://krishisync-9k1s.onrender.com/api';
 
 export default function App() {
   const [backendHealth, setBackendHealth] = useState('Checking...');
