@@ -3,17 +3,21 @@ import { Sun, CloudRain, Droplets, Wind, MapPin, ArrowUpRight, Calendar } from '
 
 export const WeatherCard = ({ weather }) => {
   const defaultWeather = {
-    temp: '28°C',
-    condition: 'Partly Cloudy',
+    temperature: '28°C',
     humidity: '72%',
+    condition: 'Partly Cloudy',
+    precipitationProbability: '80%',
     location: 'Pune, Maharashtra',
-    tomorrow: '80% Rain expected tomorrow',
-    wind: '12 km/h',
+    tomorrowForecast: '80% Rain expected tomorrow',
     highLow: '31°C / 22°C',
-    isRainy: true,
+    windSpeed: '12 km/h',
+    rainExpected: true,
   };
 
   const data = weather || defaultWeather;
+  const tempDisplay = data.temperature || data.temp || '28°C';
+  const tomorrowDisplay = data.tomorrowForecast || data.tomorrow || '80% Rain expected tomorrow';
+  const windDisplay = data.windSpeed || data.wind || '12 km/h';
 
   return (
     <div className="w-full bg-[#2E7D32] text-white rounded-2xl p-5 relative overflow-hidden font-body shadow-md">
@@ -39,7 +43,7 @@ export const WeatherCard = ({ weather }) => {
             Current Weather
           </span>
           <div className="text-[48px] sm:text-[52px] font-extrabold leading-none text-white tracking-tight font-heading flex items-baseline gap-1">
-            {data.temp}
+            {tempDisplay}
           </div>
           <div className="text-[12px] font-medium text-green-100/90 mt-1">
             High / Low: <span className="text-white font-bold">{data.highLow}</span>
@@ -49,7 +53,7 @@ export const WeatherCard = ({ weather }) => {
         {/* Weather Icon & Data Indicators */}
         <div className="col-span-5 flex flex-col items-end justify-between space-y-3">
           <div className="p-3 bg-white/15 backdrop-blur-xs border border-white/20 rounded-2xl text-white shadow-inner">
-            {data.isRainy ? (
+            {data.rainExpected ? (
               <CloudRain size={36} strokeWidth={2.2} className="text-[#81D4FA]" />
             ) : (
               <Sun size={36} strokeWidth={2.2} className="text-[#FFD54F]" />
@@ -63,7 +67,7 @@ export const WeatherCard = ({ weather }) => {
             </div>
             <div className="flex items-center justify-end gap-1.5 text-green-100">
               <Wind size={14} className="text-[#B2DFDB]" />
-              <span>Wind: <strong className="text-white font-bold">{data.wind}</strong></span>
+              <span>Wind: <strong className="text-white font-bold">{windDisplay}</strong></span>
             </div>
           </div>
         </div>
@@ -73,7 +77,7 @@ export const WeatherCard = ({ weather }) => {
       <div className="mt-4 pt-3 border-t border-white/20 flex items-center justify-between text-[13px] relative z-10">
         <div className="flex items-center gap-2 text-green-100 font-medium">
           <Calendar size={15} className="text-[#F57C00]" />
-          <span>Forecast: <strong className="text-white font-bold">{data.tomorrow}</strong></span>
+          <span>Forecast: <strong className="text-white font-bold">{tomorrowDisplay}</strong></span>
         </div>
         <ArrowUpRight size={16} className="text-white" />
       </div>

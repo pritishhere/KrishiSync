@@ -14,6 +14,7 @@ import {
 import PageHeader from '../../components/layout/PageHeader';
 import Button from '../../components/common/Button';
 import { ResultCard, ScannerDemoToolbar } from '../../components/scanner';
+import { scannerService } from '../../services/scannerService';
 
 export const ScannerPage = () => {
   // State Machine: EMPTY | IMAGE_SELECTED | ANALYZING | SUCCESS | ERROR | NOT_A_PLANT
@@ -22,7 +23,7 @@ export const ScannerPage = () => {
   const [isListening, setIsListening] = useState(false);
   const [voiceNotice, setVoiceNotice] = useState('');
 
-  // Future Plant.id API response parameters structure (Member 4 will connect later)
+  // Structured scan result state
   const [scanResult, setScanResult] = useState({
     diseaseName: 'Late Blight (Phytophthora infestans)',
     confidence: 98,
@@ -53,18 +54,22 @@ export const ScannerPage = () => {
     }
   };
 
-  // Simulate Disease Analysis
-  const handleStartAnalysis = () => {
+  // Analyze Crop Image via scannerService
+  const handleStartAnalysis = async () => {
     setScanState('ANALYZING');
-    setTimeout(() => {
-      if (scanResult.error) {
+    try {
+      const result = await scannerService.analyzeCropImage(selectedImage);
+      setScanResult(result);
+      if (result.error) {
         setScanState('ERROR');
-      } else if (!scanResult.isPlant) {
+      } else if (!result.isPlant) {
         setScanState('NOT_A_PLANT');
       } else {
         setScanState('SUCCESS');
       }
-    }, 1800);
+    } catch {
+      setScanState('ERROR');
+    }
   };
 
   // Reset to EMPTY state

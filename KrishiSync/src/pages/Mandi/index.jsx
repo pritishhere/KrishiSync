@@ -1,56 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapPin, Truck, IndianRupee, Sparkles, Calculator } from 'lucide-react';
 import PageHeader from '../../components/layout/PageHeader';
 import Button from '../../components/common/Button';
+import { mandiService } from '../../services/mandiService';
 
 export const MandiPage = () => {
   const [selectedCrop, setSelectedCrop] = useState('wheat');
   const [quantityKg, setQuantityKg] = useState(500);
-  const [isCalculated, setIsCalculated] = useState(true);
+  const [crops, setCrops] = useState([]);
+  const [mandis, setMandis] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const crops = [
-    { id: 'wheat', name: 'Wheat (गेहूँ)', avgPriceQtl: 2275, icon: '🌾' },
-    { id: 'paddy', name: 'Paddy / Rice (धान)', avgPriceQtl: 2183, icon: '🌾' },
-    { id: 'potato', name: 'Potato (आलू)', avgPriceQtl: 1450, icon: '🥔' },
-    { id: 'mustard', name: 'Mustard (सरसों)', avgPriceQtl: 5450, icon: '🌼' },
-    { id: 'cotton', name: 'Cotton (कपास)', avgPriceQtl: 7100, icon: '☁️' },
-  ];
+  // Load supported crop list on mount
+  useEffect(() => {
+    mandiService.getCropsList().then((cropList) => {
+      setCrops(cropList);
+    });
+  }, []);
 
-  // Mock Mandi Market Data per Quintal (100 kg = 1 quintal)
-  const mandiData = {
-    wheat: [
-      { id: 1, name: 'Azadpur Mandi', location: 'Delhi NCR', distanceKm: 18, pricePerQtl: 2350, transportCostPerKm: 25, isBest: true },
-      { id: 2, name: 'Karnal Grain Market', location: 'Karnal, Haryana', distanceKm: 34, pricePerQtl: 2310, transportCostPerKm: 22, isBest: false },
-      { id: 3, name: 'Pune APMC Market', location: 'Pune, MH', distanceKm: 52, pricePerQtl: 2250, transportCostPerKm: 18, isBest: false },
-    ],
-    paddy: [
-      { id: 1, name: 'Karnal Mandi', location: 'Haryana', distanceKm: 22, pricePerQtl: 2240, transportCostPerKm: 20, isBest: true },
-      { id: 2, name: 'Ambala Mandi', location: 'Punjab Border', distanceKm: 48, pricePerQtl: 2190, transportCostPerKm: 18, isBest: false },
-    ],
-    potato: [
-      { id: 1, name: 'Agra APMC Market', location: 'Agra, UP', distanceKm: 15, pricePerQtl: 1520, transportCostPerKm: 20, isBest: true },
-      { id: 2, name: 'Indore Mandi', location: 'MP', distanceKm: 65, pricePerQtl: 1480, transportCostPerKm: 15, isBest: false },
-    ],
-    mustard: [
-      { id: 1, name: 'Bharatpur Mandi', location: 'Rajasthan', distanceKm: 28, pricePerQtl: 5600, transportCostPerKm: 25, isBest: true },
-      { id: 2, name: 'Jaipur Grain Hub', location: 'Rajasthan', distanceKm: 70, pricePerQtl: 5510, transportCostPerKm: 18, isBest: false },
-    ],
-    cotton: [
-      { id: 1, name: 'Rajkot APMC', location: 'Gujarat', distanceKm: 30, pricePerQtl: 7250, transportCostPerKm: 30, isBest: true },
-      { id: 2, name: 'Yavatmal Mandi', location: 'Maharashtra', distanceKm: 85, pricePerQtl: 7050, transportCostPerKm: 20, isBest: false },
-    ],
+  // Recalculate mandi prices via mandiService when crop or quantity changes
+  const handleCalculate = async () => {
+    setIsLoading(true);
+    try {
+      const results = await mandiService.calculateMandiPrices(selectedCrop, quantityKg);
+      setMandis(results);
+      setIsLoading(false);
+    } catch {
+      setIsLoading(false);
+    }
   };
 
-  const mandis = mandiData[selectedCrop] || mandiData.wheat;
-
-  // Calculate Net Profit: (Quantity in Qtl * Price/Qtl) - (Distance * Transport Cost/Km)
-  const calculateMetrics = (mandi) => {
-    const quintals = (Number(quantityKg) || 100) / 100;
-    const grossRevenue = quintals * mandi.pricePerQtl;
-    const transportCost = mandi.distanceKm * mandi.transportCostPerKm;
-    const netProfit = grossRevenue - transportCost;
-    return { grossRevenue, transportCost, netProfit };
-  };
+  useEffect(() => {
+    handleCalculate();
+  }, [selectedCrop, quantityKg]);
 
   return (
     <div className="flex flex-col h-full bg-[#F9FAFB] font-body">
@@ -68,7 +50,7 @@ export const MandiPage = () => {
             </span>
           </div>
 
-          <form onSubmit={(e) => { e.preventDefault(); setIsCalculated(true); }} className="space-y-3">
+          <form onSubmit={(e) => { e.preventDefault(); handleCalculate(); }} className="space-y-3">
             {/* Select Crop */}
             <div>
               <label htmlFor="crop-select" className="block text-[13px] font-bold text-[#1F2937] mb-1 font-heading">
@@ -115,82 +97,77 @@ export const MandiPage = () => {
               type="submit"
               variant="primary"
               fullWidth
+              disabled={isLoading}
               className="mt-2 text-[15px] flex items-center justify-center gap-2"
             >
               <Sparkles size={18} />
-              Calculate Best Price
+              {isLoading ? 'Calculating...' : 'Calculate Best Price'}
             </Button>
           </form>
         </div>
 
-        {/* Mandi Result Cards */}
-        {isCalculated && (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between px-1">
-              <h3 className="text-[17px] font-bold font-heading text-[#1F2937]">
-                Best Selling Mandis ({mandis.length})
-              </h3>
-              <span className="text-[12px] font-semibold text-[#6B7280]">Sorted by Net Profit</span>
-            </div>
-
-            {mandis.map((mandi) => {
-              const { transportCost, netProfit } = calculateMetrics(mandi);
-
-              return (
-                <div
-                  key={mandi.id}
-                  className={`bg-white rounded-2xl border ${
-                    mandi.isBest ? 'border-2 border-[#2E7D32] shadow-sm' : 'border-gray-200 shadow-xs'
-                  } p-4 space-y-3 relative overflow-hidden`}
-                >
-                  {mandi.isBest && (
-                    <div className="absolute top-0 right-0 bg-[#2E7D32] text-white text-[10px] font-extrabold font-heading px-3 py-1 rounded-bl-xl uppercase tracking-wider">
-                      Highest Profit ⭐
-                    </div>
-                  )}
-
-                  {/* Mandi Name & Location */}
-                  <div>
-                    <h4 className="text-[18px] font-extrabold font-heading text-[#1F2937] leading-snug">
-                      {mandi.name}
-                    </h4>
-                    <p className="text-[12px] font-semibold text-[#6B7280] flex items-center gap-1 mt-0.5">
-                      <MapPin size={13} className="text-[#2E7D32] shrink-0" />
-                      {mandi.location} • <strong className="text-[#1F2937]">{mandi.distanceKm} km away</strong>
-                    </p>
-                  </div>
-
-                  {/* Market Rate & Transport breakdown */}
-                  <div className="grid grid-cols-2 gap-2 bg-[#F9FAFB] p-3 rounded-xl border border-gray-200/70 text-[12px]">
-                    <div>
-                      <span className="text-[#6B7280] font-medium block">Market Rate:</span>
-                      <strong className="text-[#1F2937] text-[14px] font-heading font-extrabold">
-                        ₹{mandi.pricePerQtl.toLocaleString()} <span className="text-[11px] text-[#6B7280] font-normal">/ qtl</span>
-                      </strong>
-                    </div>
-                    <div>
-                      <span className="text-[#6B7280] font-medium block flex items-center gap-1">
-                        <Truck size={12} className="text-[#F57C00] shrink-0" /> Transport:
-                      </span>
-                      <strong className="text-[#EF4444] text-[14px] font-heading font-extrabold">
-                        -₹{transportCost.toLocaleString()}
-                      </strong>
-                    </div>
-                  </div>
-
-                  {/* Net Profit Banner Badge */}
-                  <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                    <span className="text-[13px] font-bold text-[#6B7280]">Final Net Profit:</span>
-                    <span className="bg-emerald-50 text-[#2E7D32] text-[16px] font-extrabold font-heading px-3.5 py-1 rounded-xl border border-emerald-200 flex items-center gap-1 shadow-xs">
-                      <IndianRupee size={16} />
-                      ₹{Math.round(netProfit).toLocaleString()}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
+        {/* Mandi Result Cards (Consumes mandis array from mandiService) */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <h3 className="text-[17px] font-bold font-heading text-[#1F2937]">
+              Best Selling Mandis ({mandis.length})
+            </h3>
+            <span className="text-[12px] font-semibold text-[#6B7280]">Sorted by Net Profit</span>
           </div>
-        )}
+
+          {mandis.map((mandi, idx) => (
+            <div
+              key={idx}
+              className={`bg-white rounded-2xl border ${
+                mandi.isBest ? 'border-2 border-[#2E7D32] shadow-sm' : 'border-gray-200 shadow-xs'
+              } p-4 space-y-3 relative overflow-hidden`}
+            >
+              {mandi.isBest && (
+                <div className="absolute top-0 right-0 bg-[#2E7D32] text-white text-[10px] font-extrabold font-heading px-3 py-1 rounded-bl-xl uppercase tracking-wider">
+                  Highest Profit ⭐
+                </div>
+              )}
+
+              {/* Mandi Name & Location */}
+              <div>
+                <h4 className="text-[18px] font-extrabold font-heading text-[#1F2937] leading-snug">
+                  {mandi.mandiName}
+                </h4>
+                <p className="text-[12px] font-semibold text-[#6B7280] flex items-center gap-1 mt-0.5">
+                  <MapPin size={13} className="text-[#2E7D32] shrink-0" />
+                  {mandi.location} • <strong className="text-[#1F2937]">{mandi.distance} km away</strong>
+                </p>
+              </div>
+
+              {/* Market Rate & Transport breakdown */}
+              <div className="grid grid-cols-2 gap-2 bg-[#F9FAFB] p-3 rounded-xl border border-gray-200/70 text-[12px]">
+                <div>
+                  <span className="text-[#6B7280] font-medium block">Market Rate:</span>
+                  <strong className="text-[#1F2937] text-[14px] font-heading font-extrabold">
+                    ₹{mandi.marketPricePerQtl.toLocaleString()} <span className="text-[11px] text-[#6B7280] font-normal">/ qtl</span>
+                  </strong>
+                </div>
+                <div>
+                  <span className="text-[#6B7280] font-medium block flex items-center gap-1">
+                    <Truck size={12} className="text-[#F57C00] shrink-0" /> Transport:
+                  </span>
+                  <strong className="text-[#EF4444] text-[14px] font-heading font-extrabold">
+                    -₹{mandi.transportCost.toLocaleString()}
+                  </strong>
+                </div>
+              </div>
+
+              {/* Net Profit Banner Badge */}
+              <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                <span className="text-[13px] font-bold text-[#6B7280]">Final Net Profit:</span>
+                <span className="bg-emerald-50 text-[#2E7D32] text-[16px] font-extrabold font-heading px-3.5 py-1 rounded-xl border border-emerald-200 flex items-center gap-1 shadow-xs">
+                  <IndianRupee size={16} />
+                  ₹{mandi.netProfit.toLocaleString()}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

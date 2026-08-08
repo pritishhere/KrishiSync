@@ -1,57 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tractor, MapPin, Navigation, UserCheck, PlusCircle, Search, PhoneCall, ShieldCheck, Truck } from 'lucide-react';
 import PageHeader from '../../components/layout/PageHeader';
 import Button from '../../components/common/Button';
+import { rideService } from '../../services/rideService';
 
 export const AgriPoolPage = () => {
   const [activeTab, setActiveTab] = useState('find'); // 'find' | 'offer'
+  const [rides, setRides] = useState([]);
   const [bookingSuccess, setBookingSuccess] = useState('');
+  const [isBooking, setIsBooking] = useState(false);
 
-  // Mock Transport Ride Pool Data
-  const rides = [
-    {
-      id: 1,
-      farmerName: 'Farmer Suresh Kumar',
-      phone: '+91 98765 43210',
-      destination: 'Azadpur Mandi, Delhi NCR',
-      spaceKg: 500,
-      vehicle: 'Mahindra Bolero Pickup',
-      departureTime: 'Today, 4:00 PM',
-      fromLocation: 'Karnal Sector 4',
-      pricePerKg: '₹1.5 / kg',
-      verified: true,
-    },
-    {
-      id: 2,
-      farmerName: 'Farmer Rajesh Patel',
-      phone: '+91 98123 76543',
-      destination: 'Pune APMC Market',
-      spaceKg: 1200,
-      vehicle: 'Eicher 380 Tractor Trailer',
-      departureTime: 'Tomorrow, 6:00 AM',
-      fromLocation: 'Shirur Village',
-      pricePerKg: '₹1.2 / kg',
-      verified: true,
-    },
-    {
-      id: 3,
-      farmerName: 'Farmer Anita Devi',
-      phone: '+91 97654 32109',
-      destination: 'Jaipur Grain Market',
-      spaceKg: 350,
-      vehicle: 'Tata Ace Gold',
-      departureTime: 'Today, 7:30 PM',
-      fromLocation: 'Chomu Hub',
-      pricePerKg: '₹1.8 / kg',
-      verified: true,
-    },
-  ];
+  // Load available transport rides from rideService on mount
+  useEffect(() => {
+    rideService.getAvailableRides().then((data) => {
+      setRides(data);
+    });
+  }, []);
 
-  const handleBookRide = (farmerName) => {
-    setBookingSuccess(`Ride request sent to ${farmerName}! They will contact you shortly.`);
-    setTimeout(() => {
-      setBookingSuccess('');
-    }, 4000);
+  const handleBookRide = async (rideId, farmerName) => {
+    setIsBooking(true);
+    try {
+      const res = await rideService.bookRideSpace(rideId, 100);
+      setIsBooking(false);
+      setBookingSuccess(res.message || `Ride request sent to ${farmerName}!`);
+      setTimeout(() => {
+        setBookingSuccess('');
+      }, 4000);
+    } catch {
+      setIsBooking(false);
+    }
   };
 
   return (
@@ -138,11 +115,11 @@ export const AgriPoolPage = () => {
           </div>
         )}
 
-        {/* BOTTOM-SHEET STYLE RIDE LIST */}
+        {/* BOTTOM-SHEET STYLE RIDE LIST (Consumes rides from rideService) */}
         <div className="space-y-3 pt-1">
           <div className="flex items-center justify-between px-1">
             <h3 className="text-[17px] font-bold font-heading text-[#1F2937] flex items-center gap-1.5">
-              Available Transport Pools
+              Available Transport Pools ({rides.length})
             </h3>
             <span className="text-[12px] font-semibold text-[#2E7D32] bg-green-50 px-2.5 py-0.5 rounded-full border border-green-200">
               Shared Freight
@@ -167,12 +144,12 @@ export const AgriPoolPage = () => {
                     )}
                   </div>
                   <p className="text-[12px] font-semibold text-[#6B7280]">
-                    {ride.vehicle} • {ride.fromLocation}
+                    {ride.vehicle} • {ride.location}
                   </p>
                 </div>
 
                 <span className="bg-emerald-50 text-[#2E7D32] text-[12px] font-extrabold font-heading px-2.5 py-1 rounded-xl border border-emerald-200 shrink-0">
-                  Space: {ride.spaceKg} kg
+                  Space: {ride.availableCapacity} kg
                 </span>
               </div>
 
@@ -196,7 +173,8 @@ export const AgriPoolPage = () => {
 
                 <Button
                   variant="primary"
-                  onClick={() => handleBookRide(ride.farmerName)}
+                  onClick={() => handleBookRide(ride.id, ride.farmerName)}
+                  disabled={isBooking}
                   className="py-1.5 px-4 text-[13px] flex items-center gap-1.5"
                   aria-label={`Book transport space with ${ride.farmerName}`}
                 >

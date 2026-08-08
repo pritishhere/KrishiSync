@@ -1,26 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MessageSquare, Sparkles, CheckCircle2, Copy, Smartphone } from 'lucide-react';
 import PageHeader from '../../components/layout/PageHeader';
 import Button from '../../components/common/Button';
+import { botService } from '../../services/botService';
 
 export const BotGuidePage = () => {
   const [copiedCmd, setCopiedCmd] = useState('');
   const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
+  const [commands, setCommands] = useState([]);
+  const [whatsAppConfig, setWhatsAppConfig] = useState({ hotline: '+91 8000-123-456', presetMessage: 'RATE WHEAT' });
 
-  const commands = [
-    {
-      id: 'rate',
-      command: 'RATE WHEAT',
-      description: 'Sends real-time Mandi market rates for Wheat (or any crop) directly to your phone via SMS/WhatsApp.',
-      exampleReply: 'KrishiSync Bot: Azadpur Mandi Rate: ₹2,350/qtl. Highest Net Profit: ₹10,925.',
-    },
-    {
-      id: 'weather',
-      command: 'WEATHER',
-      description: 'Get automated 24-hour rainfall forecast & irrigation pump guidance.',
-      exampleReply: 'KrishiSync Bot: Alert 80% chance of rain tomorrow. Do not run pump today. Saved ₹500.',
-    },
-  ];
+  // Fetch bot commands & WhatsApp config on mount
+  useEffect(() => {
+    botService.getBotCommandsList().then((data) => {
+      setCommands(data);
+    });
+    botService.getWhatsAppConfig().then((cfg) => {
+      setWhatsAppConfig(cfg);
+    });
+  }, []);
 
   const handleCopyCommand = (cmdText) => {
     navigator.clipboard?.writeText?.(cmdText);
@@ -56,7 +54,7 @@ export const BotGuidePage = () => {
                 <Smartphone size={16} />
               </div>
               <span className="text-[13px] font-extrabold font-heading text-[#D8FF36]">
-                KrishiSync Bot (+91 8000-123-456)
+                KrishiSync Bot ({whatsAppConfig.hotline})
               </span>
             </div>
             <span className="text-[11px] font-bold text-emerald-200 shrink-0">Live SMS Mock</span>
@@ -65,7 +63,7 @@ export const BotGuidePage = () => {
           {/* Chat Bubble 1: Sent Command */}
           <div className="flex flex-col items-end space-y-1">
             <div className="bg-[#2E7D32] text-white px-3.5 py-2 rounded-2xl rounded-tr-none text-[13px] font-extrabold font-heading shadow-xs">
-              RATE WHEAT
+              {whatsAppConfig.presetMessage}
             </div>
             <span className="text-[10px] text-emerald-200/80">12:30 PM • SMS</span>
           </div>
@@ -161,13 +159,13 @@ export const BotGuidePage = () => {
                 WhatsApp Assistant Demo
               </h3>
               <p className="text-[13px] font-medium text-[#6B7280] leading-relaxed">
-                In production, clicking this button opens WhatsApp chat with preset message <code>RATE WHEAT</code> directly sent to our automated AI hotline.
+                In production, clicking this button opens WhatsApp chat with preset message <code>{whatsAppConfig.presetMessage}</code> directly sent to our automated AI hotline.
               </p>
             </div>
 
             <div className="bg-[#F9FAFB] p-3 rounded-xl border border-gray-200 text-[12px] text-left space-y-1">
               <p className="font-bold text-[#2E7D32]">Hotline Number:</p>
-              <code className="text-[13px] font-bold text-[#1F2937]">+91 8000-123-456</code>
+              <code className="text-[13px] font-bold text-[#1F2937]">{whatsAppConfig.hotline}</code>
             </div>
 
             <Button

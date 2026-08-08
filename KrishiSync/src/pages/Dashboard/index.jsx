@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { weatherService } from '../../services/weatherService';
 import {
   WeatherCard,
   IrrigationAlert,
@@ -12,21 +13,41 @@ import { Sparkles, SlidersHorizontal, RefreshCw } from 'lucide-react';
 const DashboardPage = () => {
   const { user } = useAuth();
   
-  // Interactive demo states for hackathon presentation
-  const [isLoading, setIsLoading] = useState(false);
+  // Weather & Irrigation State
+  const [weatherData, setWeatherData] = useState(null);
+  const [irrigationData, setIrrigationData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const [rainExpected, setRainExpected] = useState(true);
+  const [rainExpectedToggle, setRainExpectedToggle] = useState(true);
   const [showDemoToolbar, setShowDemoToolbar] = useState(false);
 
   // Dynamic farmer name resolution from backend user data
   const farmerName = user?.name || user?.phone || 'Farmer';
 
-  const handleRetry = () => {
+  // Load weather and irrigation service data on mount or toggle
+  const loadDashboardData = async (forceRainState = rainExpectedToggle) => {
     setIsLoading(true);
     setIsError(false);
-    setTimeout(() => {
+    try {
+      const [weather, advice] = await Promise.all([
+        weatherService.getWeatherData(user?.location || 'Pune, Maharashtra'),
+        weatherService.getIrrigationAdvice(forceRainState),
+      ]);
+      setWeatherData({ ...weather, rainExpected: forceRainState });
+      setIrrigationData(advice);
       setIsLoading(false);
-    }, 1000);
+    } catch {
+      setIsError(true);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadDashboardData(rainExpectedToggle);
+  }, [rainExpectedToggle]);
+
+  const handleToggleRain = (state) => {
+    setRainExpectedToggle(state);
   };
 
   return (
@@ -86,17 +107,17 @@ const DashboardPage = () => {
               <span className="text-green-100 font-medium">Irrigation Alert:</span>
               <div className="flex items-center gap-1 font-heading">
                 <button
-                  onClick={() => setRainExpected(true)}
+                  onClick={() => handleToggleRain(true)}
                   className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${
-                    rainExpected ? 'bg-[#EF4444] text-white' : 'bg-green-800 text-green-200'
+                    rainExpectedToggle ? 'bg-[#EF4444] text-white' : 'bg-green-800 text-green-200'
                   }`}
                 >
                   Rain Expected
                 </button>
                 <button
-                  onClick={() => setRainExpected(false)}
+                  onClick={() => handleToggleRain(false)}
                   className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${
-                    !rainExpected ? 'bg-[#10B981] text-white' : 'bg-green-800 text-green-200'
+                    !rainExpectedToggle ? 'bg-[#10B981] text-white' : 'bg-green-800 text-green-200'
                   }`}
                 >
                   Clear Skies
@@ -111,7 +132,7 @@ const DashboardPage = () => {
       {isLoading ? (
         <DashboardSkeleton />
       ) : isError ? (
-        <DashboardError onRetry={handleRetry} />
+        <DashboardError onRetry={() => loadDashboardData(rainExpectedToggle)} />
       ) : (
         <>
           {/* GREETING HERO HEADER */}
@@ -124,7 +145,7 @@ const DashboardPage = () => {
               </div>
 
               <button
-                onClick={handleRetry}
+                onClick={() => loadDashboardData(rainExpectedToggle)}
                 className="p-2.5 bg-white hover:bg-gray-100 text-[#6B7280] rounded-xl border border-gray-200 shadow-xs transition-transform active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32]"
                 title="Refresh Weather Data"
                 aria-label="Refresh Dashboard Data"
@@ -134,11 +155,11 @@ const DashboardPage = () => {
             </div>
           </div>
 
-          {/* WEATHER CARD */}
-          <WeatherCard />
+          {/* WEATHER CARD (Consumes weatherData from weatherService) */}
+          <WeatherCard weather={weatherData} />
 
-          {/* IRRIGATION ALERT */}
-          <IrrigationAlert rainExpected={rainExpected} />
+          {/* IRRIGATION ALERT (Consumes irrigationData from weatherService) */}
+          <IrrigationAlert rainExpected={rainExpectedToggle} data={irrigationData} />
 
           {/* QUICK ACTION GRID */}
           <QuickActionGrid />
