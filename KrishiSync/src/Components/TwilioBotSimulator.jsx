@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { API_BASE_URL } from '../services/apiConfig';
 
 export default function TwilioBotSimulator() {
   const [command, setCommand] = useState('WATER');
@@ -8,17 +9,15 @@ export default function TwilioBotSimulator() {
 
   const sendCommand = (cmd) => {
     setLoading(true);
-    fetch('http://localhost:5000/api/twilio/webhook', {
+    fetch(`${API_BASE_URL}/api/twilio/webhook`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({ Body: cmd, From: '+919876543210' })
     })
       .then((res) => res.text())
       .then((xmlData) => {
-        // Extract text between <Message>...</Message> tags
         const match = xmlData.match(/<Message>([\s\S]*?)<\/Message>/);
         let extractedText = match ? match[1] : xmlData;
-        // Unescape XML entities
         extractedText = extractedText
           .replace(/&amp;/g, '&')
           .replace(/&lt;/g, '<')
@@ -35,87 +34,52 @@ export default function TwilioBotSimulator() {
   };
 
   return (
-    <div style={{
-      padding: '16px',
-      backgroundColor: '#f0fdf4',
-      borderRadius: '8px',
-      border: '1px solid #bbf7d0',
-      color: '#14532d'
-    }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-        <h3 style={{ fontSize: '16px', fontWeight: 'bold', margin: 0, color: '#166534' }}>
-          📱 Twilio WhatsApp & SMS Bot Chat Simulator
-        </h3>
-        <span style={{ fontSize: '12px', padding: '4px 8px', backgroundColor: '#dcfce7', borderRadius: '12px', fontWeight: 'bold', color: '#15803d' }}>
-          WhatsApp + 2G SMS Active
-        </span>
-      </div>
-
-      <p style={{ fontSize: '12px', color: '#475569', margin: '0 0 12px 0' }}>
-        Test texting keywords to simulate what a farmer receives directly on their mobile phone:
+    <div className="w-full h-full flex flex-col justify-between space-y-3">
+      <p className="text-xs text-gray-600">
+        Simulate 2G SMS & WhatsApp advisory keywords sent by farmers without smartphones:
       </p>
 
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
+      <div className="flex flex-wrap gap-1.5">
         {['WATER', 'WEATHER', 'PRICE', 'DISEASE', 'HELP'].map((cmd) => (
           <button
             key={cmd}
+            type="button"
             onClick={() => {
               setCommand(cmd);
               sendCommand(cmd);
             }}
-            style={{
-              padding: '6px 14px',
-              backgroundColor: command === cmd ? '#15803d' : '#ffffff',
-              color: command === cmd ? '#ffffff' : '#15803d',
-              border: '1px solid #86efac',
-              borderRadius: '6px',
-              fontWeight: '600',
-              fontSize: '12px',
-              cursor: 'pointer'
-            }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-2xs ${
+              command === cmd
+                ? 'bg-[#166534] text-white shadow-sm'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
+            }`}
           >
             Send "{cmd}"
           </button>
         ))}
       </div>
 
-      {cleanMessage && (
-        <div style={{
-          backgroundColor: '#efeae2',
-          padding: '16px',
-          borderRadius: '12px',
-          border: '1px solid #cbd5e1',
-          maxWidth: '420px'
-        }}>
+      {loading && (
+        <p className="text-xs text-gray-500 italic animate-pulse">
+          ⏳ Requesting 2G SMS Gateway Response...
+        </p>
+      )}
+
+      {cleanMessage && !loading && (
+        <div className="bg-[#efeae2] p-3 rounded-xl border border-gray-300 space-y-2 text-xs">
           {/* User Outgoing Bubble */}
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '12px' }}>
-            <div style={{
-              backgroundColor: '#d9fdd3',
-              padding: '8px 12px',
-              borderRadius: '8px 0px 8px 8px',
-              fontSize: '13px',
-              color: '#111b21',
-              boxShadow: '0 1px 2px rgba(0,0,0,0.1)'
-            }}>
+          <div className="flex justify-end">
+            <div className="bg-[#d9fdd3] px-3 py-1.5 rounded-l-xl rounded-b-xl text-gray-900 shadow-2xs font-medium">
               <strong>{command}</strong>
-              <span style={{ fontSize: '10px', color: '#667781', marginLeft: '12px' }}>{time} ✔✔</span>
+              <span className="text-[10px] text-gray-500 ml-2">{time} ✔✔</span>
             </div>
           </div>
 
           {/* Bot Incoming Reply Bubble */}
-          <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-            <div style={{
-              backgroundColor: '#ffffff',
-              padding: '10px 14px',
-              borderRadius: '0px 8px 8px 8px',
-              fontSize: '13px',
-              color: '#111b21',
-              boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
-              whiteSpace: 'pre-wrap',
-              lineHeight: '1.4'
-            }}>
+          <div className="flex justify-start">
+            <div className="bg-white p-2.5 rounded-r-xl rounded-b-xl text-gray-900 shadow-2xs whitespace-pre-wrap leading-relaxed">
               {cleanMessage}
-              <div style={{ textAlign: 'right', fontSize: '10px', color: '#667781', marginTop: '4px' }}>
+              <div className="text-right text-[10px] text-gray-400 mt-1">
                 {time}
               </div>
             </div>
