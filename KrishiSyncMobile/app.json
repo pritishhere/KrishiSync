@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "KrishiSyncMobile",
+    "slug": "pritishhere",
+    "owner": "pritishheres-team",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.krishisync.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#064e3b",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "bdccb002-4ee5-41d5-a294-d4658353263d"
+      }
+    }
+  }
+}
