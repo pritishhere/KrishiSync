@@ -8,9 +8,27 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true
     },
+    phone: {
+      type: String,
+      trim: true
+    },
     name: {
       type: String,
       default: 'Farmer'
+    },
+    fullName: {
+      type: String
+    },
+    password: {
+      type: String
+    },
+    language: {
+      type: String,
+      default: 'hi'
+    },
+    ecoPoints: {
+      type: Number,
+      default: 0
     },
     farmLocation: {
       address: { type: String, default: 'Delhi-NCR Agro Zone' },
@@ -38,6 +56,20 @@ const userSchema = new mongoose.Schema(
     timestamps: true
   }
 );
+
+userSchema.pre('save', function (next) {
+  if (this.phoneNumber && !this.phone) {
+    this.phone = this.phoneNumber;
+  } else if (this.phone && !this.phoneNumber) {
+    this.phoneNumber = this.phone;
+  }
+  if (this.fullName && !this.name) {
+    this.name = this.fullName;
+  } else if (this.name && !this.fullName) {
+    this.fullName = this.name;
+  }
+  next();
+});
 
 const User = mongoose.models.User || mongoose.model('User', userSchema);
 

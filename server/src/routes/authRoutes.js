@@ -2,9 +2,20 @@ import express from 'express';
 import { sendOtp, verifyOtp, updateUserProfile } from '../services/authService.js';
 import { protect } from '../middleware/authMiddleware.js';
 
+let registerUser, loginUser;
+try {
+  const authController = await import('../controllers/authControllers.js');
+  registerUser = authController.registerUser;
+  loginUser = authController.loginUser;
+} catch (_err) {}
+
 const router = express.Router();
 
-// POST /api/auth/send-otp
+// Member 3 Password Auth Routes
+if (registerUser) router.post('/register', registerUser);
+if (loginUser) router.post('/login', loginUser);
+
+// Member 4 OTP Auth Routes
 router.post('/send-otp', async (req, res) => {
   try {
     const { phoneNumber } = req.body;
@@ -19,7 +30,6 @@ router.post('/send-otp', async (req, res) => {
   }
 });
 
-// POST /api/auth/verify-otp
 router.post('/verify-otp', async (req, res) => {
   try {
     const { phoneNumber, otp } = req.body;
@@ -37,7 +47,6 @@ router.post('/verify-otp', async (req, res) => {
   }
 });
 
-// GET /api/auth/me - Protected user profile
 router.get('/me', protect, (req, res) => {
   res.json({
     success: true,
@@ -45,7 +54,6 @@ router.get('/me', protect, (req, res) => {
   });
 });
 
-// PUT /api/auth/profile - Protected profile update
 router.put('/profile', protect, async (req, res) => {
   try {
     const result = await updateUserProfile(req.user._id || req.user.id, req.body);
