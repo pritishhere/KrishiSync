@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Leaf } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
-import Input from '../../components/common/Input';
-import Button from '../../components/common/Button';
+import { Button, Input, Badge, H1, H2, BodyText } from '../../components/common';
 
 const LoginPage = () => {
   const { login } = useAppContext();
@@ -12,44 +11,47 @@ const LoginPage = () => {
   
   const handleLogin = (e) => {
     e.preventDefault();
-    if (phone.length > 5) {
+    if (phone.length > 9) {
       login(phone);
       navigate('/dashboard');
     }
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-green-600 text-white p-6 justify-center relative">
-      <div className="absolute top-0 right-0 p-8 opacity-20 pointer-events-none">
-        <Leaf size={120} />
-      </div>
+    <div className="flex flex-col min-h-screen bg-[#FFFFFF] p-6 justify-center relative overflow-hidden">
+      <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#2E7D32]/5 rounded-full blur-3xl"></div>
       
-      <div className="z-10 bg-white text-gray-900 p-8 rounded-3xl shadow-2xl">
-        <div className="flex items-center gap-2 mb-2">
-          <Leaf className="text-green-600" size={32} fill="currentColor" />
-          <h1 className="text-3xl font-black text-green-800">KrishiSync</h1>
+      <div className="z-10 w-full max-w-sm mx-auto">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="bg-[#2E7D32] p-3 rounded-[16px] shadow-sm">
+            <Leaf className="text-white" size={40} />
+          </div>
+          <H1 className="text-[32px] text-[#2E7D32]">KrishiSync</H1>
         </div>
-        <p className="text-gray-500 mb-8 font-medium">Empowering every farmer, everywhere.</p>
+        
+        <H2 className="mb-2">Welcome Back / नमस्ते / স্বাগতম</H2>
+        <BodyText className="text-[#6B7280] mb-8">Enter your mobile number to access your farm dashboard.</BodyText>
         
         <form onSubmit={handleLogin}>
           <Input 
-            label="Phone Number" 
-            placeholder="Enter mobile number" 
+            label="Mobile Number" 
+            placeholder="Enter 10-digit number" 
             type="tel"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
           />
-          <Button fullWidth onClick={handleLogin} className="mt-4 text-lg py-4">
-            Get OTP
+          <Button fullWidth onClick={handleLogin} className="mt-2">
+            Continue securely
           </Button>
         </form>
         
-        <div className="mt-6 flex justify-center gap-4 text-sm text-gray-400">
-          <span>English</span> | <span className="text-green-600 font-bold">हिंदी</span> | <span>मराठी</span>
+        <div className="mt-8 pt-6 border-t border-gray-100 flex justify-center gap-4">
+          <Badge variant="primary">English</Badge>
+          <Badge variant="default">हिन्दी</Badge>
+          <Badge variant="default">বাংলা</Badge>
         </div>
       </div>
     </div>
   );
 };
-
 export default LoginPage;

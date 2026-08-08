@@ -1,14 +1,22 @@
 import React from 'react';
 import { Tractor } from 'lucide-react';
-import PlaceholderPage from '../../components/common/PlaceholderPage';
+import PageHeader from '../../components/layout/PageHeader';
+import { EmptyState, Button } from '../../components/common';
 
-const AgriPoolPage = () => (
-  <PlaceholderPage 
-    title="AgriPool" 
-    description="Rent and share farming equipment locally." 
-    icon={Tractor} 
-    colorClass="bg-amber-100 text-amber-600" 
-  />
-);
+const AgriPoolPage = () => {
+  return (
+    <div className="h-full bg-[#F9FAFB] flex flex-col">
+      <PageHeader title="AgriPool" />
+      <div className="flex-1 p-4 flex items-center justify-center">
+        <EmptyState 
+          icon={Tractor}
+          title="Coming Soon"
+          description="Tractor sharing and rental network coming soon."
+          action={<Button variant="outline">Learn More</Button>}
+        />
+      </div>
+    </div>
+  );
+};
 
 export default AgriPoolPage;

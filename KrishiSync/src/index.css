@@ -1,1 +1,16 @@
-@import "tailwindcss"
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+:root {
+font-family: 'Inter', 'Noto Sans Devanagari', 'Noto Sans Bengali', sans-serif;
+background-color: #F9FAFB;
+color: #1F2937;
+}
+body {
+font-size: 16px; /* Strict baseline for accessibility */
+}
+@layer utilities {
+.pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background-color: #D1D5DB; border-radius: 20px; }
+}

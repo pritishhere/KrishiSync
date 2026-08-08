@@ -1,35 +1,51 @@
-import React from 'react';
-import { Camera, Scan } from 'lucide-react';
-import Button from '../../components/common/Button';
-import Card from '../../components/common/Card';
+import React, { useState } from 'react';
+import { Camera, Scan, Info, Image as ImageIcon, CheckCircle } from 'lucide-react';
+import { Button, IconButton, BodyText, Modal } from '../../components/common';
+import PageHeader from '../../components/layout/PageHeader';
 
-const ScannerPage = () => (
-  <div className="p-4 flex flex-col h-full">
-    <h2 className="text-xl font-bold text-gray-800 mb-4">Identify Crop Disease</h2>
-    
-    <div className="flex-1 bg-gray-900 rounded-2xl flex flex-col items-center justify-center text-white p-6 relative overflow-hidden shadow-inner min-h-[300px]">
-      <div className="absolute inset-4 border-2 border-white/20 rounded-xl pointer-events-none">
-        <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-green-500 rounded-tl-xl"></div>
-        <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-green-500 rounded-tr-xl"></div>
-        <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-green-500 rounded-bl-xl"></div>
-        <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-green-500 rounded-br-xl"></div>
-      </div>
+const ScannerPage = () => {
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  return (
+    <div className="flex flex-col h-full bg-[#1F2937]">
+      <PageHeader 
+        title="Scan Leaf" 
+        showBack={false} 
+        rightAction={<IconButton icon={Info} variant="ghost" className="text-white hover:bg-gray-800" onClick={() => setModalOpen(true)}/>}
+      />
+      <style>{`.bg-\\[\\#FFFFFF\\] { background-color: #1F2937; border-bottom-color: #374151; } .text-\\[\\#1F2937\\] { color: white; }`}</style>
       
-      <Camera size={48} className="mb-4 text-green-500 animate-pulse" />
-      <p className="text-center font-medium">Position the affected leaf<br/>inside the frame</p>
-    </div>
-    
-    <div className="mt-6 flex gap-4">
-      <Button variant="outline" className="flex-1">Gallery</Button>
-      <Button className="flex-[2]" icon={Scan}>Capture Photo</Button>
-    </div>
-    
-    <Card className="mt-6 bg-blue-50 border-blue-100">
-      <p className="text-sm text-blue-800">
-        <strong>Tip:</strong> Ensure good lighting and a clear background for accurate Plant.id results.
-      </p>
-    </Card>
-  </div>
-);
+      <div className="flex-1 flex flex-col p-4 relative">
+        <div className="flex-1 rounded-[24px] border-2 border-[#2E7D32] bg-black/50 overflow-hidden relative flex flex-col items-center justify-center">
+          <div className="w-[70%] aspect-square border-2 border-[#2E7D32]/50 rounded-[24px] relative">
+            <div className="absolute -top-1 -left-1 w-8 h-8 border-t-4 border-l-4 border-[#10B981] rounded-tl-[24px]"></div>
+            <div className="absolute -top-1 -right-1 w-8 h-8 border-t-4 border-r-4 border-[#10B981] rounded-tr-[24px]"></div>
+            <div className="absolute -bottom-1 -left-1 w-8 h-8 border-b-4 border-l-4 border-[#10B981] rounded-bl-[24px]"></div>
+            <div className="absolute -bottom-1 -right-1 w-8 h-8 border-b-4 border-r-4 border-[#10B981] rounded-br-[24px]"></div>
+          </div>
+          <BodyText className="text-white mt-6 bg-black/60 px-4 py-2 rounded-full">Center leaf in the frame</BodyText>
+        </div>
 
+        <div className="flex gap-4 mt-6 pb-2">
+          <Button variant="ghost" className="bg-[#374151] text-white hover:bg-[#4B5563] flex-1" icon={ImageIcon}>Gallery</Button>
+          <Button variant="primary" className="flex-[2] text-[18px]" icon={Scan}>Capture</Button>
+        </div>
+      </div>
+
+      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} title="Scanning Tips">
+        <div className="space-y-4">
+          <div className="flex items-start gap-3">
+            <CheckCircle className="text-[#10B981] shrink-0 mt-0.5" />
+            <BodyText>Ensure good lighting, preferably daylight.</BodyText>
+          </div>
+          <div className="flex items-start gap-3">
+            <CheckCircle className="text-[#10B981] shrink-0 mt-0.5" />
+            <BodyText>Focus on a single, clear leaf.</BodyText>
+          </div>
+          <Button fullWidth onClick={() => setModalOpen(false)} className="mt-4">Got it</Button>
+        </div>
+      </Modal>
+    </div>
+  );
+};
 export default ScannerPage;
