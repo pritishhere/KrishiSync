@@ -1,121 +1,109 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
+import { useState, useEffect } from 'react'
 import heroImg from './assets/hero.png'
 import './App.css'
 
+// Importing Member 2 (Aritra) Components
+import './Utils/i18n'
+import LanguageSwitcher from './Components/LanguageSwitcher'
+import VoiceSearch from './Components/VoiceSearch'
+import MandiCalculator from './Components/MandiCalculator'
+import LocationTracker from './Components/LocationTracker'
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [health, setHealth] = useState('Checking...')
+  const [speechText, setSpeechText] = useState('')
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/health')
+      .then((res) => res.json())
+      .then((data) => setHealth(data.message))
+      .catch(() => setHealth('Backend offline'))
+  }, [])
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+    <main className="app-shell">
+      {/* Hero Section */}
+      <section className="hero-card">
+        <div className="hero-copy">
+          <p className="eyebrow">Hackathon-ready MERN app</p>
+          <h1>KrishiSync</h1>
+          <p className="subtitle">
+            A modern full-stack platform built for fast demos, clean UI, and a reliable backend.
           </p>
+          <div className="hero-actions">
+            <a className="primary-btn" href="https://github.com/pritishhere/KrishiSync" target="_blank" rel="noreferrer">
+              View on GitHub
+            </a>
+            <span className="status-pill">Backend: {health}</span>
+          </div>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
+        <img src={heroImg} className="hero-image" alt="KrishiSync illustration" />
       </section>
 
-      <div className="ticks"></div>
+      {/* CODE BUILT BY ARITRA (MEMBER 2: DATA & MAPS INTEGRATOR) */}
+      <section style={{
+        margin: '20px 0',
+        padding: '24px',
+        backgroundColor: '#ffffff',
+        borderRadius: '12px',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+        textAlign: 'left',
+        color: '#1a1a1a'
+      }}>
+        <h2 style={{ fontSize: '22px', fontWeight: 'bold', color: '#166534', marginBottom: '16px', borderBottom: '2px solid #e5e7eb', paddingBottom: '8px' }}>
+          🌾 Smart Integrations Module
+        </h2>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+        {/* 1. Language Toggle */}
+        <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
+          <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151', marginBottom: '8px' }}>Multilingual Switcher</h3>
+          <LanguageSwitcher />
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
+
+        {/* 2. Voice Search */}
+        <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
+          <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151', marginBottom: '8px' }}>Voice Search (Web Speech API)</h3>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <input 
+              type="text" 
+              value={speechText} 
+              onChange={(e) => setSpeechText(e.target.value)} 
+              placeholder="Spoken search term will appear here..."
+              style={{ flex: 1, padding: '10px', borderRadius: '6px', border: '1px solid #d1d5db', backgroundColor: '#ffffff', color: '#000000' }}
+            />
+            <VoiceSearch onSpeechResult={(text) => setSpeechText(text)} />
+          </div>
+        </div>
+
+        {/* 3. Location Tracker */}
+        <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
+          <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151', marginBottom: '8px' }}>GPS Mandi Finder</h3>
+          <LocationTracker onLocationFound={(loc) => console.log("Current Coordinates:", loc)} />
+        </div>
+
+        {/* 4. Mandi Net Profit Calculator */}
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
+          <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151', marginBottom: '8px' }}>Net Profit Routing Calculator</h3>
+          <MandiCalculator mandiName="Kolkata Central Mandi" cropPricePerKg={30} distanceInKm={25} />
         </div>
       </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      {/* Feature Grid */}
+      <section className="feature-grid">
+        <article>
+          <h2>React + Vite</h2>
+          <p>Fast frontend development with a polished landing page.</p>
+        </article>
+        <article>
+          <h2>Express + MongoDB</h2>
+          <p>API-ready backend connected for future features and data models.</p>
+        </article>
+        <article>
+          <h2>Ready to demo</h2>
+          <p>Everything is wired so you can show the stack end to end tomorrow.</p>
+        </article>
+      </section>
+    </main>
   )
 }
 
