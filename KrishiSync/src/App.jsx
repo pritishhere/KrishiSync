@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { AppProvider, useAppContext } from './context/AppContext';
 import Login from './pages/Login';
@@ -8,6 +8,8 @@ import Scanner from './pages/Scanner';
 import Mandi from './pages/Mandi';
 import AgriPool from './pages/Agripool';
 import BotGuide from './pages/Botguide';
+import PWAInstallPrompt from './components/common/PWAInstallPrompt';
+import { registerServiceWorker } from './registerServiceWorker';
 
 // Route Guard Component
 const ProtectedRoute = ({ children }) => {
@@ -24,6 +26,7 @@ const ProtectedRoute = ({ children }) => {
 const ProtectedLayoutWrapper = () => (
   <ProtectedRoute>
     <MainContentLayout>
+      <PWAInstallPrompt />
       <Outlet />
     </MainContentLayout>
   </ProtectedRoute>
@@ -53,6 +56,11 @@ const AppRoutes = () => {
 };
 
 export default function App() {
+  useEffect(() => {
+    // Register Progressive Web App Service Worker
+    registerServiceWorker();
+  }, []);
+
   return (
     <AppProvider>
       <BrowserRouter>
