@@ -1,30 +1,43 @@
-import { useState, useEffect } from 'react'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import heroImg from './assets/hero.png';
+import './App.css';
 
-// Importing Member 2 Components
-import './Utils/i18n'
-import LanguageSwitcher from './Components/LanguageSwitcher'
-import VoiceSearch from './Components/VoiceSearch'
-import MandiCalculator from './Components/MandiCalculator'
-import LocationTracker from './Components/LocationTracker'
+// Context & Layout
+import { AppProvider } from './context/AppContext';
+import Layout from './components/layout/Layout';
 
-// Importing Member 4 (X-Factor & Pitch Captain) Components
-import SmartIrrigation from './Components/SmartIrrigation'
-import DiseaseScanner from './Components/DiseaseScanner'
-import PhoneOtpAuth from './Components/PhoneOtpAuth'
-import TwilioBotSimulator from './Components/TwilioBotSimulator'
+// Member 1 Pages
+import LoginPage from './pages/Login';
+import DashboardPage from './pages/Dashboard';
+import ScannerPage from './pages/Scanner';
+import MandiPage from './pages/Mandi';
+import AgriPoolPage from './pages/AgriPool';
+import BotGuidePage from './pages/BotGuide';
 
-function App() {
-  const [health, setHealth] = useState('Checking...')
-  const [speechText, setSpeechText] = useState('')
+// Member 2 Components
+import './Utils/i18n';
+import LanguageSwitcher from './Components/LanguageSwitcher';
+import VoiceSearch from './Components/VoiceSearch';
+import MandiCalculator from './Components/MandiCalculator';
+import LocationTracker from './Components/LocationTracker';
+
+// Member 4 Components
+import SmartIrrigation from './Components/SmartIrrigation';
+import DiseaseScanner from './Components/DiseaseScanner';
+import PhoneOtpAuth from './Components/PhoneOtpAuth';
+import TwilioBotSimulator from './Components/TwilioBotSimulator';
+
+function MainHome() {
+  const [health, setHealth] = useState('Checking...');
+  const [speechText, setSpeechText] = useState('');
 
   useEffect(() => {
     fetch('http://localhost:5000/api/health')
       .then((res) => res.json())
       .then((data) => setHealth(data.message))
-      .catch(() => setHealth('Backend offline'))
-  }, [])
+      .catch(() => setHealth('Backend offline'));
+  }, []);
 
   return (
     <main className="app-shell">
@@ -46,7 +59,7 @@ function App() {
         <img src={heroImg} className="hero-image" alt="KrishiSync illustration" />
       </section>
 
-      {/* CODE BUILT BY MEMBER 4 (THE X-FACTOR & PITCH CAPTAIN) */}
+      {/* MEMBER 4 (X-FACTOR & INTELLIGENCE) */}
       <section style={{
         margin: '20px 0',
         padding: '24px',
@@ -62,21 +75,13 @@ function App() {
         <h2 style={{ fontSize: '22px', fontWeight: 'bold', color: '#166534', margin: 0, borderBottom: '2px solid #e5e7eb', paddingBottom: '8px' }}>
           🚀 X-Factor & Intelligence Subsystem
         </h2>
-
-        {/* 1. Phone Number OTP Auth */}
         <PhoneOtpAuth />
-
-        {/* 2. Smart Rule-Based Irrigation */}
         <SmartIrrigation />
-
-        {/* 3. Plant.id AI Leaf Disease Scanner */}
         <DiseaseScanner />
-
-        {/* 4. Twilio SMS & WhatsApp Bot Simulator */}
         <TwilioBotSimulator />
       </section>
 
-      {/* CODE BUILT BY ARITRA (MEMBER 2: DATA & MAPS INTEGRATOR) */}
+      {/* MEMBER 2 (SMART INTEGRATIONS) */}
       <section style={{
         margin: '20px 0',
         padding: '24px',
@@ -89,14 +94,10 @@ function App() {
         <h2 style={{ fontSize: '22px', fontWeight: 'bold', color: '#166534', marginBottom: '16px', borderBottom: '2px solid #e5e7eb', paddingBottom: '8px' }}>
           🌾 Smart Integrations Module
         </h2>
-
-        {/* 1. Language Toggle */}
         <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
           <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151', marginBottom: '8px' }}>Multilingual Switcher</h3>
           <LanguageSwitcher />
         </div>
-
-        {/* 2. Voice Search */}
         <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
           <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151', marginBottom: '8px' }}>Voice Search (Web Speech API)</h3>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
@@ -110,37 +111,35 @@ function App() {
             <VoiceSearch onSpeechResult={(text) => setSpeechText(text)} />
           </div>
         </div>
-
-        {/* 3. Location Tracker */}
         <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
           <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151', marginBottom: '8px' }}>GPS Mandi Finder</h3>
           <LocationTracker onLocationFound={(loc) => console.log("Current Coordinates:", loc)} />
         </div>
-
-        {/* 4. Mandi Net Profit Calculator */}
         <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
           <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151', marginBottom: '8px' }}>Net Profit Routing Calculator</h3>
           <MandiCalculator mandiName="Kolkata Central Mandi" cropPricePerKg={30} distanceInKm={25} />
         </div>
       </section>
-
-      {/* Feature Grid */}
-      <section className="feature-grid">
-        <article>
-          <h2>React + Vite</h2>
-          <p>Fast frontend development with a polished landing page.</p>
-        </article>
-        <article>
-          <h2>Express + MongoDB</h2>
-          <p>API-ready backend connected for future features and data models.</p>
-        </article>
-        <article>
-          <h2>Ready to demo</h2>
-          <p>Everything is wired so you can show the stack end to end tomorrow.</p>
-        </article>
-      </section>
     </main>
-  )
+  );
 }
 
-export default App
+export default function App() {
+  return (
+    <AppProvider>
+      <BrowserRouter>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<MainHome />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/scanner" element={<ScannerPage />} />
+            <Route path="/mandi" element={<MandiPage />} />
+            <Route path="/agri-pool" element={<AgriPoolPage />} />
+            <Route path="/bot-guide" element={<BotGuidePage />} />
+          </Routes>
+        </Layout>
+      </BrowserRouter>
+    </AppProvider>
+  );
+}
