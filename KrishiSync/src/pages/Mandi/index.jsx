@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TrendingUp, MapPin, Truck, IndianRupee, Sparkles, Filter, Calculator } from 'lucide-react';
+import { MapPin, Truck, IndianRupee, Sparkles, Calculator } from 'lucide-react';
 import PageHeader from '../../components/layout/PageHeader';
 import Button from '../../components/common/Button';
 
@@ -41,7 +41,6 @@ export const MandiPage = () => {
     ],
   };
 
-  const activeCrop = crops.find((c) => c.id === selectedCrop) || crops[0];
   const mandis = mandiData[selectedCrop] || mandiData.wheat;
 
   // Calculate Net Profit: (Quantity in Qtl * Price/Qtl) - (Distance * Transport Cost/Km)
@@ -69,7 +68,7 @@ export const MandiPage = () => {
             </span>
           </div>
 
-          <div className="space-y-3">
+          <form onSubmit={(e) => { e.preventDefault(); setIsCalculated(true); }} className="space-y-3">
             {/* Select Crop */}
             <div>
               <label htmlFor="crop-select" className="block text-[13px] font-bold text-[#1F2937] mb-1 font-heading">
@@ -79,7 +78,7 @@ export const MandiPage = () => {
                 id="crop-select"
                 value={selectedCrop}
                 onChange={(e) => setSelectedCrop(e.target.value)}
-                className="w-full bg-[#F9FAFB] border border-gray-300 text-[#1F2937] text-[14px] font-bold rounded-xl px-3.5 py-2.5 outline-none focus:border-[#2E7D32] focus:ring-1 focus:ring-[#2E7D32] cursor-pointer"
+                className="w-full bg-[#F9FAFB] border border-gray-300 text-[#1F2937] text-[14px] font-bold rounded-xl px-3.5 py-2.5 outline-none focus:border-[#2E7D32] focus-visible:ring-2 focus-visible:ring-[#2E7D32] cursor-pointer"
               >
                 {crops.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -102,9 +101,10 @@ export const MandiPage = () => {
                   step="50"
                   value={quantityKg}
                   onChange={(e) => setQuantityKg(Math.max(1, Number(e.target.value)))}
-                  className="w-full bg-[#F9FAFB] border border-gray-300 text-[#1F2937] text-[15px] font-bold rounded-xl px-3.5 py-2.5 outline-none focus:border-[#2E7D32] focus:ring-1 focus:ring-[#2E7D32]"
+                  className="w-full bg-[#F9FAFB] border border-gray-300 text-[#1F2937] text-[15px] font-bold rounded-xl px-3.5 py-2.5 pr-20 outline-none focus:border-[#2E7D32] focus-visible:ring-2 focus-visible:ring-[#2E7D32]"
+                  aria-describedby="qtl-helper"
                 />
-                <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[12px] font-extrabold text-[#6B7280] font-heading bg-gray-200 px-2 py-0.5 rounded-md">
+                <span id="qtl-helper" className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-extrabold text-[#6B7280] font-heading bg-gray-200 px-2 py-0.5 rounded-md pointer-events-none">
                   {((Number(quantityKg) || 0) / 100).toFixed(1)} Qtl
                 </span>
               </div>
@@ -112,15 +112,15 @@ export const MandiPage = () => {
 
             {/* Calculate CTA */}
             <Button
+              type="submit"
               variant="primary"
               fullWidth
-              onClick={() => setIsCalculated(true)}
               className="mt-2 text-[15px] flex items-center justify-center gap-2"
             >
               <Sparkles size={18} />
               Calculate Best Price
             </Button>
-          </div>
+          </form>
         </div>
 
         {/* Mandi Result Cards */}
@@ -134,7 +134,7 @@ export const MandiPage = () => {
             </div>
 
             {mandis.map((mandi) => {
-              const { grossRevenue, transportCost, netProfit } = calculateMetrics(mandi);
+              const { transportCost, netProfit } = calculateMetrics(mandi);
 
               return (
                 <div
@@ -155,7 +155,7 @@ export const MandiPage = () => {
                       {mandi.name}
                     </h4>
                     <p className="text-[12px] font-semibold text-[#6B7280] flex items-center gap-1 mt-0.5">
-                      <MapPin size={13} className="text-[#2E7D32]" />
+                      <MapPin size={13} className="text-[#2E7D32] shrink-0" />
                       {mandi.location} • <strong className="text-[#1F2937]">{mandi.distanceKm} km away</strong>
                     </p>
                   </div>
@@ -170,7 +170,7 @@ export const MandiPage = () => {
                     </div>
                     <div>
                       <span className="text-[#6B7280] font-medium block flex items-center gap-1">
-                        <Truck size={12} className="text-[#F57C00]" /> Transport Cost:
+                        <Truck size={12} className="text-[#F57C00] shrink-0" /> Transport:
                       </span>
                       <strong className="text-[#EF4444] text-[14px] font-heading font-extrabold">
                         -₹{transportCost.toLocaleString()}

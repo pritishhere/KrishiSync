@@ -5,7 +5,6 @@ import Button from '../../components/common/Button';
 
 export const AgriPoolPage = () => {
   const [activeTab, setActiveTab] = useState('find'); // 'find' | 'offer'
-  const [searchQuery, setSearchQuery] = useState('');
   const [bookingSuccess, setBookingSuccess] = useState('');
 
   // Mock Transport Ride Pool Data
@@ -64,11 +63,12 @@ export const AgriPoolPage = () => {
         <div className="flex items-center gap-2 bg-white p-1.5 rounded-2xl border border-gray-200 shadow-xs font-heading">
           <button
             onClick={() => setActiveTab('find')}
-            className={`flex-1 py-2.5 px-3 rounded-xl text-[13px] font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+            className={`flex-1 py-2.5 px-3 rounded-xl text-[13px] font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] ${
               activeTab === 'find'
                 ? 'bg-[#2E7D32] text-white shadow-xs'
                 : 'bg-transparent text-[#6B7280] hover:bg-gray-100'
             }`}
+            aria-label="Find a ride transport pool"
           >
             <Search size={16} />
             Find a Ride
@@ -76,11 +76,12 @@ export const AgriPoolPage = () => {
 
           <button
             onClick={() => setActiveTab('offer')}
-            className={`flex-1 py-2.5 px-3 rounded-xl text-[13px] font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+            className={`flex-1 py-2.5 px-3 rounded-xl text-[13px] font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F57C00] ${
               activeTab === 'offer'
                 ? 'bg-[#F57C00] text-white shadow-xs'
                 : 'bg-transparent text-[#6B7280] hover:bg-gray-100'
             }`}
+            aria-label="Offer a ride transport pool"
           >
             <PlusCircle size={16} />
             Offer a Ride
@@ -122,14 +123,17 @@ export const AgriPoolPage = () => {
 
           {/* Map Bottom Information */}
           <p className="text-[11px] font-medium text-emerald-100 relative z-10 flex items-center gap-1">
-            <MapPin size={13} className="text-[#F57C00]" /> 3 Active transport pools in your farming hub
+            <MapPin size={13} className="text-[#F57C00] shrink-0" /> 3 Active transport pools in your farming hub
           </p>
         </div>
 
         {/* Booking Notification Banner */}
         {bookingSuccess && (
-          <div className="bg-emerald-50 text-[#2E7D32] border border-emerald-200 p-3 rounded-xl text-[13px] font-bold flex items-center gap-2 animate-fade-in">
-            <UserCheck size={18} />
+          <div 
+            role="status"
+            className="bg-emerald-50 text-[#2E7D32] border border-emerald-200 p-3 rounded-xl text-[13px] font-bold flex items-center gap-2 animate-fade-in"
+          >
+            <UserCheck size={18} className="shrink-0" />
             <span>{bookingSuccess}</span>
           </div>
         )}
@@ -159,7 +163,7 @@ export const AgriPoolPage = () => {
                       {ride.farmerName}
                     </h4>
                     {ride.verified && (
-                      <ShieldCheck size={16} className="text-[#10B981]" title="Verified Farmer" />
+                      <ShieldCheck size={16} className="text-[#10B981] shrink-0" title="Verified Farmer" />
                     )}
                   </div>
                   <p className="text-[12px] font-semibold text-[#6B7280]">
@@ -167,7 +171,7 @@ export const AgriPoolPage = () => {
                   </p>
                 </div>
 
-                <span className="bg-emerald-50 text-[#2E7D32] text-[13px] font-extrabold font-heading px-2.5 py-1 rounded-xl border border-emerald-200">
+                <span className="bg-emerald-50 text-[#2E7D32] text-[12px] font-extrabold font-heading px-2.5 py-1 rounded-xl border border-emerald-200 shrink-0">
                   Space: {ride.spaceKg} kg
                 </span>
               </div>
@@ -194,6 +198,7 @@ export const AgriPoolPage = () => {
                   variant="primary"
                   onClick={() => handleBookRide(ride.farmerName)}
                   className="py-1.5 px-4 text-[13px] flex items-center gap-1.5"
+                  aria-label={`Book transport space with ${ride.farmerName}`}
                 >
                   <PhoneCall size={14} />
                   Book Space

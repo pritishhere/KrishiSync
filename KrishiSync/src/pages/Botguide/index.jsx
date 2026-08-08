@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MessageSquare, PhoneCall, Send, Sparkles, CheckCircle2, Copy, Smartphone, HelpCircle } from 'lucide-react';
+import { MessageSquare, Sparkles, CheckCircle2, Copy, Smartphone } from 'lucide-react';
 import PageHeader from '../../components/layout/PageHeader';
 import Button from '../../components/common/Button';
 
@@ -52,14 +52,14 @@ export const BotGuidePage = () => {
         <div className="bg-[#0F2D1E] rounded-2xl p-4 text-white border-2 border-emerald-950 shadow-md space-y-3">
           <div className="flex items-center justify-between border-b border-emerald-800 pb-2">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 bg-[#2E7D32] rounded-full flex items-center justify-center text-white">
+              <div className="w-7 h-7 bg-[#2E7D32] rounded-full flex items-center justify-center text-white shrink-0">
                 <Smartphone size={16} />
               </div>
               <span className="text-[13px] font-extrabold font-heading text-[#D8FF36]">
                 KrishiSync Bot (+91 8000-123-456)
               </span>
             </div>
-            <span className="text-[11px] font-bold text-emerald-200">Live SMS Mock</span>
+            <span className="text-[11px] font-bold text-emerald-200 shrink-0">Live SMS Mock</span>
           </div>
 
           {/* Chat Bubble 1: Sent Command */}
@@ -101,7 +101,8 @@ export const BotGuidePage = () => {
 
                 <button
                   onClick={() => handleCopyCommand(cmd.command)}
-                  className="text-[12px] font-bold text-[#2E7D32] hover:text-green-800 flex items-center gap-1 cursor-pointer bg-green-50 px-2.5 py-1 rounded-lg border border-green-200"
+                  className="text-[12px] font-bold text-[#2E7D32] hover:text-green-800 flex items-center gap-1 cursor-pointer bg-green-50 px-2.5 py-1 rounded-lg border border-green-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32]"
+                  aria-label={`Copy command ${cmd.command}`}
                 >
                   {copiedCmd === cmd.command ? (
                     <>

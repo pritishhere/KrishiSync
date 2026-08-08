@@ -10,7 +10,7 @@ const MainContentLayout = ({ children }) => {
         
         <AppHeader />
         
-        {/* Main Content Area - App Base #F9FAFB */}
+        {/* Main Content Area - pb-8 to ensure bottom nav never overlaps interactive content */}
         <main className="flex-1 overflow-y-auto custom-scrollbar relative flex flex-col bg-[#F9FAFB]">
           {children}
         </main>

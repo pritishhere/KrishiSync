@@ -3,16 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { 
   Sprout, 
-  Phone, 
-  KeyRound, 
   ArrowRight, 
   RefreshCw, 
   Edit2, 
   CheckCircle2, 
   AlertCircle,
   ShieldCheck,
-  ChevronLeft
+  ChevronLeft,
+  KeyRound
 } from 'lucide-react';
+import Button from '../../components/common/Button';
 
 export default function Login() {
   const [step, setStep] = useState(1); // 1: Phone, 2: OTP
@@ -69,7 +69,6 @@ export default function Login() {
       setStep(2);
       setResendTimer(30);
       setError('');
-      // Focus first OTP box on step transition
       setTimeout(() => {
         if (otpInputRefs[0].current) {
           otpInputRefs[0].current.focus();
@@ -92,13 +91,10 @@ export default function Login() {
     try {
       await verifyOtp(phone, currentOtp);
       setIsLoading(false);
-      // Navigate to dashboard upon successful authentication
       navigate('/dashboard', { replace: true });
     } catch (err) {
       setIsLoading(false);
-      // STATE 4 — INVALID OTP requirement: "Incorrect code. Please try again."
       setError('Incorrect code. Please try again.');
-      // Highlight & focus first digit slot for quick retry
       setOtpDigits(['', '', '', '']);
       setTimeout(() => {
         if (otpInputRefs[0].current) {
@@ -110,10 +106,8 @@ export default function Login() {
 
   // OTP Digit Box Change Handler
   const handleOtpDigitChange = (index, value) => {
-    // Only accept numeric inputs
     const cleanValue = value.replace(/\D/g, '');
     
-    // Handle paste of 4 digits
     if (cleanValue.length >= 4) {
       const pastedDigits = cleanValue.slice(0, 4).split('');
       setOtpDigits(pastedDigits);
@@ -130,13 +124,12 @@ export default function Login() {
     setOtpDigits(newDigits);
     setError('');
 
-    // Auto advance focus to next digit box
     if (digit && index < 3 && otpInputRefs[index + 1].current) {
       otpInputRefs[index + 1].current.focus();
     }
   };
 
-  // Keydown Handler for Backspace navigation across digit boxes
+  // Keydown Handler for Backspace navigation
   const handleOtpKeyDown = (index, e) => {
     if (e.key === 'Backspace') {
       if (!otpDigits[index] && index > 0 && otpInputRefs[index - 1].current) {
@@ -178,62 +171,60 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F0FDF4] flex flex-col justify-center items-center p-4 sm:p-6 pb-safe font-sans">
+    <div className="min-h-screen bg-[#F9FAFB] flex flex-col justify-center items-center p-3 sm:p-6 pb-safe font-body">
       {/* Mobile Shell Container */}
-      <div className="w-full max-w-[480px] bg-white rounded-3xl shadow-xl border border-[#DCFCE7] p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden transition-all duration-300">
+      <div className="w-full max-w-[480px] bg-white rounded-2xl shadow-sm border border-gray-200 p-5 sm:p-8 flex flex-col justify-between relative overflow-hidden">
         
-        {/* Top Decorative Header Banner */}
-        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-emerald-600 via-green-500 to-emerald-400" />
+        {/* Top Decorative Brand Stripe */}
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#2E7D32]" />
 
         <div>
           {/* Branding Header */}
-          <div className="flex items-center justify-between mb-8 pt-2">
-            <div className="flex items-center gap-3">
-              <div className="bg-emerald-600 text-white p-3 rounded-2xl shadow-md shadow-emerald-600/20 flex items-center justify-center">
-                <Sprout className="h-7 w-7 stroke-[2.5]" />
+          <div className="flex items-center justify-between mb-6 pt-2">
+            <div className="flex items-center gap-2.5">
+              <div className="bg-[#2E7D32] text-white p-2.5 rounded-xl shadow-xs flex items-center justify-center">
+                <Sprout className="h-6 w-6 stroke-[2.3]" />
               </div>
               <div>
-                <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight flex items-center gap-1.5">
-                  KrishiSync
+                <h1 className="text-xl font-extrabold font-heading text-[#1F2937] tracking-tight">
+                  Krishi<span className="text-[#2E7D32]">Sync</span>
                 </h1>
-                <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60 inline-block">
+                <span className="text-[11px] font-bold text-[#2E7D32] bg-green-50 px-2 py-0.5 rounded-full border border-green-200 inline-block font-heading">
                   स्मार्ट कृषि मंच
                 </span>
               </div>
             </div>
             
-            <div className="flex items-center gap-1 text-xs font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+            <div className="flex items-center gap-1 text-[11px] font-bold text-[#10B981] bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Secure MVP</span>
+              <span>Verified MVP</span>
             </div>
           </div>
 
           {/* STATE 1: PHONE NUMBER INPUT */}
           {step === 1 && (
-            <div className="animate-in fade-in slide-in-from-bottom-3 duration-300">
-              {/* Welcoming Heading & Multilingual Warmth */}
-              <div className="mb-6">
-                <div className="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-1">
-                  Namaste • नमस्ते • স্বাগতম
-                </div>
-                <h2 className="text-2xl sm:text-3xl font-black text-gray-900 leading-tight">
+            <div className="space-y-5">
+              <div>
+                <span className="text-[12px] font-bold text-[#2E7D32] bg-green-100/70 px-2 py-0.5 rounded-full border border-green-200 inline-block mb-1 font-heading">
+                  Namaste 🙏
+                </span>
+                <h2 className="text-2xl font-black font-heading text-[#1F2937] leading-tight">
                   Welcome to KrishiSync
                 </h2>
-                <p className="text-sm text-gray-600 mt-2 leading-relaxed">
+                <p className="text-[13px] font-medium text-[#6B7280] mt-1.5 leading-relaxed">
                   Enter your 10-digit mobile number to access real-time mandi prices, disease scanner, and agripool options.
                 </p>
               </div>
 
-              <form onSubmit={handlePhoneSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <label htmlFor="phone-input" className="block text-sm font-bold text-gray-800">
-                    Mobile Number <span className="text-emerald-600">*</span>
+              <form onSubmit={handlePhoneSubmit} className="space-y-5">
+                <div className="space-y-1.5">
+                  <label htmlFor="phone-input" className="block text-[13px] font-bold text-[#1F2937] font-heading">
+                    Mobile Number <span className="text-[#2E7D32]">*</span>
                   </label>
 
                   <div className="relative flex items-center">
-                    <div className="absolute left-3.5 flex items-center gap-1.5 text-gray-600 font-semibold text-base pointer-events-none border-r border-gray-200 pr-3">
-                      <span className="text-lg">🇮🇳</span>
-                      <span>+91</span>
+                    <div className="absolute left-3.5 flex items-center gap-1 text-[#1F2937] font-bold text-[14px] pointer-events-none border-r border-gray-200 pr-2.5 font-heading">
+                      <span>🇮🇳 +91</span>
                     </div>
 
                     <input
@@ -251,108 +242,109 @@ export default function Login() {
                         setError('');
                       }}
                       disabled={isLoading}
-                      aria-label="Mobile phone number"
+                      aria-label="10 digit mobile phone number"
                       aria-describedby="phone-hint"
-                      className="w-full h-14 bg-gray-50 border-2 border-gray-200 text-gray-900 text-lg font-bold rounded-2xl pl-24 pr-11 outline-none transition-all duration-200 focus:bg-white focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/10 placeholder:text-gray-400 placeholder:font-normal"
+                      className="w-full h-12 bg-[#F9FAFB] border border-gray-300 text-[#1F2937] text-[16px] font-bold rounded-xl pl-22 pr-10 outline-none transition-all focus:bg-white focus:border-[#2E7D32] focus-visible:ring-2 focus-visible:ring-[#2E7D32]"
                     />
 
                     {isValidPhone && (
-                      <div className="absolute right-3.5 text-emerald-600">
-                        <CheckCircle2 className="w-6 h-6 stroke-[2.5]" />
+                      <div className="absolute right-3 text-[#10B981]">
+                        <CheckCircle2 className="w-5 h-5 stroke-[2.3]" />
                       </div>
                     )}
                   </div>
 
-                  <p id="phone-hint" className="text-xs text-gray-500 flex justify-between items-center px-1">
-                    <span>Must be a valid 10-digit Indian number</span>
-                    <span className="font-semibold text-gray-600">{phone.length}/10</span>
+                  <p id="phone-hint" className="text-[11px] font-medium text-[#6B7280] flex justify-between items-center px-1">
+                    <span>Must be a valid 10-digit Indian mobile number</span>
+                    <span className="font-bold text-[#1F2937]">{phone.length}/10</span>
                   </p>
                 </div>
 
                 {error && (
                   <div 
                     role="alert" 
-                    className="p-3.5 bg-red-50 border border-red-200 rounded-2xl text-red-700 text-sm font-medium flex items-center gap-2.5"
+                    className="p-3 bg-[#FEF2F2] border border-[#EF4444]/30 rounded-xl text-[#EF4444] text-[13px] font-bold flex items-center gap-2"
                   >
-                    <AlertCircle className="w-5 h-5 shrink-0 text-red-600" />
+                    <AlertCircle className="w-4 h-4 shrink-0 text-[#EF4444]" />
                     <span>{error}</span>
                   </div>
                 )}
 
-                {/* Large Touch Action Button */}
-                <button
+                {/* Primary Action Button */}
+                <Button
                   type="submit"
+                  variant="primary"
+                  fullWidth
                   disabled={!isValidPhone || isLoading}
-                  aria-label="Send OTP Verification Code"
-                  className="w-full h-14 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-bold text-base rounded-2xl shadow-lg shadow-emerald-600/25 flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none disabled:active:scale-100 min-h-[52px]"
+                  className="text-[15px] py-3 flex items-center justify-center gap-2"
                 >
                   {isLoading ? (
                     <div className="flex items-center gap-2">
-                      <div className="h-5 w-5 border-3 border-white/30 border-t-white rounded-full animate-spin" />
+                      <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       <span>Sending OTP...</span>
                     </div>
                   ) : (
                     <>
                       <span>Send OTP</span>
-                      <ArrowRight className="w-5 h-5" />
+                      <ArrowRight className="w-4 h-4" />
                     </>
                   )}
-                </button>
+                </Button>
               </form>
             </div>
           )}
 
           {/* STATE 2: OTP VERIFICATION INPUT */}
           {step === 2 && (
-            <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+            <div className="space-y-5">
               <button
                 type="button"
                 onClick={handleChangeNumber}
-                className="mb-4 text-xs font-semibold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200/60 active:scale-95 transition-all"
+                className="text-[12px] font-bold text-[#2E7D32] hover:underline flex items-center gap-1 bg-green-50 px-2.5 py-1 rounded-lg border border-green-200 cursor-pointer font-heading"
               >
-                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft className="w-3.5 h-3.5" />
                 <span>Back to Phone Entry</span>
               </button>
 
-              <div className="mb-6">
-                <h2 className="text-2xl sm:text-3xl font-black text-gray-900 leading-tight">
+              <div>
+                <h2 className="text-2xl font-black font-heading text-[#1F2937] leading-tight">
                   Verify OTP Code
                 </h2>
-                <div className="flex items-center gap-2 mt-2">
-                  <p className="text-sm text-gray-600">
-                    Sent to <span className="font-bold text-gray-900">+91 {phone}</span>
+                <div className="flex items-center gap-1.5 mt-1">
+                  <p className="text-[13px] text-[#6B7280]">
+                    Sent to <strong className="text-[#1F2937] font-bold">+91 {phone}</strong>
                   </p>
                   <button
                     type="button"
                     onClick={handleChangeNumber}
                     aria-label="Change phone number"
-                    className="text-xs font-semibold text-emerald-600 hover:underline flex items-center gap-0.5 ml-1"
+                    className="text-[12px] font-bold text-[#2E7D32] hover:underline flex items-center gap-0.5 cursor-pointer font-heading"
                   >
                     <Edit2 className="w-3 h-3" />
-                    <span>Change</span>
+                    <span>Edit</span>
                   </button>
                 </div>
               </div>
 
-              {/* STATE 4 — INVALID OTP ERROR DISPLAY */}
+              {/* INVALID OTP ERROR DISPLAY */}
               {error && (
                 <div 
                   role="alert" 
-                  className="mb-5 p-3.5 bg-red-50 border-2 border-red-300 rounded-2xl text-red-700 text-sm font-semibold flex items-center gap-2.5 animate-shake"
+                  className="p-3 bg-[#FEF2F2] border border-[#EF4444]/30 rounded-xl text-[#EF4444] text-[13px] font-bold flex items-center gap-2"
                 >
-                  <AlertCircle className="w-5 h-5 shrink-0 text-red-600" />
+                  <AlertCircle className="w-4 h-4 shrink-0 text-[#EF4444]" />
                   <span>{error}</span>
                 </div>
               )}
 
-              <form onSubmit={handleOtpSubmit} className="space-y-6">
-                <div className="space-y-3">
-                  <label className="block text-sm font-bold text-gray-800 text-center">
+              <form onSubmit={handleOtpSubmit} className="space-y-5">
+                <div className="space-y-2">
+                  <label className="block text-[13px] font-bold text-[#1F2937] text-center font-heading">
                     Enter 4-Digit Verification Code
                   </label>
 
                   {/* 4-Digit Input Boxes Grid */}
-                  <div className="flex justify-center items-center gap-3 sm:gap-4 my-2">
+                  <div className="flex justify-center items-center gap-2.5 sm:gap-3 my-1">
                     {otpDigits.map((digit, idx) => (
                       <input
                         key={idx}
@@ -368,52 +360,53 @@ export default function Login() {
                         disabled={isLoading}
                         aria-label={`Digit ${idx + 1} of verification code`}
                         aria-invalid={Boolean(error)}
-                        className={`w-14 h-16 sm:w-16 sm:h-18 text-center text-2xl font-black rounded-2xl border-2 outline-none transition-all duration-200 shadow-sm ${
+                        className={`w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-extrabold rounded-xl border outline-none font-heading transition-all ${
                           error 
-                            ? 'border-red-400 bg-red-50 text-red-900 focus:ring-4 focus:ring-red-400/20' 
+                            ? 'border-[#EF4444] bg-[#FEF2F2] text-[#EF4444] focus-visible:ring-2 focus-visible:ring-[#EF4444]' 
                             : digit 
-                              ? 'border-emerald-600 bg-emerald-50/50 text-gray-900' 
-                              : 'border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/10'
+                              ? 'border-[#2E7D32] bg-emerald-50 text-[#1F2937]' 
+                              : 'border-gray-300 bg-[#F9FAFB] text-[#1F2937] focus:bg-white focus:border-[#2E7D32] focus-visible:ring-2 focus-visible:ring-[#2E7D32]'
                         }`}
                       />
                     ))}
                   </div>
 
-                  {/* Demo Helper Badge */}
+                  {/* Demo Code Helper */}
                   <div className="text-center">
-                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800 bg-emerald-100/70 border border-emerald-300 px-3 py-1 rounded-full">
-                      <KeyRound className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>Demo Code: <strong className="font-mono text-emerald-950">1234</strong></span>
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#2E7D32] bg-green-50 border border-green-200 px-3 py-0.5 rounded-full font-heading">
+                      <KeyRound className="w-3.5 h-3.5 text-[#2E7D32]" />
+                      <span>Demo Code: <strong className="font-mono text-[#1F2937]">1234</strong></span>
                     </span>
                   </div>
                 </div>
 
                 {/* Login Submit Button */}
-                <button
+                <Button
                   type="submit"
+                  variant="primary"
+                  fullWidth
                   disabled={!isValidOtp || isLoading}
-                  aria-label="Verify OTP and Login"
-                  className="w-full h-14 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-bold text-base rounded-2xl shadow-lg shadow-emerald-600/25 flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none disabled:active:scale-100 min-h-[52px]"
+                  className="text-[15px] py-3 flex items-center justify-center gap-2"
                 >
                   {isLoading ? (
                     <div className="flex items-center gap-2">
-                      <div className="h-5 w-5 border-3 border-white/30 border-t-white rounded-full animate-spin" />
+                      <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       <span>Verifying...</span>
                     </div>
                   ) : (
                     <span>Login to Dashboard</span>
                   )}
-                </button>
+                </Button>
 
                 {/* Resend & Change Number Options */}
-                <div className="flex items-center justify-between pt-2 border-t border-gray-100 text-sm">
+                <div className="flex items-center justify-between pt-2 border-t border-gray-100 text-[13px] font-semibold">
                   <button
                     type="button"
                     onClick={handleResendOtp}
                     disabled={resendTimer > 0 || isResending || isLoading}
-                    className="font-semibold text-emerald-700 hover:text-emerald-800 disabled:text-gray-400 flex items-center gap-1.5 transition-colors disabled:cursor-not-allowed"
+                    className="text-[#2E7D32] hover:underline disabled:text-gray-400 flex items-center gap-1 transition-colors cursor-pointer disabled:cursor-not-allowed font-heading"
                   >
-                    <RefreshCw className={`w-4 h-4 ${isResending ? 'animate-spin' : ''}`} />
+                    <RefreshCw className={`w-3.5 h-3.5 ${isResending ? 'animate-spin' : ''}`} />
                     <span>
                       {resendTimer > 0 
                         ? `Resend OTP in ${resendTimer}s` 
@@ -427,7 +420,7 @@ export default function Login() {
                     type="button"
                     onClick={handleChangeNumber}
                     disabled={isLoading}
-                    className="font-medium text-gray-500 hover:text-gray-700 transition-colors"
+                    className="text-[#6B7280] hover:text-[#1F2937] transition-colors cursor-pointer"
                   >
                     Change number
                   </button>
@@ -438,11 +431,11 @@ export default function Login() {
         </div>
 
         {/* Footer Subtext */}
-        <div className="mt-8 text-center text-xs text-gray-500">
+        <div className="mt-6 text-center text-[11px] text-[#6B7280]">
           By continuing, you agree to KrishiSync's{' '}
-          <span className="underline font-medium text-emerald-700 cursor-pointer">Terms of Service</span>{' '}
-          &{' '}
-          <span className="underline font-medium text-emerald-700 cursor-pointer">Privacy Policy</span>
+          <span className="underline font-bold text-[#2E7D32] cursor-pointer">Terms of Service</span>{' '}
+          &amp;{' '}
+          <span className="underline font-bold text-[#2E7D32] cursor-pointer">Privacy Policy</span>
         </div>
 
       </div>
