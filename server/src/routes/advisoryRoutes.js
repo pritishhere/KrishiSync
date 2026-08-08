@@ -1,7 +1,6 @@
-// src/routes/advisoryRoutes.js
 import express from 'express';
 import { getSmartAdvisory } from '../controllers/advisoryController.js';
-import { protect } from '../middlewares/authMiddleware.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
