@@ -321,7 +321,7 @@ export default function App() {
 
           {/* 1. Phone OTP Auth Card */}
           <View style={styles.blueCard}>
-            <Text style={styles.blueCardTitle}>📱 Farmer Mobile OTP Authentication (Twilio SMS + JWT)</Text>
+            <Text style={styles.blueCardTitle}>{t.otpHeader}</Text>
 
             {authStep === 'SEND' && (
               <View style={styles.rowForm}>
@@ -333,7 +333,7 @@ export default function App() {
                   placeholder="Enter Mobile Number (+91...)"
                 />
                 <TouchableOpacity style={styles.blueBtn} onPress={handleSendOtp} disabled={authLoading}>
-                  <Text style={styles.btnText}>{authLoading ? 'Sending...' : '📲 Send OTP SMS'}</Text>
+                  <Text style={styles.btnText}>{authLoading ? 'Sending...' : t.sendOtp}</Text>
                 </TouchableOpacity>
               </View>
             )}
@@ -348,7 +348,7 @@ export default function App() {
                   placeholder="Enter 6-digit OTP (123456)"
                 />
                 <TouchableOpacity style={styles.greenBtn} onPress={handleVerifyOtp} disabled={authLoading}>
-                  <Text style={styles.btnText}>{authLoading ? 'Verifying...' : '✅ Verify OTP'}</Text>
+                  <Text style={styles.btnText}>{authLoading ? 'Verifying...' : t.verifyOtp}</Text>
                 </TouchableOpacity>
               </View>
             )}
@@ -371,7 +371,7 @@ export default function App() {
           {/* 2. Smart Irrigation Advisory Engine Card */}
           <View style={styles.greenCard}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={styles.greenCardTitle}>🌧️ Smart Irrigation Advisory Engine</Text>
+              <Text style={styles.greenCardTitle}>{t.irrigation}</Text>
               <TouchableOpacity style={styles.refreshBtn} onPress={() => fetchIrrigationAdvice(selectedCrop, selectedSoil)}>
                 <Text style={styles.refreshBtnText}>🔄 Refresh Weather</Text>
               </TouchableOpacity>
@@ -463,7 +463,8 @@ export default function App() {
 
           {/* 3. Plant.id AI Leaf Scanner Card */}
           <View style={styles.yellowCard}>
-            <Text style={styles.yellowCardTitle}>🔬 Plant.id AI Crop Leaf Disease Scanner</Text>
+            <Text style={styles.yellowCardTitle}>{t.cropScanner}</Text>
+
 
             <View style={styles.pillRow}>
               {['tomato', 'wheat', 'rice', 'mustard', 'cotton'].map((crop) => (
@@ -562,9 +563,15 @@ export default function App() {
           <View style={styles.moduleItem}>
             <Text style={styles.moduleItemTitle}>Multilingual Switcher</Text>
             <View style={styles.pillRow}>
-              <TouchableOpacity style={styles.langPill}><Text style={styles.langPillText}>🌐 English</Text></TouchableOpacity>
-              <TouchableOpacity style={styles.langPill}><Text style={styles.langPillText}>🇮🇳 Hindi (हिंदी)</Text></TouchableOpacity>
-              <TouchableOpacity style={styles.langPill}><Text style={styles.langPillText}>🌾 Bengali (বাংলা)</Text></TouchableOpacity>
+              <TouchableOpacity onPress={() => setLang('en')} style={[styles.langPill, lang === 'en' && { backgroundColor: '#2563eb' }]}>
+                <Text style={[styles.langPillText, lang === 'en' && { color: '#ffffff' }]}>🌐 English</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => setLang('hi')} style={[styles.langPill, lang === 'hi' && { backgroundColor: '#16a34a' }]}>
+                <Text style={[styles.langPillText, lang === 'hi' && { color: '#ffffff' }]}>🇮🇳 Hindi (हिंदी)</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => setLang('bn')} style={[styles.langPill, lang === 'bn' && { backgroundColor: '#ca8a04' }]}>
+                <Text style={[styles.langPillText, lang === 'bn' && { color: '#ffffff' }]}>🌾 Bengali (বাংলা)</Text>
+              </TouchableOpacity>
             </View>
           </View>
 
