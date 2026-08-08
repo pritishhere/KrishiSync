@@ -12,7 +12,7 @@ import {
   Platform
 } from 'react-native';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = Platform.OS === 'web' ? 'http://localhost:5000/api' : 'http://192.168.1.3:5000/api';
 
 export default function App() {
   const [backendHealth, setBackendHealth] = useState('Checking...');
