@@ -138,7 +138,7 @@ export default function App() {
       .then((xmlData) => {
         const match = xmlData.match(/<Message>([\s\S]*?)<\/Message>/);
         let text = match ? match[1] : xmlData;
-        text = text.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+        text = text.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
         setBotMessage(text);
         setBotTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
       })
