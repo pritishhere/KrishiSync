@@ -9,10 +9,7 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@google/generative-ai": "^0.24.1",
-=======
->>>>>>> 4eb7d4565434754dde59ec0f1b82534c61c5bd59
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^16.6.1",

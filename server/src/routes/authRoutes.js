@@ -1,14 +1,4 @@
 import express from 'express';
-<<<<<<< HEAD
-import { registerUser, loginUser } from '../controllers/authControllers.js';
-
-const router = express.Router();
-
-router.post('/register', registerUser);
-router.post('/login', loginUser);
-
-export default router;
-=======
 import { sendOtp, verifyOtp, updateUserProfile } from '../services/authService.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -74,4 +64,3 @@ router.put('/profile', protect, async (req, res) => {
 });
 
 export default router;
->>>>>>> 4eb7d4565434754dde59ec0f1b82534c61c5bd59

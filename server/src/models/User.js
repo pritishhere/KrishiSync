@@ -1,32 +1,5 @@
 import mongoose from 'mongoose';
 
-<<<<<<< HEAD
-const userSchema = new mongoose.Schema({
-    phone: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    password: {
-        type: String,
-        required: true,
-    },
-    fullName: {
-        type: String,
-        required: true,
-    },
-    language: {
-        type: String,
-        default: 'hi', // 'hi' for Hindi, 'en' for English
-    },
-    ecoPoints: {
-        type: Number,
-        default: 0, // Kisaan-score gamification ke liye
-    }
-}, { timestamps: true });
-
-export default mongoose.model('User', userSchema);
-=======
 const userSchema = new mongoose.Schema(
   {
     phoneNumber: {
@@ -101,4 +74,3 @@ userSchema.pre('save', function (next) {
 const User = mongoose.models.User || mongoose.model('User', userSchema);
 
 export default User;
->>>>>>> 4eb7d4565434754dde59ec0f1b82534c61c5bd59
