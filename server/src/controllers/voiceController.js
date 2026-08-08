@@ -13,7 +13,7 @@ export const processVoiceQuery = async (req, res) => {
 
         const query = text.toLowerCase();
         let responseText = "";
-        let answeredBy = ""; // Frontend ko batane ke liye ki answer kahan se aaya
+        let answeredBy = ""; // To inform the frontend about the answer's source
 
         // 🧠 Intent 1: Irrigation / Weather (Keywords in English, Hindi & Bengali)
         const weatherKeywords = ['water', 'irrigate', 'pani', 'sinchai', 'rain', 'barish', 'jol', 'bristi', 'sech', 'জল', 'বৃষ্টি', 'সেচ'];
@@ -67,7 +67,7 @@ export const processVoiceQuery = async (req, res) => {
         
         else {
             // ---> THE MAGIC: FALLBACK TO GEMINI AI
-            // Agar query weather ya mandi ki nahi hai (e.g. "Aaloo ke patte peele kyun ho rahe hain?")
+            // If the query is not about weather or mandi (e.g., "Why are potato leaves turning yellow?")
             const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
             const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 

@@ -55,7 +55,7 @@ export const analyzeBestMandi = async (req, res) => {
             return res.status(404).json({ success: false, message: 'No real data found for this crop today.' });
         }
 
-        // Govt data me bahot saari mandiyan aayengi. Geocoding API ko block hone se bachane ke liye hum sirf Top 5 Highest Price wali mandiyon ka distance check karenge
+        // The government data will contain many mandis. To avoid blocking the geocoding API, we will only check the distance for the Top 5 highest-priced mandis.
         const sortedByPrice = govtData.records.sort((a, b) => b.modal_price - a.modal_price).slice(0, 5);
 
         const transportRatePerKm = 25; // ₹25 per km

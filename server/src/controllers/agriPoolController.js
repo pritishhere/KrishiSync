@@ -1,16 +1,16 @@
 import AgriPoolRide from '../models/AgriPoolRide.js';
 
-// @desc    Tractor Owner naya ride create karega
+// @desc    Tractor Owner will create a new ride
 // @route   POST /api/rides
 export const createRide = async (req, res) => {
     try {
         const { longitude, latitude, availableCapacity } = req.body;
 
         const ride = await AgriPoolRide.create({
-            driverId: req.user._id, // Ye protect middleware se aayega
+            driverId: req.user._id, // This will come from the protect middleware
             startLocation: {
                 type: 'Point',
-                coordinates: [longitude, latitude] // Dhyan rakhna pehle Lng, fir Lat aata hai MongoDB mein
+                coordinates: [longitude, latitude] // Note that MongoDB expects longitude first, then latitude
             },
             availableCapacity
         });
@@ -21,7 +21,7 @@ export const createRide = async (req, res) => {
     }
 };
 
-// @desc    Farmer apne aas-paas (e.g., 5km) ki rides dhoondhega
+// @desc    Farmer will search for rides in their vicinity (e.g., 5km)
 // @route   GET /api/rides/nearby?lng=88.36&lat=22.57&distance=5
 export const findNearbyRides = async (req, res) => {
     try {
@@ -44,7 +44,7 @@ export const findNearbyRides = async (req, res) => {
                 }
             },
             status: 'OPEN'
-        }).populate('driverId', 'fullName phone ecoPoints'); // Driver ki details bhi sath bhejenge
+        }).populate('driverId', 'fullName phone ecoPoints'); // We will also send the driver's details along
 
         res.status(200).json({ success: true, count: rides.length, data: rides });
     } catch (error) {
@@ -72,7 +72,7 @@ export const completeRide = async (req, res) => {
         // Magic: Carbon Calculation & Gamification
         // Assuming average ride saves 10 km of tractor driving. 
         // 1 km tractor driving = ~0.6 kg CO2 emission.
-        const co2Saved = 10 * 0.6; 
+        const co2Saved = 10 * 0.6;
         const earnedPoints = 50; // 50 Krishi Coins
 
         // Add points to the User

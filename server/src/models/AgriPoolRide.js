@@ -28,7 +28,7 @@ const rideSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-// Yeh index map par nearest rides search karne ke liye zaroori hai
+// This index is necessary for searching for nearest rides on the map
 rideSchema.index({ startLocation: '2dsphere' });
 
 export default mongoose.model('AgriPoolRide', rideSchema);
