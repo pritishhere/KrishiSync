@@ -1,85 +1,67 @@
 /**
- * Agri-Pool Transport Ride Sharing Service Layer
- * 
- * Data Interface:
- * {
- *   id: string,                 // e.g. 'ride_101'
- *   farmerName: string,         // e.g. 'Farmer Suresh Kumar'
- *   phone: string,              // e.g. '+91 98765 43210'
- *   destination: string,        // e.g. 'Azadpur Mandi, Delhi NCR'
- *   availableCapacity: number,  // e.g. 500 (in kg)
- *   location: string,           // e.g. 'Karnal Sector 4'
- *   vehicle: string,            // e.g. 'Mahindra Bolero Pickup'
- *   departureTime: string,      // e.g. 'Today, 4:00 PM'
- *   pricePerKg: string,         // e.g. '₹1.5 / kg'
- *   verified: boolean,          // true | false
- * }
- * 
- * Ready for Member 2 to integrate Google Maps / Leaflet Routing and Member 3 for backend endpoints.
+ * KrishiSync Agri-Pool Ride Service (Backend-Connected)
+ * Consumes POST /api/rides, GET /api/rides/nearby, PUT /api/rides/:id/complete.
  */
+import { apiFetch } from './apiConfig';
 
 export const rideService = {
   /**
-   * Get list of available transport pool rides.
-   * @param {string} destinationFilter 
-   * @returns {Promise<Array<object>>}
+   * Find nearby available rides.
+   * @param {{lng:number, lat:number, distance?:number}} coords
    */
-  getAvailableRides: async (destinationFilter = '') => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const rides = [
-          {
-            id: 'ride_101',
-            farmerName: 'Farmer Suresh Kumar',
-            phone: '+91 98765 43210',
-            destination: 'Azadpur Mandi, Delhi NCR',
-            availableCapacity: 500,
-            location: 'Karnal Sector 4',
-            vehicle: 'Mahindra Bolero Pickup',
-            departureTime: 'Today, 4:00 PM',
-            pricePerKg: '₹1.5 / kg',
-            verified: true,
-          },
-          {
-            id: 'ride_102',
-            farmerName: 'Farmer Rajesh Patel',
-            phone: '+91 98123 76543',
-            destination: 'Pune APMC Market',
-            availableCapacity: 1200,
-            location: 'Shirur Village',
-            vehicle: 'Eicher 380 Tractor Trailer',
-            departureTime: 'Tomorrow, 6:00 AM',
-            pricePerKg: '₹1.2 / kg',
-            verified: true,
-          },
-          {
-            id: 'ride_103',
-            farmerName: 'Farmer Anita Devi',
-            phone: '+91 97654 32109',
-            destination: 'Jaipur Grain Market',
-            availableCapacity: 350,
-            location: 'Chomu Hub',
-            vehicle: 'Tata Ace Gold',
-            departureTime: 'Today, 7:30 PM',
-            pricePerKg: '₹1.8 / kg',
-            verified: true,
-          },
-        ];
+  getAvailableRides: async (coords = { lng: 88.3639, lat: 22.5726, distance: 50 }) => {
+    const { lng, lat, distance } = coords;
+    const data = await apiFetch(`/api/rides/nearby?lng=${lng}&lat=${lat}&distance=${distance || 50}`);
+    if (!data || !data.success) {
+      throw new Error(data?.message || 'Failed to load nearby rides');
+    }
 
-        if (destinationFilter) {
-          resolve(rides.filter((r) => r.destination.toLowerCase().includes(destinationFilter.toLowerCase())));
-        } else {
-          resolve(rides);
-        }
-      }, 400);
+    // Normalize backend ride objects into the UI's expected shape
+    return (data.data || []).map((ride) => {
+      const driver = ride.driverId || {};
+      const [lon, la] = ride.startLocation?.coordinates || [lng, lat];
+      return {
+        id: ride._id,
+        farmerName: driver.fullName || driver.name || 'Farmer',
+        phone: driver.phone || '+91 Unknown',
+        availableCapacity: ride.availableCapacity,
+        distanceKm: ride.distance ? `${ride.distance} km` : 'Nearby',
+        location: driver.farmLocation?.address || `Lat ${la?.toFixed?.(2) || la}, Lng ${lon?.toFixed?.(2) || lon}`,
+        destination: 'Nearest Mandi / Farm Hub',
+        departureTime: 'Flexible',
+        pricePerKg: 'Shared',
+        verified: Boolean(driver.isVerified),
+        ownerCoins: driver.ecoPoints || 0,
+      };
     });
   },
 
   /**
-   * Book space on an available transport pool ride.
-   * @param {string} rideId 
-   * @param {number} requestedKg 
-   * @returns {Promise<{ success: boolean, message: string }>}
+   * Create/publish a new ride (tractor owner).
+   * @param {{longitude, latitude, availableCapacity}} ride
+   */
+  createRide: async ({ longitude, latitude, availableCapacity }) => {
+    const data = await apiFetch('/api/rides', {
+      method: 'POST',
+      body: { longitude, latitude, availableCapacity },
+    });
+    return data;
+  },
+
+  /**
+   * Complete a ride and receive gamification (Krishi Coins / CO2 saved).
+   * @param {string} rideId
+   */
+  completeRide: async (rideId) => {
+    const data = await apiFetch(`/api/rides/${rideId}/complete`, {
+      method: 'PUT',
+    });
+    return data;
+  },
+
+  /**
+   * Book space on a ride - backend doesn't have this endpoint;
+   * we simulate a friendly confirmation until a booking API exists.
    */
   bookRideSpace: async (rideId, requestedKg = 100) => {
     return new Promise((resolve) => {
@@ -88,7 +70,9 @@ export const rideService = {
           success: true,
           message: `Booking request for ${requestedKg} kg sent to farmer!`,
         });
-      }, 600);
+      }, 400);
     });
   },
 };
+
+export default rideService;

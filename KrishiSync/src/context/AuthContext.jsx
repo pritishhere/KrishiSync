@@ -1,35 +1,34 @@
 import React, { createContext, useState, useContext } from 'react';
 import { authService } from '../services/authService';
+import { setSession } from '../services/apiConfig';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState(() => authService.getStoredAuth());
 
-  const requestOtp = async (phone) => {
-    return await authService.requestOtp(phone);
-  };
+  const requestOtp = (phone) => authService.requestOtp(phone);
 
   const verifyOtp = async (phone, otp) => {
     const result = await authService.verifyOtp(phone, otp);
-    setAuthState({
-      token: result.token,
-      user: result.user,
-      isAuthenticated: true,
-    });
+    if (result && result.success) {
+      setAuthState({
+        token: result.token,
+        user: result.user,
+        isAuthenticated: true,
+      });
+    }
     return result;
   };
 
   const login = (userData, token) => {
     if (userData && token) {
-      localStorage.setItem('krishi_sync_demo_auth_token', token);
-      localStorage.setItem('krishi_sync_demo_user', JSON.stringify(userData));
+      setSession({ token, user: userData });
     }
-    localStorage.setItem('krishi_sync_demo_auth', 'true');
     setAuthState({
-      token: token || 'demo_token',
-      user: userData || { phone: 'Demo User' },
-      isAuthenticated: true,
+      token: token || null,
+      user: userData || null,
+      isAuthenticated: Boolean(token),
     });
   };
 

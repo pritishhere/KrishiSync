@@ -1,72 +1,64 @@
 /**
- * Weather & Irrigation Service Layer
- * 
- * Data Interface:
- * {
- *   temperature: string,           // e.g. '28°C'
- *   humidity: string,              // e.g. '72%'
- *   condition: string,             // e.g. 'Partly Cloudy'
- *   precipitationProbability: string, // e.g. '80%'
- *   location: string,              // e.g. 'Pune, Maharashtra'
- *   tomorrowForecast: string,      // e.g. '80% Rain expected tomorrow'
- *   highLow: string,               // e.g. '31°C / 22°C'
- *   windSpeed: string,             // e.g. '12 km/h'
- *   rainExpected: boolean,         // true | false
- * }
- * 
- * Ready for Member 4 to swap mock response with OpenWeather API endpoint.
+ * KrishiSync Weather & Irrigation Service (Backend-Connected)
+ * Consumes GET /api/data/weather (protected) and GET /api/irrigation/advisory.
  */
+import { apiFetch } from './apiConfig';
 
 export const weatherService = {
   /**
-   * Fetch current weather data for a given location or coordinates.
-   * @param {string} location 
-   * @returns {Promise<object>}
+   * Fetch current weather for lat/lng via the protected backend route.
+   * @param {{lat:number, lng:number}} coords
    */
-  getWeatherData: async (location = 'Pune, Maharashtra') => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          temperature: '28°C',
-          humidity: '72%',
-          condition: 'Partly Cloudy',
-          precipitationProbability: '80%',
-          location: location || 'Pune, Maharashtra',
-          tomorrowForecast: '80% Rain expected tomorrow',
-          highLow: '31°C / 22°C',
-          windSpeed: '12 km/h',
-          rainExpected: true,
-        });
-      }, 300);
-    });
+  getWeatherData: async (coords = { lat: 22.5726, lng: 88.3639 }) => {
+    const { lat, lng } = coords;
+    const data = await apiFetch(`/api/data/weather?lat=${lat}&lng=${lng}`);
+    if (data && data.success) {
+      const w = data.data;
+      return {
+        location: w.location,
+        temperature: w.temperature,
+        condition: w.condition,
+        description: w.description,
+        humidity: w.humidity,
+        windSpeed: w.windSpeed,
+        rainExpected: false,
+      };
+    }
+    throw new Error(data?.message || 'Failed to load weather');
   },
 
   /**
-   * Calculate automated irrigation recommendation based on weather metrics.
-   * @param {boolean} rainExpected 
-   * @returns {Promise<{ rainExpected: boolean, title: string, instruction: string, savings: string }>}
+   * Fetch smart irrigation advisory from the backend.
+   * @param {string} cropType
+   * @param {string} soilType
+   * @param {{lat:number, lon:number}} coords
    */
-  getIrrigationAdvice: async (rainExpected = true) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        if (rainExpected) {
-          resolve({
-            rainExpected: true,
-            title: '80% Chance of rain tomorrow',
-            instruction: 'Do not run the pump today.',
-            savings: '₹500',
-            details: 'Save power & prevent soil saturation.',
-          });
-        } else {
-          resolve({
-            rainExpected: false,
-            title: 'Clear skies forecasted today',
-            instruction: 'Proceed with normal watering schedule.',
-            savings: '₹0',
-            recommendation: 'Target 25-30 liters/sq meter in late afternoon',
-          });
-        }
-      }, 200);
-    });
+  getIrrigationAdvice: async (cropType = 'wheat', soilType = 'loam', coords = { lat: 28.6139, lon: 77.2090 }) => {
+    const data = await apiFetch(
+      `/api/irrigation/advisory?cropType=${cropType}&soilType=${soilType}&lat=${coords.lat}&lon=${coords.lon}`
+    );
+    if (data && data.success) {
+      return {
+        recommendation: data.advisory?.recommendation,
+        urgency: data.advisory?.urgency,
+        waterVolumeLitersPerAcre: data.advisory?.waterVolumeLitersPerAcre,
+        bestTime: data.advisory?.bestTime,
+        reasons: data.advisory?.reasons,
+        weather: data.weather,
+        crop: data.crop,
+        location: data.location,
+      };
+    }
+    throw new Error(data?.error || 'Failed to load irrigation advice');
+  },
+
+  /**
+   * Get supported crops list.
+   */
+  getSupportedCrops: async () => {
+    const data = await apiFetch('/api/irrigation/crops');
+    return data?.crops || ['wheat', 'rice', 'cotton', 'tomato', 'mustard'];
   },
 };
+
+export default weatherService;
