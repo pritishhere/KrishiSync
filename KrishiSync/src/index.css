@@ -1,16 +1,49 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
-:root {
-font-family: 'Inter', 'Noto Sans Devanagari', 'Noto Sans Bengali', sans-serif;
-background-color: #F9FAFB;
-color: #1F2937;
+
+@layer base {
+  :root {
+    /* Exact KrishiSync Design Tokens */
+    --color-primary: #2E7D32;        /* Forest Green */
+    --color-secondary: #F57C00;      /* Harvest Orange */
+    --color-bg-base: #F9FAFB;        /* Off-White / Light Gray */
+    --color-surface: #FFFFFF;        /* Pure White */
+    --color-text-primary: #1F2937;   /* Dark Charcoal */
+    --color-text-secondary: #6B7280; /* Slate Gray */
+    --color-success: #10B981;        /* Emerald Success */
+    --color-danger: #EF4444;         /* Signal Red / Danger */
+
+    --font-heading: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
+    --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-bg-base);
+    color: var(--color-text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
 }
-body {
-font-size: 16px; /* Strict baseline for accessibility */
+
+.font-heading {
+  font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
 }
-@layer utilities {
-.pb-safe { padding-bottom: env(safe-area-inset-bottom); }
-.custom-scrollbar::-webkit-scrollbar { width: 6px; }
-.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background-color: #D1D5DB; border-radius: 20px; }
+
+.font-body {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Smooth Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #F3F4F6;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #2E7D32;
+  border-radius: 10px;
 }

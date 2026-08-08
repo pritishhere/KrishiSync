@@ -1,60 +1,149 @@
-import React from 'react';
-import { Sun, Camera, AlertCircle, MapPin } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { useAppContext } from '../../context/AppContext';
-import { Card, Button, Alert, AlertBanner, H1, H2, SmallText } from '../../components/common';
+import React, { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import {
+  WeatherCard,
+  IrrigationAlert,
+  QuickActionGrid,
+  DashboardSkeleton,
+  DashboardError,
+} from '../../components/dashboard';
+import { Sparkles, SlidersHorizontal, RefreshCw } from 'lucide-react';
 
 const DashboardPage = () => {
-  const { user } = useAppContext();
-  const navigate = useNavigate();
+  const { user } = useAuth();
   
+  // Interactive demo states for hackathon presentation
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [rainExpected, setRainExpected] = useState(true);
+  const [showDemoToolbar, setShowDemoToolbar] = useState(false);
+
+  // Dynamic farmer name resolution from backend user data
+  const farmerName = user?.name || user?.phone || 'Farmer';
+
+  const handleRetry = () => {
+    setIsLoading(true);
+    setIsError(false);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  };
+
   return (
-    <div className="space-y-4">
-      <AlertBanner variant="warning">
-        <AlertCircle size={18} /> High chance of rain tomorrow in your area.
-      </AlertBanner>
-      
-      <div className="px-4 space-y-6 pt-2">
-        <div className="flex justify-between items-center">
-          <div>
-            <SmallText>Good Morning,</SmallText>
-            <H1>{user?.name}</H1>
+    <div className="p-4 space-y-5 pb-8 min-h-full font-body bg-[#F9FAFB]">
+      {/* Hackathon Interactive Demo Controls */}
+      <div className="bg-[#2E7D32] text-white rounded-2xl p-3 shadow-sm border border-green-700">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-[12px] font-bold text-white font-heading">
+            <Sparkles size={15} className="text-[#F57C00]" />
+            <span>Hackathon Demo Switcher</span>
           </div>
-          <div className="text-right flex flex-col items-end">
-            <div className="flex items-center gap-1 text-[#F57C00]">
-              <Sun size={24} className="fill-current" />
-              <H2>32°C</H2>
-            </div>
-            <SmallText className="flex items-center gap-1"><MapPin size={12}/> Pune, MH</SmallText>
-          </div>
+          <button
+            onClick={() => setShowDemoToolbar(!showDemoToolbar)}
+            className="text-[11px] font-bold bg-[#F57C00] text-white px-3 py-1 rounded-full uppercase transition-transform active:scale-95 cursor-pointer flex items-center gap-1 font-heading shadow-xs"
+          >
+            <SlidersHorizontal size={12} />
+            {showDemoToolbar ? 'Hide Controls' : 'Show Controls'}
+          </button>
         </div>
 
-        <Card padding="p-0" className="border-2 border-[#2E7D32]/20 relative">
-          <div className="p-6 bg-gradient-to-br from-[#2E7D32] to-[#1f5c24] text-white">
-            <div className="flex justify-between items-start mb-4">
-              <div className="max-w-[70%]">
-                <h3 className="text-[20px] font-bold mb-1">Crop Health Scanner</h3>
-                <p className="text-[14px] text-green-100 font-medium leading-relaxed">Instantly detect diseases and get treatment recommendations.</p>
-              </div>
-              <div className="bg-white/20 p-3 rounded-2xl backdrop-blur-sm">
-                <Camera size={32} />
+        {showDemoToolbar && (
+          <div className="mt-2.5 pt-2.5 border-t border-green-600/80 space-y-2 text-[12px]">
+            {/* View State Controls */}
+            <div className="flex items-center justify-between">
+              <span className="text-green-100 font-medium">View State:</span>
+              <div className="flex items-center gap-1 font-heading">
+                <button
+                  onClick={() => { setIsLoading(false); setIsError(false); }}
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                    !isLoading && !isError ? 'bg-white text-[#2E7D32]' : 'bg-green-800 text-green-200'
+                  }`}
+                >
+                  Loaded
+                </button>
+                <button
+                  onClick={() => { setIsLoading(true); setIsError(false); }}
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                    isLoading ? 'bg-[#F57C00] text-white' : 'bg-green-800 text-green-200'
+                  }`}
+                >
+                  Loading
+                </button>
+                <button
+                  onClick={() => { setIsError(true); setIsLoading(false); }}
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                    isError ? 'bg-[#EF4444] text-white' : 'bg-green-800 text-green-200'
+                  }`}
+                >
+                  Error
+                </button>
               </div>
             </div>
-            <Button variant="secondary" fullWidth onClick={() => navigate('/scanner')}>
-              Open Camera
-            </Button>
-          </div>
-        </Card>
 
-        <div>
-          <H2 className="mb-3">Farm Updates</H2>
-          <div className="space-y-3">
-            <Alert variant="success" title="Mandi Prices Up" description="Wheat is currently trading at ₹2,275/qtl (+₹50 today)." />
-            <Alert variant="danger" title="Pest Alert Nearby" description="Fall Armyworm reported in neighboring farms. Inspect crops." />
+            {/* Irrigation State Controls */}
+            <div className="flex items-center justify-between">
+              <span className="text-green-100 font-medium">Irrigation Alert:</span>
+              <div className="flex items-center gap-1 font-heading">
+                <button
+                  onClick={() => setRainExpected(true)}
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                    rainExpected ? 'bg-[#EF4444] text-white' : 'bg-green-800 text-green-200'
+                  }`}
+                >
+                  Rain Expected
+                </button>
+                <button
+                  onClick={() => setRainExpected(false)}
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                    !rainExpected ? 'bg-[#10B981] text-white' : 'bg-green-800 text-green-200'
+                  }`}
+                >
+                  Clear Skies
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </div>
+
+      {/* Render Skeletons during Loading State */}
+      {isLoading ? (
+        <DashboardSkeleton />
+      ) : isError ? (
+        <DashboardError onRetry={handleRetry} />
+      ) : (
+        <>
+          {/* GREETING HERO HEADER */}
+          <div className="pt-1">
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="text-[26px] sm:text-[28px] font-extrabold font-heading text-[#1F2937] leading-tight tracking-tight">
+                  Namaste, <span className="text-[#2E7D32]">{farmerName}</span>
+                </h1>
+              </div>
+
+              <button
+                onClick={handleRetry}
+                className="p-2.5 bg-white hover:bg-gray-100 text-[#6B7280] rounded-xl border border-gray-200 shadow-xs transition-transform active:scale-95 cursor-pointer"
+                title="Refresh Weather Data"
+              >
+                <RefreshCw size={18} strokeWidth={2.2} />
+              </button>
+            </div>
+          </div>
+
+          {/* WEATHER CARD */}
+          <WeatherCard />
+
+          {/* IRRIGATION ALERT */}
+          <IrrigationAlert rainExpected={rainExpected} />
+
+          {/* QUICK ACTION GRID */}
+          <QuickActionGrid />
+        </>
+      )}
     </div>
   );
 };
+
 export default DashboardPage;

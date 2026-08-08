@@ -1,14 +1,13 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { AppProvider, useAppContext } from './context/AppContext';
 import Login from './pages/Login';
 import MainContentLayout from './components/layout/MainContentLayout';
-
-// Mock components for scaffolding the layout
-const Dashboard = () => <div className="p-4 text-[16px] text-gray-800">Dashboard Content</div>;
-const Scanner = () => <div className="p-4 text-[16px] text-gray-800">Scanner Content</div>;
-const Mandi = () => <div className="p-4 text-[16px] text-gray-800">Mandi Content</div>;
-const AgriPool = () => <div className="p-4 text-[16px] text-gray-800">Agri-Pool Content</div>;
+import Dashboard from './pages/Dashboard';
+import Scanner from './pages/Scanner';
+import Mandi from './pages/Mandi';
+import AgriPool from './pages/Agripool';
+import BotGuide from './pages/Botguide';
 
 // Route Guard Component
 const ProtectedRoute = ({ children }) => {
@@ -21,6 +20,15 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+// Layout Wrapper for React Router v7 Nested Routes
+const ProtectedLayoutWrapper = () => (
+  <ProtectedRoute>
+    <MainContentLayout>
+      <Outlet />
+    </MainContentLayout>
+  </ProtectedRoute>
+);
+
 // Application Routes Structure
 const AppRoutes = () => {
   return (
@@ -29,17 +37,17 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
       
       {/* Protected Layout Routes */}
-      <Route path="/" element={
-        <ProtectedRoute>
-          <MainContentLayout />
-        </ProtectedRoute>
-      }>
+      <Route element={<ProtectedLayoutWrapper />}>
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="scanner" element={<Scanner />} />
         <Route path="mandi" element={<Mandi />} />
         <Route path="agri-pool" element={<AgriPool />} />
+        <Route path="bot-guide" element={<BotGuide />} />
       </Route>
+
+      {/* Fallback route */}
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
 };
