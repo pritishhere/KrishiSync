@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { API_BASE_URL } from '../services/apiConfig';
+import { diseaseService } from '../services/diseaseService';
 
 export default function DiseaseScanner() {
   const [selectedCrop, setSelectedCrop] = useState('tomato');
@@ -7,28 +8,39 @@ export default function DiseaseScanner() {
   const [result, setResult] = useState(null);
 
   useEffect(() => {
+    // (Optional) preload sample cases — kept lightweight for quick UX
     fetch(`${API_BASE_URL}/api/disease/sample-cases`)
       .then((res) => res.json())
       .then((_data) => {})
       .catch(() => {});
   }, []);
 
-  const handleScan = (crop = selectedCrop) => {
+  const [file, setFile] = useState(null);
+
+  const handleScan = async (crop = selectedCrop) => {
     setLoading(true);
-    fetch(`${API_BASE_URL}/api/disease/scan`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ cropHint: crop })
-    })
-      .then((res) => res.json())
-      .then((data) => {
+    try {
+      if (file) {
+        const form = new FormData();
+        form.append('image', file);
+        form.append('cropHint', crop);
+        const data = await diseaseService.scanImage(form);
         setResult(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Disease scan error:', err);
-        setLoading(false);
-      });
+      } else {
+        // Fallback: quick scan by crop hint
+        const res = await fetch(`${API_BASE_URL}/api/disease/scan`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cropHint: crop }),
+        });
+        const data = await res.json();
+        setResult(data);
+      }
+    } catch (err) {
+      console.error('Disease scan error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -54,6 +66,16 @@ export default function DiseaseScanner() {
           <option value="rice">🍚 Rice Leaf (Paddy Blast)</option>
           <option value="mustard">🌼 Mustard Leaf (Powdery Mildew)</option>
         </select>
+      </div>
+
+      <div className="space-y-2">
+        <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">Upload Leaf Image (optional)</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setFile(e.target.files && e.target.files[0])}
+          className="block w-full text-xs text-gray-700 file:bg-emerald-50 file:border-0 file:py-2 file:px-3 file:rounded-lg file:text-sm file:font-bold file:text-emerald-800"
+        />
       </div>
 
       <button

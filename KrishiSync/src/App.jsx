@@ -76,7 +76,7 @@ function MainHome() {
     <main id="home" className="p-4 sm:p-8 lg:p-10 space-y-10 min-h-screen text-gray-900 overflow-x-hidden">
       
       {/* 2. MAIN HERO SECTION BOX - Black border with glowing light emerging throughout borders */}
-      <section className="relative rounded-3xl p-[2px] bg-gradient-to-r from-emerald-500 via-lime-400 to-teal-400 shadow-[0_0_50px_rgba(74,222,128,0.35)] transition-all duration-500">
+      <section className="relative rounded-3xl p-0.5 bg-linear-to-r from-emerald-500 via-lime-400 to-teal-400 shadow-[0_0_50px_rgba(74,222,128,0.35)] transition-all duration-500">
         
         {/* Inner Obsidian Black Main Box */}
         <div className="bg-[#020f0a] text-white rounded-[22px] p-6 sm:p-10 lg:p-12 border-2 border-black grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative overflow-hidden">
@@ -128,7 +128,7 @@ function MainHome() {
                   <button
                     type="button"
                     onClick={() => handleVoiceQuery()}
-                    className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-lime-400 hover:from-emerald-400 hover:to-lime-300 text-slate-950 font-black text-xs sm:text-sm rounded-xl transition-all shadow-[0_0_20px_rgba(74,222,128,0.4)] active:scale-95 whitespace-nowrap"
+                    className="px-6 py-3 bg-linear-to-r from-emerald-500 to-lime-400 hover:from-emerald-400 hover:to-lime-300 text-slate-950 font-black text-xs sm:text-sm rounded-xl transition-all shadow-[0_0_20px_rgba(74,222,128,0.4)] active:scale-95 whitespace-nowrap"
                   >
                     Ask AI
                   </button>
@@ -168,10 +168,10 @@ function MainHome() {
 
           <div className="lg:col-span-5 flex justify-center relative z-10">
             <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 via-lime-400 to-teal-400 rounded-3xl blur-lg opacity-70 group-hover:opacity-100 transition duration-500" />
+              <div className="absolute -inset-1 bg-linear-to-r from-emerald-500 via-lime-400 to-teal-400 rounded-3xl blur-lg opacity-70 group-hover:opacity-100 transition duration-500" />
               <img 
                 src={heroImg} 
-                className="relative w-full max-w-[280px] sm:max-w-xs md:max-w-sm rounded-3xl shadow-2xl border-4 border-slate-900 object-cover transform group-hover:scale-[1.02] transition duration-300" 
+                className="relative w-full max-w-70 sm:max-w-xs md:max-w-sm rounded-3xl shadow-2xl border-4 border-slate-900 object-cover transform group-hover:scale-[1.02] transition duration-300" 
                 alt="KrishiSync farmer illustration" 
               />
             </div>
@@ -198,7 +198,7 @@ function MainHome() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             {/* Card 1: Mandi Net Profit Calculator */}
-            <div id="calculator" className="h-full bg-white/95 backdrop-blur-sm rounded-3xl p-6 shadow-2xl hover:shadow-emerald-900/30 hover:-translate-y-1.5 transition-all duration-300 border border-emerald-300/80 flex flex-col justify-between space-y-4">
+            <div id="calculator" className="h-full ks-card ks-appear p-6 flex flex-col justify-between space-y-4">
               <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                 <div className="flex items-center gap-3">
                   <span className="p-2.5 bg-emerald-100 text-[#166534] rounded-2xl text-lg shadow-2xs">💰</span>
@@ -214,7 +214,7 @@ function MainHome() {
             </div>
 
             {/* Card 2: GPS Mandi Locator */}
-            <div id="mandi" className="h-full bg-white/95 backdrop-blur-sm rounded-3xl p-6 shadow-2xl hover:shadow-blue-900/30 hover:-translate-y-1.5 transition-all duration-300 border border-blue-300/80 flex flex-col justify-between space-y-4">
+            <div id="mandi" className="h-full ks-card ks-appear p-6 flex flex-col justify-between space-y-4">
               <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                 <div className="flex items-center gap-3">
                   <span className="p-2.5 bg-blue-100 text-blue-800 rounded-2xl text-lg shadow-2xs">📍</span>
@@ -230,7 +230,7 @@ function MainHome() {
             </div>
 
             {/* Card 3: Farmer Mobile OTP Auth */}
-            <div className="h-full bg-white/95 backdrop-blur-sm rounded-3xl p-6 shadow-2xl hover:shadow-indigo-900/30 hover:-translate-y-1.5 transition-all duration-300 border border-indigo-300/80 flex flex-col justify-between space-y-4">
+            <div className="h-full ks-card ks-appear p-6 flex flex-col justify-between space-y-4">
               <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                 <div className="flex items-center gap-3">
                   <span className="p-2.5 bg-indigo-100 text-indigo-800 rounded-2xl text-lg shadow-2xs">📱</span>
@@ -263,7 +263,7 @@ function MainHome() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             {/* Card 4: AI Crop Disease Scanner */}
-            <div className="h-full bg-white/95 backdrop-blur-sm rounded-3xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-amber-100/90 flex flex-col justify-between space-y-4">
+            <div className="h-full ks-card ks-appear p-6 flex flex-col justify-between space-y-4">
               <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                 <div className="flex items-center gap-3">
                   <span className="p-2.5 bg-amber-100 text-amber-800 rounded-2xl text-lg shadow-2xs">🔬</span>
@@ -279,7 +279,7 @@ function MainHome() {
             </div>
 
             {/* Card 5: Smart Irrigation Engine */}
-            <div className="h-full bg-white/95 backdrop-blur-sm rounded-3xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-teal-100/90 flex flex-col justify-between space-y-4">
+            <div className="h-full ks-card ks-appear p-6 flex flex-col justify-between space-y-4">
               <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                 <div className="flex items-center gap-3">
                   <span className="p-2.5 bg-teal-100 text-teal-800 rounded-2xl text-lg shadow-2xs">🌧️</span>
@@ -295,7 +295,7 @@ function MainHome() {
             </div>
 
             {/* Card 6: Feature Phone SMS / IVR Advisory */}
-            <div id="advisory" className="h-full bg-white/95 backdrop-blur-sm rounded-3xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-emerald-100/90 flex flex-col justify-between space-y-4">
+            <div id="advisory" className="h-full ks-card ks-appear p-6 flex flex-col justify-between space-y-4">
               <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                 <div className="flex items-center gap-3">
                   <span className="p-2.5 bg-emerald-100 text-emerald-800 rounded-2xl text-lg shadow-2xs">📟</span>
