@@ -1,19 +1,30 @@
-import React, { useState, createContext, useContext } from 'react';
+import React, { createContext, useContext } from 'react';
+import { AuthProvider, useAuth } from './AuthContext';
 
-export const AppContext = createContext();
-export const useAppContext = () => useContext(AppContext);
+const AppContext = createContext(null);
 
 export const AppProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-
-  const login = (phone) => {
-    setUser({ phone, name: 'Kisan Kumar', lang: 'en' });
-  };
-  const logout = () => setUser(null);
-
   return (
-    <AppContext.Provider value={{ user, login, logout }}>
+    <AuthProvider>
+      <AppProviderContent>{children}</AppProviderContent>
+    </AuthProvider>
+  );
+};
+
+const AppProviderContent = ({ children }) => {
+  const auth = useAuth();
+  
+  return (
+    <AppContext.Provider value={{ ...auth }}>
       {children}
     </AppContext.Provider>
   );
 };
+
+export const useAppContext = () => {
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error('useAppContext must be used within an AppProvider');
+  }
+  return context;
+};

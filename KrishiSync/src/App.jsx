@@ -1,43 +1,55 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AppProvider } from './context/AppContext';
-
-// Layout
+import { AppProvider, useAppContext } from './context/AppContext';
+import Login from './pages/Login';
 import MainContentLayout from './components/layout/MainContentLayout';
 
-// Pages
-import LoginPage from './pages/Login';
-import DashboardPage from './pages/Dashboard';
-import ScannerPage from './pages/Scanner';
-import MandiPage from './pages/Mandi';
-import AgriPoolPage from './pages/AgriPool';
-import BotGuidePage from './pages/BotGuide';
+// Mock components for scaffolding the layout
+const Dashboard = () => <div className="p-4 text-[16px] text-gray-800">Dashboard Content</div>;
+const Scanner = () => <div className="p-4 text-[16px] text-gray-800">Scanner Content</div>;
+const Mandi = () => <div className="p-4 text-[16px] text-gray-800">Mandi Content</div>;
+const AgriPool = () => <div className="p-4 text-[16px] text-gray-800">Agri-Pool Content</div>;
+
+// Route Guard Component
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated } = useAppContext();
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  return children;
+};
+
+// Application Routes Structure
+const AppRoutes = () => {
+  return (
+    <Routes>
+      {/* Public Authentication Route */}
+      <Route path="/login" element={<Login />} />
+      
+      {/* Protected Layout Routes */}
+      <Route path="/" element={
+        <ProtectedRoute>
+          <MainContentLayout />
+        </ProtectedRoute>
+      }>
+        <Route index element={<Navigate to="/dashboard" replace />} />
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="scanner" element={<Scanner />} />
+        <Route path="mandi" element={<Mandi />} />
+        <Route path="agri-pool" element={<AgriPool />} />
+      </Route>
+    </Routes>
+  );
+};
+
 export default function App() {
   return (
     <AppProvider>
       <BrowserRouter>
-        <Routes>
-          {/* Public Route */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          
-          {/* Authenticated Routes wrapped in Shell Layout */}
-          <Route path="/*" element={
-            <MainContentLayout>
-              <Routes>
-                <Route path="/dashboard" element={<DashboardPage />} />
-                <Route path="/scanner" element={<ScannerPage />} />
-                <Route path="/mandi" element={<MandiPage />} />
-                <Route path="/agri-pool" element={<AgriPoolPage />} />
-                <Route path="/bot-guide" element={<BotGuidePage />} />
-                <Route path="*" element={<Navigate to="/dashboard" replace />} />
-              </Routes>
-            </MainContentLayout>
-          } />
-        </Routes>
+        <AppRoutes />
       </BrowserRouter>
     </AppProvider>
   );
 }
-
-
