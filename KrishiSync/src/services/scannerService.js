@@ -16,10 +16,10 @@
 export const scannerService = {
   /**
    * Analyze uploaded or captured crop leaf image.
-   * @param {string | File} imageData 
+   * @param {string | File} _imageData 
    * @returns {Promise<{ diseaseName: string, confidence: number, recommendation: string, isPlant: boolean, error: string | null }>}
    */
-  analyzeCropImage: async (imageData) => {
+  analyzeCropImage: async (_imageData) => {
     return new Promise((resolve) => {
       setTimeout(() => {
         // Mock result payload ready for Plant.id API response mapping

@@ -19,7 +19,7 @@ export const MandiPage = () => {
   }, []);
 
   // Recalculate mandi prices via mandiService when crop or quantity changes
-  const handleCalculate = async () => {
+  const handleCalculate = React.useCallback(async () => {
     setIsLoading(true);
     try {
       const results = await mandiService.calculateMandiPrices(selectedCrop, quantityKg);
@@ -28,11 +28,11 @@ export const MandiPage = () => {
     } catch {
       setIsLoading(false);
     }
-  };
+  }, [selectedCrop, quantityKg]);
 
   useEffect(() => {
     handleCalculate();
-  }, [selectedCrop, quantityKg]);
+  }, [handleCalculate]);
 
   return (
     <div className="flex flex-col h-full bg-[#F9FAFB] font-body">

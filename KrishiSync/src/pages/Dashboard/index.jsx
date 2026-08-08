@@ -25,7 +25,7 @@ const DashboardPage = () => {
   const farmerName = user?.name || user?.phone || 'Farmer';
 
   // Load weather and irrigation service data on mount or toggle
-  const loadDashboardData = async (forceRainState = rainExpectedToggle) => {
+  const loadDashboardData = React.useCallback(async (forceRainState = rainExpectedToggle) => {
     setIsLoading(true);
     setIsError(false);
     try {
@@ -40,11 +40,11 @@ const DashboardPage = () => {
       setIsError(true);
       setIsLoading(false);
     }
-  };
+  }, [rainExpectedToggle, user?.location]);
 
   useEffect(() => {
     loadDashboardData(rainExpectedToggle);
-  }, [rainExpectedToggle]);
+  }, [loadDashboardData, rainExpectedToggle]);
 
   const handleToggleRain = (state) => {
     setRainExpectedToggle(state);

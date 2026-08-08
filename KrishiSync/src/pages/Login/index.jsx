@@ -92,7 +92,7 @@ export default function Login() {
       await verifyOtp(phone, currentOtp);
       setIsLoading(false);
       navigate('/dashboard', { replace: true });
-    } catch (err) {
+    } catch {
       setIsLoading(false);
       setError('Incorrect code. Please try again.');
       setOtpDigits(['', '', '', '']);

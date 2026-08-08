@@ -1,13 +1,9 @@
 // Service Worker Registration Module for KrishiSync PWA
 
 export function registerServiceWorker() {
-  // Only register service worker in browser environment supporting ServiceWorkers
   if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-    // Avoid interfering with Vite HMR in local development mode unless previewing
     const isProduction = import.meta.env.PROD;
-    const isPreview = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-    // Register service worker in production or explicit test mode
     window.addEventListener('load', () => {
       if (isProduction) {
         navigator.serviceWorker

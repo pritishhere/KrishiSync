@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Download, X, Leaf, Sparkles } from 'lucide-react';
-import Button from './Button';
 
 export const PWAInstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -8,7 +7,6 @@ export const PWAInstallPrompt = () => {
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
-      // Prevent automatic browser banner
       e.preventDefault();
       setDeferredPrompt(e);
       setShowBanner(true);
@@ -24,7 +22,6 @@ export const PWAInstallPrompt = () => {
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
 
-    // Show native browser install prompt
     deferredPrompt.prompt();
 
     const { outcome } = await deferredPrompt.userChoice;
