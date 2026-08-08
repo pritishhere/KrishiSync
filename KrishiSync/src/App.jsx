@@ -101,10 +101,10 @@ function MainHome() {
         <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
           <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151', marginBottom: '8px' }}>Voice Search (Web Speech API)</h3>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            <input 
-              type="text" 
-              value={speechText} 
-              onChange={(e) => setSpeechText(e.target.value)} 
+            <input
+              type="text"
+              value={speechText}
+              onChange={(e) => setSpeechText(e.target.value)}
               placeholder="Spoken search term will appear here..."
               style={{ flex: 1, padding: '10px', borderRadius: '6px', border: '1px solid #d1d5db', backgroundColor: '#ffffff', color: '#000000' }}
             />

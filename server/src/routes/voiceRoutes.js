@@ -1,6 +1,7 @@
+// src/routes/voiceRoutes.js
 import express from 'express';
 import { processVoiceQuery } from '../controllers/voiceController.js';
-import { protect } from '../middleware/authMiddleware.js';
+import { protect } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 

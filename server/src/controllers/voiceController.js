@@ -1,9 +1,5 @@
 // src/controllers/voiceController.js
-let GoogleGenerativeAI;
-try {
-  const genAiModule = await import('@google/generative-ai');
-  GoogleGenerativeAI = genAiModule.GoogleGenerativeAI;
-} catch (_err) {}
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 // @desc    Hybrid Voice Assistant: Routes to Real APIs (Weather/Mandi) OR Gemini AI
 // @route   POST /api/voice/ask
@@ -17,9 +13,9 @@ export const processVoiceQuery = async (req, res) => {
 
         const query = text.toLowerCase();
         let responseText = "";
-        let answeredBy = "";
+        let answeredBy = ""; // To inform the frontend about the answer's source
 
-        // 🧠 Intent 1: Irrigation / Weather
+        // 🧠 Intent 1: Irrigation / Weather (Keywords in English, Hindi & Bengali)
         const weatherKeywords = ['water', 'irrigate', 'pani', 'sinchai', 'rain', 'barish', 'jol', 'bristi', 'sech', 'জল', 'বৃষ্টি', 'সেচ'];
         const isWeatherQuery = weatherKeywords.some(kw => query.includes(kw));
 
@@ -28,7 +24,8 @@ export const processVoiceQuery = async (req, res) => {
         const isMandiQuery = mandiKeywords.some(kw => query.includes(kw));
 
         if (isWeatherQuery && lat && lng) {
-            const apiKey = process.env.OPENWEATHER_API_KEY || process.env.WEATHER_API_KEY;
+            // ---> REAL API ROUTE (Weather)
+            const apiKey = process.env.WEATHER_API_KEY;
             const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&appid=${apiKey}&units=metric`;
             const response = await fetch(url);
             
@@ -52,12 +49,13 @@ export const processVoiceQuery = async (req, res) => {
                     responseText = noRainResponses[lang] || noRainResponses['hi'];
                 }
             } else {
-                responseText = "Irrigation Engine: Scheduled watering is optimal today for current humidity and temperature.";
+                responseText = "Weather system down. Trying AI..."; // Fallback mechanism
             }
             answeredBy = "Krishi-App-System";
         } 
         
         else if (isMandiQuery) {
+            // ---> APP FEATURE ROUTE (Mandi)
             const mandiResponses = {
                 hi: "Fasal bechne ka sabse sahi daam jaan-ne ke liye, kripya app mein Mandi Mind feature kholen.",
                 bn: "Fosol bikrir sothik dam jante, anugraha kore app e Mandi Mind feature ti khulun.",
@@ -68,32 +66,24 @@ export const processVoiceQuery = async (req, res) => {
         } 
         
         else {
-            if (GoogleGenerativeAI && process.env.GEMINI_API_KEY) {
-                try {
-                    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-                    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+            // ---> THE MAGIC: FALLBACK TO GEMINI AI
+            // If the query is not about weather or mandi (e.g., "Why are potato leaves turning yellow?")
+            const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-                    const systemInstruction = `
-                    You are 'Krishi-AI', a smart agricultural expert assistant for the KrishiSync app. 
-                    Rules:
-                    1. Keep answers short, strictly under 3 sentences.
-                    2. Reply STRICTLY in this language code: '${lang}' ('hi'=Hindi, 'bn'=Bengali, 'en'=English). 
-                    3. Only answer farming, crop, and agriculture-related questions.
-                    `;
+            const systemInstruction = `
+            You are 'Krishi-AI', a smart agricultural expert assistant for the KrishiSync app. 
+            Rules:
+            1. Keep answers short, strictly under 3 sentences.
+            2. Reply STRICTLY in this language code: '${lang}' ('hi'=Hindi, 'bn'=Bengali, 'en'=English). 
+            3. Only answer farming, crop, and agriculture-related questions.
+            `;
 
-                    const finalPrompt = `${systemInstruction}\n\nFarmer asks: "${text}"`;
-                    const result = await model.generateContent(finalPrompt);
-                    
-                    responseText = result.response.text();
-                    answeredBy = "Krishi-Gemini-AI";
-                } catch (_err) {
-                    responseText = `KrishiSync Advisory: For "${text}", apply organic neem oil spray (5ml/L) and maintain balanced NPK soil nutrition.`;
-                    answeredBy = "Krishi-Advisor-Fallback";
-                }
-            } else {
-                responseText = `KrishiSync Advisory: For "${text}", apply organic neem oil spray (5ml/L) and maintain balanced NPK soil nutrition.`;
-                answeredBy = "Krishi-Advisor-Fallback";
-            }
+            const finalPrompt = `${systemInstruction}\n\nFarmer asks: "${text}"`;
+            const result = await model.generateContent(finalPrompt);
+            
+            responseText = result.response.text();
+            answeredBy = "Krishi-Gemini-AI";
         }
 
         res.status(200).json({

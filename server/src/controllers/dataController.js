@@ -20,7 +20,7 @@ export const getWeather = async (req, res) => {
             throw new Error(data.message || 'Failed to fetch weather data');
         }
 
-        // Clean data format frontend ke liye
+        // Clean data format for the frontend
         const weatherData = {
             location: data.name,
             temperature: `${data.main.temp} °C`,
@@ -59,7 +59,7 @@ export const getMandiPrices = async (req, res) => {
             throw new Error('Failed to fetch real Mandi data');
         }
 
-        // Govt API bahot lamba data deti hai, humein sirf useful details filter karni hain
+        // The Govt API returns a lot of data; we only need to filter the useful details
         const mandiData = data.records.map(record => ({
             crop: record.commodity,
             market: record.market,

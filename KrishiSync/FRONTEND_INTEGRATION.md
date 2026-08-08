@@ -118,7 +118,7 @@ All UI components consume business logic via service modules in `src/services/`:
 ## 6. How Member 2 Can Integrate Maps & GIS
 
 1. Open `src/pages/Agripool/index.jsx` and `src/services/rideService.js`.
-2. Replace the visual map placeholder element (`<div className="w-full h-[180px] bg-emerald-900...`>) with Google Maps JavaScript API (`@react-google-maps/api`) or Leaflet.
+2. Replace the visual map placeholder element (`<div className="w-full h-45 bg-emerald-900...`>) with Google Maps JavaScript API (`@react-google-maps/api`) or Leaflet.
 3. Map ride location coordinates (`latitude`, `longitude`) to dynamic Map Markers.
 4. Update `rideService.getAvailableRides()` to perform spatial radius queries against MongoDB geospatial indexes (`$near` / `$geoWithin`).
 

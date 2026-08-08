@@ -1,6 +1,6 @@
 import express from 'express';
 import { createRide, findNearbyRides, completeRide } from '../controllers/agriPoolController.js';
-import { protect } from '../middleware/authMiddleware.js';
+import { protect } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 

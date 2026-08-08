@@ -1,11 +1,11 @@
-import User from '../models/User.js'; // .js zaroori hai
+import User from '../models/User.js'; // .js is required
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 // Generate Token Function
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: '7d', // 7 din tak farmer logged in rahega
+        expiresIn: '7d', // The farmer will stay logged in for 7 days
     });
 };
 
