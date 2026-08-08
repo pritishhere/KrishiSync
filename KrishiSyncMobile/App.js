@@ -17,6 +17,44 @@ const API_BASE_URL = Platform.OS === 'web' ? 'http://localhost:5000/api' : 'http
 export default function App() {
   const [backendHealth, setBackendHealth] = useState('Checking...');
 
+  // Language State
+  const [lang, setLang] = useState('en');
+  const t = {
+    en: {
+      eyebrow: "Hackathon-ready MERN + Native app",
+      title: "KrishiSync",
+      subtitle: "A modern full-stack platform built for fast demos, clean UI, and a reliable backend.",
+      otpHeader: "📱 Farmer Mobile OTP Authentication (Twilio SMS + JWT)",
+      sendOtp: "📲 Send OTP SMS",
+      verifyOtp: "✅ Verify OTP",
+      cropScanner: "🔬 Plant.id AI Crop Leaf Scanner",
+      irrigation: "🌧️ Smart Irrigation Advisory Engine",
+      whatsappBot: "💬 Twilio WhatsApp & SMS Bot Simulator"
+    },
+    hi: {
+      eyebrow: "हैकथॉन-रेडी MERN + नैटिव ऐप",
+      title: "कृषिसिंक्स (KrishiSync)",
+      subtitle: "आधुनिक फुल-स्टैक प्लेटफॉर्म - त्वरित प्रदर्शन, स्वच्छ UI और विश्वसनीय बैकएंड।",
+      otpHeader: "📱 किसान मोबाइल OTP प्रमाणीकरण (Twilio SMS + JWT)",
+      sendOtp: "📲 OTP SMS भेजें",
+      verifyOtp: "✅ OTP सत्यापित करें",
+      cropScanner: "🔬 Plant.id AI फसल पत्ती स्कैनर",
+      irrigation: "🌧️ स्मार्ट सिंचाई सलाहकार इंजन",
+      whatsappBot: "💬 ट्विलियो व्हाट्सएप और एसएमएस बॉट"
+    },
+    bn: {
+      eyebrow: "হ্যাকথন-রেডি MERN + নেটিভ অ্যাপ",
+      title: "কৃষিসিংক (KrishiSync)",
+      subtitle: "দ্রুত ডেমো, আধুনিক UI এবং নির্ভরযোগ্য ব্যাকএন্ড সহ একটি ফুল-স্ট্যাক প্ল্যাটফর্ম।",
+      otpHeader: "📱 কৃষক মোবাইল OTP প্রমাণীকরণ (Twilio SMS + JWT)",
+      sendOtp: "📲 ওটিপি পাঠান",
+      verifyOtp: "✅ ওটিপি যাচাই করুন",
+      cropScanner: "🔬 Plant.id এআই শস্যের পাতা স্ক্যানার",
+      irrigation: "🌧️ স্মার্ট সেচ পরামর্শ ইঞ্জিন",
+      whatsappBot: "💬 টুইলিও হোয়াটসঅ্যাপ ও এসএমএস বট"
+    }
+  }[lang];
+
   // Auth State
   const [phone, setPhone] = useState('+919876543210');
   const [otp, setOtp] = useState('');
@@ -153,11 +191,22 @@ export default function App() {
 
         {/* Hero Banner Section (Exact Web Design) */}
         <View style={styles.heroCard}>
-          <Text style={styles.eyebrow}>Hackathon-ready MERN + Native app</Text>
-          <Text style={styles.heroTitle}>KrishiSync</Text>
-          <Text style={styles.subtitle}>
-            A modern full-stack platform built for fast demos, clean UI, and a reliable backend.
-          </Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+            <Text style={styles.eyebrow}>{t.eyebrow}</Text>
+            <View style={{ flexDirection: 'row', gap: 6 }}>
+              <TouchableOpacity onPress={() => setLang('en')} style={{ paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6, backgroundColor: lang === 'en' ? '#2563eb' : '#e2e8f0' }}>
+                <Text style={{ color: lang === 'en' ? '#fff' : '#334155', fontWeight: 'bold', fontSize: 12 }}>EN</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => setLang('hi')} style={{ paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6, backgroundColor: lang === 'hi' ? '#16a34a' : '#e2e8f0' }}>
+                <Text style={{ color: lang === 'hi' ? '#fff' : '#334155', fontWeight: 'bold', fontSize: 12 }}>हिंदी</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => setLang('bn')} style={{ paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6, backgroundColor: lang === 'bn' ? '#ca8a04' : '#e2e8f0' }}>
+                <Text style={{ color: lang === 'bn' ? '#fff' : '#334155', fontWeight: 'bold', fontSize: 12 }}>বাংলা</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <Text style={styles.heroTitle}>{t.title}</Text>
+          <Text style={styles.subtitle}>{t.subtitle}</Text>
 
           <View style={styles.statusPill}>
             <Text style={styles.statusPillText}>Backend: {backendHealth}</Text>
