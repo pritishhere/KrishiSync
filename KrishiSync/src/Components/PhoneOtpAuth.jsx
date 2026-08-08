@@ -130,13 +130,34 @@ export default function PhoneOtpAuth() {
       )}
 
       {step === 'LOGGED_IN' && user && (
-        <div style={{ backgroundColor: '#ffffff', padding: '12px 16px', borderRadius: '6px', border: '1px solid #93c5fd' }}>
-          <p style={{ margin: 0, fontWeight: 'bold', color: '#15803d', fontSize: '14px' }}>
-            🎉 Authenticated Farmer: {user.name} ({user.phoneNumber})
-          </p>
-          <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#64748b' }}>
-            JWT Session Token: <code style={{ backgroundColor: '#f1f5f9', padding: '2px 6px', borderRadius: '4px' }}>{token.substring(0, 30)}...</code>
-          </p>
+        <div style={{ backgroundColor: '#ffffff', padding: '12px 16px', borderRadius: '6px', border: '1px solid #93c5fd', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <p style={{ margin: 0, fontWeight: 'bold', color: '#15803d', fontSize: '14px' }}>
+              🎉 Authenticated Farmer: {user.name} ({user.phoneNumber})
+            </p>
+            <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#0369a1', fontWeight: '600' }}>
+              🔒 Session Status: Active & Verified (30-Day Encrypted Auth)
+            </p>
+          </div>
+          <button
+            onClick={() => {
+              setStep('SEND');
+              setUser(null);
+              setToken('');
+              setMessage('');
+            }}
+            style={{
+              padding: '4px 10px',
+              backgroundColor: '#f1f5f9',
+              color: '#475569',
+              border: '1px solid #cbd5e1',
+              borderRadius: '4px',
+              fontSize: '12px',
+              cursor: 'pointer'
+            }}
+          >
+            Logout
+          </button>
         </div>
       )}
 
