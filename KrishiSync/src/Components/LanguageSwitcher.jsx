@@ -11,6 +11,13 @@ export default function LanguageSwitcher() {
     { code: 'bn', label: 'বাংলা' },
   ];
 
+  const handleLanguageChange = (langCode) => {
+    if (i18n && typeof i18n.changeLanguage === 'function') {
+      i18n.changeLanguage(langCode);
+      localStorage.setItem('krishi_lang', langCode);
+    }
+  };
+
   return (
     <div className="flex flex-wrap gap-1.5 p-1 w-full sm:w-auto items-center justify-start">
       {languages.map((lang) => {
@@ -19,11 +26,11 @@ export default function LanguageSwitcher() {
           <button
             key={lang.code}
             type="button"
-            onClick={() => i18n?.changeLanguage && i18n.changeLanguage(lang.code)}
-            className={`px-3 py-1.5 rounded-lg font-bold text-xs transition-all shadow-sm active:scale-95 border ${
+            onClick={() => handleLanguageChange(lang.code)}
+            className={`px-3.5 py-1.5 rounded-xl font-black text-xs transition-all duration-200 shadow-sm active:scale-95 border ${
               isActive
-                ? 'bg-[#166534] text-white border-green-800 ring-2 ring-green-400/20'
-                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
+                ? 'bg-emerald-700 text-white border-emerald-800 shadow-emerald-700/30 ring-2 ring-emerald-400/30 scale-102'
+                : 'bg-white text-gray-700 border-gray-200 hover:bg-emerald-50 hover:text-emerald-800'
             }`}
           >
             {lang.label}
@@ -33,4 +40,3 @@ export default function LanguageSwitcher() {
     </div>
   );
 }
-
