@@ -140,52 +140,56 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f9f8f6] flex flex-col justify-center items-center p-3 sm:p-6 pb-safe relative overflow-hidden">
-      <div className="w-full max-w-120 ks-card ks-glass ks-appear p-5 sm:p-8 flex flex-col justify-between relative overflow-hidden z-10 shadow-sm border border-[#e2dcd0] rounded-md bg-white">
+    <div className="min-h-screen bg-linear-to-br from-[#0c2912] via-[#1b4318] to-[#081b0c] flex flex-col justify-center items-center p-4 sm:p-8 relative overflow-hidden text-white">
+      {/* Background Animated Glows */}
+      <div className="absolute top-10 left-10 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none animate-pulse" />
+      <div className="absolute bottom-10 right-10 w-96 h-96 bg-amber-400/15 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="w-full max-w-md glass-panel-dark p-6 sm:p-10 flex flex-col justify-between relative z-10 shadow-2xl rounded-3xl border border-emerald-400/30">
 
         <div>
-          <div className="flex items-center justify-between mb-6 pt-2">
-            <div className="flex items-center gap-2.5">
-              <div className="bg-[#2d5a27] text-white p-2.5 rounded-md shadow-sm flex items-center justify-center border border-[#1a3816]">
-                <Sprout className="h-6 w-6 stroke-[2.3]" />
+          <div className="flex items-center justify-between mb-8 pt-2">
+            <div className="flex items-center gap-3">
+              <div className="bg-linear-to-br from-emerald-500 to-teal-600 text-white p-3 rounded-2xl shadow-lg shadow-emerald-600/30 flex items-center justify-center border border-emerald-400/30">
+                <Sprout className="h-7 w-7 stroke-[2.3] animate-sway" />
               </div>
               <div>
-                <h1 className="text-xl font-extrabold font-heading text-gray-900 tracking-tight">
-                  Krishi<span className="text-[#2d5a27]">Sync</span>
+                <h1 className="text-2xl font-black text-white tracking-tight">
+                  Krishi<span className="text-emerald-400">Sync</span>
                 </h1>
-                <span className="text-[11px] font-bold text-[#2d5a27] bg-[#e8e0d5] px-2 py-0.5 rounded-md border border-[#e2dcd0] inline-block font-heading">
-                  स्मार्ट कृषि मंच
+                <span className="text-[11px] font-black text-emerald-300 bg-emerald-950/70 px-2.5 py-0.5 rounded-full border border-emerald-500/40 inline-block font-heading">
+                  स्मार्ट कृषि मंच 🌾
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center gap-1 text-[11px] font-bold text-[#2d5a27] bg-[#e8e0d5] px-2.5 py-1 rounded-md border border-[#e2dcd0]">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Backend Live</span>
+            <div className="flex items-center gap-1.5 text-[11px] font-extrabold text-emerald-300 bg-emerald-950/80 px-3 py-1.5 rounded-full border border-emerald-500/40 shadow-inner">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <span>Secure Session</span>
             </div>
           </div>
 
           {step === 1 && (
             <div className="space-y-5">
               <div>
-                <span className="text-[12px] font-bold text-[#2d5a27] bg-[#e8e0d5] px-2 py-0.5 rounded-md border border-[#e2dcd0] inline-block mb-1 font-heading">
-                  Namaste
+                <span className="text-[12px] font-extrabold text-amber-300 bg-amber-950/70 px-3 py-1 rounded-full border border-amber-500/40 inline-block mb-2 font-heading">
+                  Namaste 🌾
                 </span>
-                <h2 className="text-2xl font-black font-heading text-gray-900 leading-tight">
+                <h2 className="text-3xl font-black font-heading text-white leading-tight">
                   Welcome to KrishiSync
                 </h2>
-                <p className="text-[13px] font-medium text-gray-600 mt-1.5 leading-relaxed">
+                <p className="text-sm font-medium text-emerald-100/90 mt-2 leading-relaxed">
                   Enter your 10-digit mobile number to access real-time mandi prices, disease scanner, and agripool options.
                 </p>
               </div>
 
               <form onSubmit={handlePhoneSubmit} className="space-y-5">
-                <div className="space-y-1.5">
-                  <label htmlFor="phone-input" className="block text-[13px] font-bold text-gray-900 font-heading">
-                    Mobile Number <span className="text-[#2d5a27]">*</span>
+                <div className="space-y-2">
+                  <label htmlFor="phone-input" className="block text-xs font-black text-emerald-200 uppercase tracking-wider font-heading">
+                    Mobile Number <span className="text-amber-400">*</span>
                   </label>
                   <div className="relative flex items-center">
-                    <div className="absolute left-3.5 flex items-center gap-1 text-gray-900 font-bold text-[14px] pointer-events-none border-r border-[#e2dcd0] pr-2.5 font-heading">
+                    <div className="absolute left-3.5 flex items-center gap-1 text-emerald-300 font-extrabold text-sm pointer-events-none border-r border-emerald-500/40 pr-3 font-heading">
                       <span>IND +91</span>
                     </div>
                     <input
@@ -204,17 +208,17 @@ export default function Login() {
                       }}
                       disabled={isLoading}
                       aria-label="10 digit mobile phone number"
-                      className="w-full h-12 bg-[#f9f8f6] border border-[#e2dcd0] text-gray-900 text-[16px] font-bold rounded-md pl-22 pr-10 outline-none transition-all focus:bg-white focus:border-[#2d5a27] focus-visible:ring-2 focus-visible:ring-[#2d5a27] shadow-sm"
+                      className="w-full h-12 bg-white/10 border border-emerald-400/40 text-white placeholder-emerald-300/50 text-base font-extrabold rounded-xl pl-24 pr-10 outline-none transition-all focus:bg-white/20 focus:border-emerald-400 focus-visible:ring-2 focus-visible:ring-emerald-400 shadow-inner"
                     />
                     {isValidPhone && (
-                      <div className="absolute right-3 text-[#2d5a27]">
+                      <div className="absolute right-3 text-emerald-400">
                         <CheckCircle2 className="w-5 h-5 stroke-[2.3]" />
                       </div>
                     )}
                   </div>
-                  <p className="text-[11px] font-medium text-gray-500 flex justify-between items-center px-1">
+                  <p className="text-xs font-medium text-emerald-200/80 flex justify-between items-center px-1">
                     <span>Valid 10-digit Indian mobile number</span>
-                    <span className="font-bold text-gray-900">{phone.length}/10</span>
+                    <span className="font-bold text-white">{phone.length}/10</span>
                   </p>
                 </div>
 

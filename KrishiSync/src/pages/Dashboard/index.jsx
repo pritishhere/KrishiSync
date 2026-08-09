@@ -54,7 +54,10 @@ const DashboardPage = () => {
     : false;
 
   return (
-    <div className="p-4 space-y-5 pb-8 min-h-full font-body bg-[#f9f8f6] relative">
+    <div className="p-4 sm:p-8 space-y-6 pb-12 min-h-full font-body bg-linear-to-b from-[#f8faf6] via-[#f0f7ef] to-[#f8faf6] relative overflow-hidden">
+      {/* Ambient Radial Glows */}
+      <div className="absolute top-0 right-10 w-80 h-80 bg-emerald-400/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-20 left-10 w-96 h-96 bg-amber-400/15 rounded-full blur-3xl pointer-events-none" />
 
       {isLoading ? (
         <DashboardSkeleton />
@@ -63,36 +66,37 @@ const DashboardPage = () => {
       ) : (
         <>
           <div className="relative z-10">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center flex-wrap gap-4">
               <div>
-                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#2d5a27] bg-[#e8e0d5] px-2.5 py-0.5 rounded-md border border-[#e2dcd0] font-heading mb-2">
-                  <Sparkles size={12} />
-                  Live Backend Data
+                <span className="inline-flex items-center gap-1.5 text-xs font-black text-emerald-800 bg-emerald-100/80 px-3 py-1 rounded-full border border-emerald-300 font-heading mb-2 shadow-2xs">
+                  <Sparkles size={14} className="text-emerald-600 animate-spin-slow" />
+                  Live Backend Agriculture Data
                 </span>
-                <h1 className="text-[26px] sm:text-[28px] font-extrabold font-heading text-gray-900 leading-tight tracking-tight">
-                  Namaste, <span className="text-[#2d5a27]">{farmerName}</span>
+                <h1 className="text-3xl sm:text-4xl font-black font-heading text-gray-900 leading-tight tracking-tight">
+                  Namaste, <span className="text-emerald-700">{farmerName}</span> 🌾
                 </h1>
               </div>
 
               <button
                 onClick={loadDashboardData}
-                className="p-2.5 bg-white hover:bg-gray-50 text-gray-500 rounded-md border border-[#e2dcd0] shadow-sm transition-transform active:scale-95 cursor-pointer hover:border-[#2d5a27] hover:text-[#2d5a27]"
-                title="Refresh Data"
+                className="p-3 bg-white hover:bg-emerald-50 text-emerald-700 rounded-2xl border border-emerald-200 shadow-md transition-all active:scale-95 cursor-pointer hover:border-emerald-500"
+                title="Refresh Live Data"
               >
-                <RefreshCw size={18} strokeWidth={2.2} />
+                <RefreshCw size={20} strokeWidth={2.2} />
               </button>
             </div>
 
             {/* Crop selector */}
-            <div className="mt-3 flex items-center gap-2 flex-wrap">
+            <div className="mt-4 flex items-center gap-2.5 flex-wrap">
+              <span className="text-xs font-extrabold text-gray-600 uppercase tracking-wider">Select Crop:</span>
               {['wheat', 'rice', 'tomato', 'mustard', 'cotton'].map((c) => (
                 <button
                   key={c}
                   onClick={() => setCropType(c)}
-                  className={`px-3 py-1.5 rounded-md text-[12px] font-bold font-heading transition-all cursor-pointer border ${
+                  className={`px-4 py-2 rounded-full text-xs font-black font-heading transition-all duration-200 cursor-pointer border ${
                     cropType === c
-                      ? 'bg-[#2d5a27] text-white border-[#2d5a27] shadow-sm'
-                      : 'bg-white text-gray-600 border-[#e2dcd0] hover:border-[#2d5a27] hover:text-[#2d5a27]'
+                      ? 'bg-emerald-700 text-white border-emerald-700 shadow-md shadow-emerald-700/30 scale-102'
+                      : 'bg-white/80 text-gray-700 border-gray-200 hover:border-emerald-500 hover:text-emerald-700'
                   }`}
                 >
                   {c.charAt(0).toUpperCase() + c.slice(1)}

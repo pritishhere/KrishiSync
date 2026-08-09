@@ -3,7 +3,7 @@
  * Centralizes the backend base URL and provides a JWT-aware fetch helper
  * so every protected endpoint automatically attaches the Bearer token.
  */
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://krishisync-9k1s.onrender.com';
 
 const TOKEN_KEY = 'krishi_sync_token';
 const USER_KEY = 'krishi_sync_user';

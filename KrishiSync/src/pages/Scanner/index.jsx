@@ -15,6 +15,7 @@ import PageHeader from '../../components/layout/PageHeader';
 import Button from '../../components/common/Button';
 import { ResultCard, ScannerDemoToolbar } from '../../components/scanner';
 import { scannerService } from '../../services/scannerService';
+import CropScanDoodle from '../../Components/doodles/CropScanDoodle';
 
 export const ScannerPage = () => {
   // State Machine: EMPTY | IMAGE_SELECTED | ANALYZING | SUCCESS | ERROR | NOT_A_PLANT

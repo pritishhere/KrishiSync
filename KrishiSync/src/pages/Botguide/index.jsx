@@ -29,19 +29,19 @@ export const BotGuidePage = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#f9f8f6] font-body relative">
-      <PageHeader title="Bot Guide & SMS Assistant" showBack={false} />
+    <div className="flex flex-col h-full bg-linear-to-b from-[#f8faf6] via-[#f0f7ef] to-[#f8faf6] font-body min-h-screen">
+      <PageHeader title="2G SMS & WhatsApp Voice Assistant" showBack={false} />
 
-      <div className="flex-1 overflow-y-auto pb-8 space-y-5 p-4">
+      <div className="flex-1 overflow-y-auto pb-12 space-y-6 p-4 sm:p-8 max-w-5xl mx-auto w-full">
         {/* Intro Header */}
-        <div className="bg-white rounded-md border border-[#e2dcd0] shadow-sm p-5 space-y-2">
-          <span className="text-[12px] font-bold text-[#2d5a27] bg-[#e8e0d5] px-2.5 py-0.5 rounded-md border border-[#e2dcd0] font-heading inline-block">
-            Low-Literacy AI Access
+        <div className="glass-panel rounded-3xl p-6 sm:p-8 space-y-3 shadow-xl border border-emerald-500/20">
+          <span className="text-xs font-black text-emerald-800 bg-emerald-100/90 px-3.5 py-1 rounded-full border border-emerald-300 font-heading inline-block shadow-2xs">
+            ✨ Low-Literacy Voice & SMS Access
           </span>
-          <h2 className="text-[22px] font-extrabold font-heading text-gray-900 leading-snug">
-            Farm Assistant via WhatsApp &amp; SMS
+          <h2 className="text-2xl sm:text-3xl font-black font-heading text-gray-900 leading-snug">
+            Farm Assistant via WhatsApp &amp; Offline SMS
           </h2>
-          <p className="text-[14px] font-medium text-gray-600 leading-relaxed">
+          <p className="text-base font-medium text-gray-700 leading-relaxed">
             No smartphone app required! Send simple text messages or voice notes to our automated bot number for instant market rates and weather alerts.
           </p>
         </div>

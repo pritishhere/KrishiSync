@@ -4,6 +4,8 @@ import PageHeader from '../../components/layout/PageHeader';
 import Button from '../../components/common/Button';
 import { rideService } from '../../services/rideService';
 
+import MandiCartDoodle from '../../Components/doodles/MandiCartDoodle';
+
 export const AgriPoolPage = () => {
   const [rides, setRides] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -33,9 +35,8 @@ export const AgriPoolPage = () => {
   }, [view]);
 
   const handleBookRide = async (rideId, farmerName) => {
-    // This is a simulated booking as per rideService.js
     const result = await rideService.bookRideSpace(rideId);
-    alert(result.message); // Using alert for simplicity, can be replaced with a toast notification
+    alert(result.message);
   };
 
   const renderRideCard = (ride) => (
@@ -144,19 +145,20 @@ export const AgriPoolPage = () => {
   );
 
   return (
-    <div className="flex flex-col h-full bg-[#f9f8f6] font-body">
-      <PageHeader title="Agri-Pool Transport" showBack={false} />
+    <div className="flex flex-col h-full bg-linear-to-b from-[#f8faf6] via-[#f0f7ef] to-[#f8faf6] font-body min-h-screen">
+      <PageHeader title="Agri-Pool Shared Transport" showBack={false} />
 
-      <div className="flex-1 p-4 space-y-4 overflow-y-auto pb-8">
-        <div className="relative rounded-md overflow-hidden shadow-sm border border-[#e2dcd0] h-48 bg-[#2d5a27] flex items-center justify-center text-[#e8e0d5]/80 flex-col p-4 text-center">
-            <Map size={48} className="opacity-20"/>
-            <p className="font-bold mt-2 text-white">Live Map of Nearby Rides</p>
-            <span className="text-xs text-[#e8e0d5]">(Map Integration Coming Soon)</span>
+      <div className="flex-1 p-4 sm:p-8 space-y-6 overflow-y-auto pb-12 max-w-5xl mx-auto w-full">
+        {/* Banner with Map Accent */}
+        <div className="relative rounded-3xl overflow-hidden shadow-xl border border-emerald-500/30 min-h-44 bg-linear-to-r from-emerald-800 to-teal-900 flex items-center justify-center text-white flex-col p-6 text-center">
+            <MandiCartDoodle className="w-14 h-14 mb-2 animate-bounce" />
+            <p className="font-black text-xl text-white">Live Shared Transport Network</p>
+            <span className="text-xs text-emerald-200 font-extrabold mt-1">Share transport costs with nearby farmers & earn Eco-Coins</span>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 bg-[#e8e0d5] p-1 rounded-md border border-[#e2dcd0]">
-            <button onClick={() => setView('find')} className={`py-2 px-4 rounded-md text-sm font-bold transition-all ${view === 'find' ? 'bg-white text-[#2d5a27] shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}>Find a Ride</button>
-            <button onClick={() => setView('publish')} className={`py-2 px-4 rounded-md text-sm font-bold transition-all ${view === 'publish' ? 'bg-white text-[#2d5a27] shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}>Publish a Ride</button>
+        <div className="grid grid-cols-2 gap-2 bg-emerald-100/70 p-1.5 rounded-full border border-emerald-300 shadow-inner">
+            <button onClick={() => setView('find')} className={`py-2.5 px-4 rounded-full text-xs sm:text-sm font-black transition-all duration-200 ${view === 'find' ? 'bg-emerald-700 text-white shadow-md' : 'text-gray-700 hover:text-emerald-800'}`}>Find a Ride</button>
+            <button onClick={() => setView('publish')} className={`py-2.5 px-4 rounded-full text-xs sm:text-sm font-black transition-all duration-200 ${view === 'publish' ? 'bg-emerald-700 text-white shadow-md' : 'text-gray-700 hover:text-emerald-800'}`}>Publish a Ride</button>
         </div>
 
         {view === 'find' ? renderFindView() : renderPublishView()}

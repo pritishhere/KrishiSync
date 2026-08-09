@@ -5,6 +5,8 @@ import Button from '../../components/common/Button';
 import { mandiService } from '../../services/mandiService';
 import MandiMapLocator from '../../Components/MandiMapLocator';
 
+import MandiCartDoodle from '../../Components/doodles/MandiCartDoodle';
+
 const formatCurrency = (value) => {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
@@ -49,17 +51,17 @@ export const MandiPage = () => {
   }, [handleCalculate]);
 
   return (
-    <div className="flex flex-col h-full bg-[#f9f8f6] font-body">
-      <PageHeader title="Mandi Decision & Profit Calculator" showBack={false} />
+    <div className="flex flex-col h-full bg-linear-to-b from-[#f8faf6] via-[#f0f7ef] to-[#f8faf6] font-body min-h-screen">
+      <PageHeader title="Mandi Decision & Net Profit Engine" showBack={false} />
 
-      <div className="flex-1 p-4 space-y-4 overflow-y-auto pb-8">
-        <div className="ks-card ks-appear p-5 space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-[#e2dcd0]">
-            <span className="text-[13px] font-bold text-[#2d5a27] font-heading flex items-center gap-1.5">
-              <Calculator size={16} /> MandiMind Net Revenue Engine
+      <div className="flex-1 p-4 sm:p-8 space-y-6 overflow-y-auto pb-12 max-w-7xl mx-auto w-full">
+        <div className="glass-panel rounded-3xl p-6 sm:p-8 space-y-5 shadow-xl border border-emerald-500/20">
+          <div className="flex items-center justify-between pb-4 border-b border-gray-100 flex-wrap gap-3">
+            <span className="text-xl font-black text-gray-900 font-heading flex items-center gap-3">
+              <MandiCartDoodle className="w-10 h-10" /> MandiMind Net Revenue Engine
             </span>
-            <span className="text-[11px] font-semibold text-[#2d5a27] bg-[#e8e0d5] px-2.5 py-0.5 rounded-md border border-[#e2dcd0] flex items-center gap-1">
-              <Globe size={11} /> Real Govt. Prices
+            <span className="text-xs font-black text-emerald-800 bg-emerald-100/90 px-3.5 py-1.5 rounded-full border border-emerald-300 flex items-center gap-1.5 shadow-2xs">
+              <Globe size={14} className="text-emerald-600 animate-spin-slow" /> Real Govt. Prices
             </span>
           </div>
 

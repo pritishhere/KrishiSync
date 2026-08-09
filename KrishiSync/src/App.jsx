@@ -30,6 +30,11 @@ import DiseaseScanner from './Components/DiseaseScanner';
 import PhoneOtpAuth from './Components/PhoneOtpAuth';
 import TwilioBotSimulator from './Components/TwilioBotSimulator';
 
+// Animated Vector Doodles
+import FarmerCowAnimatedDoodle from './Components/doodles/FarmerCowAnimatedDoodle';
+import MandiCartDoodle from './Components/doodles/MandiCartDoodle';
+import CropScanDoodle from './Components/doodles/CropScanDoodle';
+
 function MainHome() {
   const { t } = useTranslation();
   const [health, setHealth] = useState('Checking...');
@@ -41,68 +46,109 @@ function MainHome() {
   }, []);
 
   return (
-    <main id="home" className="p-4 sm:p-8 lg:p-10 space-y-10 min-h-screen text-gray-900 overflow-x-hidden">
+    <main id="home" className="p-4 sm:p-8 lg:p-10 space-y-12 min-h-screen text-gray-900 overflow-x-hidden bg-linear-to-b from-[#f8faf6] via-[#f0f7ef] to-[#f8faf6]">
       
-      <section className="relative rounded-lg p-0 bg-[#2d5a27] overflow-hidden border border-[#e2dcd0] shadow-xl">
-        {/* Blurred Farmer Background */}
-        <div 
-          className="absolute inset-0 z-0 bg-cover bg-center blur-sm scale-110 opacity-90"
-          style={{ backgroundImage: "url('https://t4.ftcdn.net/jpg/05/95/55/89/360_F_595558921_z1JnF4ieH75XlWoDPuh1Os97QkPnb4dx.jpg')" }}
-        />
-        {/* Dark Overlay for Readability */}
-        <div className="absolute inset-0 z-0 bg-green-950/75" />
+      {/* 🌾 HERO SECTION WITH ANIMATED FARMER & COW DOODLE */}
+      <section className="relative rounded-3xl p-0 bg-linear-to-br from-[#1b4318] via-[#2d5a27] to-[#0f2a10] overflow-hidden border-2 border-emerald-500/30 shadow-2xl">
+        {/* Ambient Radial Glows */}
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-emerald-400/20 rounded-full blur-3xl pointer-events-none animate-pulse" />
+        <div className="absolute -bottom-10 left-10 w-80 h-80 bg-amber-400/15 rounded-full blur-3xl pointer-events-none" />
         
-        <div className="relative z-10 p-6 sm:p-10 lg:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center text-white">
-          <div className="lg:col-span-8 space-y-6 text-left">
-            
+        <div className="relative z-10 p-6 sm:p-10 lg:p-14 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center text-white">
+          
+          {/* Left Column: Title & Search */}
+          <div className="lg:col-span-7 space-y-6 text-left">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-950/70 border border-emerald-400/40 text-emerald-300 text-xs sm:text-sm font-extrabold tracking-wide shadow-inner backdrop-blur-md">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+              🌾 AI-Powered Indian Farming Ecosystem
+            </span>
 
-            {/* HUGE POPPING KRISHISYNC TITLE */}
-            <div className="space-y-2">
-              <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight leading-none text-white">
-                Krishi<span className="text-[#e8e0d5]">Sync</span>
+            {/* HUGE SHIMMER TITLE */}
+            <div className="space-y-3">
+              <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight leading-none text-white drop-shadow-md font-heading">
+                Krishi<span className="text-shimmer">Sync</span>
               </h1>
-              <p className="text-lg sm:text-2xl font-bold text-emerald-100 tracking-tight">
-                {t('title') || 'Smart Agriculture Intelligence for Every Farmer'}
+              <p className="text-lg sm:text-2xl font-bold text-emerald-100 tracking-tight font-heading">
+                Smart Agriculture Intelligence for Every Farmer
               </p>
             </div>
 
-            <p className="text-base sm:text-lg text-emerald-50 max-w-xl leading-relaxed font-medium">
+            <p className="text-base sm:text-lg text-emerald-100/90 max-w-xl leading-relaxed font-medium">
               Access real-time Mandi price intelligence, Plant.id AI leaf diagnostics, evapotranspiration water advisories, and 2G SMS connectivity.
             </p>
 
             {/* Integrated Voice & Text Search Drawer */}
-            <VoiceSearch />
+            <div className="pt-2">
+              <VoiceSearch />
+            </div>
 
             {/* Live Stats Bar */}
-            <div className="grid grid-cols-3 gap-3 pt-4 border-t border-[#e8e0d5]/20">
-              <div>
-                <span className="text-xl sm:text-3xl font-black text-white block">10,000+</span>
-                <span className="text-xs text-emerald-200 font-bold uppercase tracking-wider">Active Farmers</span>
+            <div className="grid grid-cols-3 gap-3 pt-6 border-t border-emerald-400/20">
+              <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/10 text-center">
+                <span className="text-xl sm:text-3xl font-black text-amber-300 block">10,000+</span>
+                <span className="text-[11px] text-emerald-100 font-bold uppercase tracking-wider">Active Farmers</span>
               </div>
-              <div>
-                <span className="text-xl sm:text-3xl font-black text-white block">54 Mandis</span>
-                <span className="text-xs text-emerald-200 font-bold uppercase tracking-wider">Live Rates</span>
+              <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/10 text-center">
+                <span className="text-xl sm:text-3xl font-black text-emerald-300 block">54 Mandis</span>
+                <span className="text-[11px] text-emerald-100 font-bold uppercase tracking-wider">Live Rates</span>
               </div>
-              <div>
-                <span className="text-xl sm:text-3xl font-black text-white block">98.4%</span>
-                <span className="text-xs text-emerald-200 font-bold uppercase tracking-wider">AI Accuracy</span>
+              <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/10 text-center">
+                <span className="text-xl sm:text-3xl font-black text-cyan-300 block">98.4%</span>
+                <span className="text-[11px] text-emerald-100 font-bold uppercase tracking-wider">AI Accuracy</span>
               </div>
             </div>
           </div>
+
+          {/* Right Column: Authentic Happy Indian Farmer Photo Card */}
+          <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
+            <div className="relative w-full max-w-md bg-white/15 backdrop-blur-2xl p-3 sm:p-4 rounded-3xl border-2 border-emerald-400/40 shadow-2xl hover:scale-102 transition-all duration-500 group">
+              
+              {/* Badge Overlay */}
+              <div className="flex items-center justify-between mb-3 px-2">
+                <span className="text-xs font-black uppercase tracking-widest text-amber-300 flex items-center gap-1.5 font-heading">
+                  🌾 Indian Farmer Pride
+                </span>
+                <span className="text-[10px] bg-emerald-500/40 text-emerald-100 px-3 py-1 rounded-full font-black border border-emerald-400/40 tracking-wider">
+                  VERIFIED KRISHI PARTNER
+                </span>
+              </div>
+              
+              {/* User Uploaded Farmer Photo */}
+              <div className="relative overflow-hidden rounded-2xl border border-white/20 shadow-lg bg-emerald-950">
+                <img
+                  src="/assets/happy_farmer_victory.png"
+                  alt="Smiling Indian Farmer in Green Agriculture Field"
+                  className="w-full h-72 sm:h-80 object-cover object-center scale-100 group-hover:scale-103 transition-transform duration-700 rounded-2xl"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
+                
+                {/* Floating Victory Tag */}
+                <div className="absolute bottom-3 left-3 bg-emerald-950/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-emerald-500/40 text-amber-300 text-xs font-extrabold flex items-center gap-1.5 shadow-md">
+                  <span>✌️ Jai Jawan, Jai Kisan</span>
+                </div>
+              </div>
+
+              {/* Bottom Caption */}
+              <div className="mt-3 bg-black/30 backdrop-blur-md p-3 rounded-2xl border border-white/15 text-center">
+                <p className="text-xs text-emerald-100 font-extrabold flex items-center justify-center gap-2 m-0">
+                  <span>🌾 Empowering 10,000+ Indian Farmers with Smart AI Intelligence</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
       {/* 3. CORE FEATURES & SMART TOOLS GRID */}
-      <section className="space-y-8">
+      <section className="space-y-10">
         
         {/* Category A: Market & Financial Tools */}
-        <div className="space-y-4">
-          <div className="border-b border-[#e2dcd0] pb-3 flex items-center justify-between">
+        <div className="space-y-5">
+          <div className="border-b border-[#e2dcd0] pb-4 flex items-center justify-between">
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight m-0 flex items-center gap-2.5">
-                <span className="p-1.5 bg-[#e8e0d5] rounded-lg border border-[#e2dcd0] text-[#5c4033]">
-                  <Banknote className="w-5 h-5" />
-                </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight m-0 flex items-center gap-3">
+                <MandiCartDoodle className="w-10 h-10" />
                 <span>Market Intelligence & Financial Tools</span>
               </h2>
               <p className="text-base text-gray-600 m-0 mt-1 font-medium">
@@ -114,17 +160,18 @@ function MainHome() {
           {/* Top row: 2-col — Profit Estimator + Farmer Mobile Auth */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
             {/* Card 1: Mandi Net Profit Calculator */}
-            <div id="calculator" className="h-full bg-white rounded-lg border border-[#e2dcd0] p-6 flex flex-col justify-between space-y-4">
-              <div className="flex items-center justify-between border-b border-[#e2dcd0] pb-3">
+            <div id="calculator" className="h-full glass-panel rounded-2xl p-6 flex flex-col justify-between space-y-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-emerald-500/20">
+              <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                 <div className="flex items-center gap-3">
-                  <span className="p-2.5 bg-[#f9f8f6] text-[#2d5a27] border border-[#e2dcd0] rounded-md text-lg">
-                    <Banknote className="w-5 h-5" />
+                  <span className="p-2.5 bg-emerald-100 text-[#2d5a27] rounded-xl text-lg shadow-xs">
+                    <Banknote className="w-6 h-6" />
                   </span>
                   <div>
                     <h3 className="text-base font-extrabold text-gray-900 m-0">Profit Estimator</h3>
                     <span className="text-xs font-black text-[#5c4033] uppercase tracking-widest">Financial Tool</span>
                   </div>
                 </div>
+                <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black tracking-wider animate-pulse border border-emerald-300">⚡ ELECTRIC AI</span>
               </div>
               <div className="flex-1 flex flex-col justify-between">
                 <MandiCalculator mandiName="Kolkata Central Mandi" cropPricePerKg={30} distanceInKm={25} />
@@ -132,17 +179,18 @@ function MainHome() {
             </div>
 
             {/* Card 3: Farmer Mobile OTP Auth */}
-            <div className="h-full bg-white rounded-lg border border-[#e2dcd0] p-6 flex flex-col justify-between space-y-4">
-              <div className="flex items-center justify-between border-b border-[#e2dcd0] pb-3">
+            <div className="h-full glass-panel rounded-2xl p-6 flex flex-col justify-between space-y-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-purple-500/20">
+              <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                 <div className="flex items-center gap-3">
-                  <span className="p-2.5 bg-[#f9f8f6] text-[#5c4033] border border-[#e2dcd0] rounded-md text-lg">
-                    <Smartphone className="w-5 h-5" />
+                  <span className="p-2.5 bg-purple-100 text-purple-700 rounded-xl text-lg shadow-xs">
+                    <Smartphone className="w-6 h-6" />
                   </span>
                   <div>
                     <h3 className="text-base font-extrabold text-gray-900 m-0">Farmer Mobile Auth</h3>
-                    <span className="text-xs font-black text-[#5c4033] uppercase tracking-widest">SMS OTP Session</span>
+                    <span className="text-xs font-black text-purple-700 uppercase tracking-widest">SMS OTP Session</span>
                   </div>
                 </div>
+                <span className="px-2.5 py-1 rounded-full bg-purple-100 text-purple-800 text-[10px] font-black tracking-wider animate-pulse border border-purple-300">⚡ ELECTRIC AI</span>
               </div>
               <div className="flex-1 flex flex-col justify-between">
                 <PhoneOtpAuth />
@@ -151,17 +199,18 @@ function MainHome() {
           </div>
 
           {/* Full-width row: GPS Mandi Locator */}
-          <div id="mandi" className="bg-white rounded-lg border border-[#e2dcd0] p-6 flex flex-col space-y-4 w-full">
-            <div className="flex items-center justify-between border-b border-[#e2dcd0] pb-3">
+          <div id="mandi" className="glass-panel rounded-2xl p-6 flex flex-col space-y-4 w-full shadow-lg hover:shadow-xl transition-all duration-300 border border-blue-500/20">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-3">
               <div className="flex items-center gap-3">
-                <span className="p-2.5 bg-[#f9f8f6] text-[#2d5a27] border border-[#e2dcd0] rounded-md text-lg">
-                  <MapPin className="w-5 h-5" />
+                <span className="p-2.5 bg-blue-100 text-blue-700 rounded-xl text-lg shadow-xs">
+                  <MapPin className="w-6 h-6" />
                 </span>
                 <div>
                   <h3 className="text-base font-extrabold text-gray-900 m-0">GPS Mandi Locator</h3>
-                  <span className="text-xs font-black text-[#5c4033] uppercase tracking-widest">Geolocation Market</span>
+                  <span className="text-xs font-black text-blue-700 uppercase tracking-widest">Geolocation Market</span>
                 </div>
               </div>
+              <span className="px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 text-[10px] font-black tracking-wider animate-pulse border border-blue-300">📍 LIVE MAP</span>
             </div>
             <MandiMapLocator />
           </div>
@@ -169,13 +218,11 @@ function MainHome() {
         </div>
 
         {/* Category B: AI Agronomy & Offline Advisory */}
-        <div className="space-y-4 pt-4">
-          <div className="border-b border-[#e2dcd0] pb-3 flex items-center justify-between">
+        <div className="space-y-5 pt-4">
+          <div className="border-b border-[#e2dcd0] pb-4 flex items-center justify-between">
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight m-0 flex items-center gap-2.5">
-                <span className="p-1.5 bg-[#e8e0d5] rounded-lg border border-[#e2dcd0] text-[#5c4033]">
-                  <Microscope className="w-5 h-5" />
-                </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight m-0 flex items-center gap-3">
+                <CropScanDoodle className="w-10 h-10" />
                 <span>AI Agronomy & Offline Advisory</span>
               </h2>
               <p className="text-base text-gray-600 m-0 mt-1 font-medium">
@@ -186,17 +233,18 @@ function MainHome() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
             {/* Card 4: AI Crop Disease Scanner */}
-            <div className="bg-white rounded-lg border border-[#e2dcd0] p-6 flex flex-col space-y-4">
-              <div className="flex items-center justify-between border-b border-[#e2dcd0] pb-3">
+            <div className="glass-panel rounded-2xl p-6 flex flex-col space-y-4 shadow-lg hover:shadow-xl transition-all duration-300 border border-amber-500/20">
+              <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                 <div className="flex items-center gap-3">
-                  <span className="p-2.5 bg-[#f9f8f6] text-[#2d5a27] border border-[#e2dcd0] rounded-md text-lg">
-                    <Microscope className="w-5 h-5" />
+                  <span className="p-2.5 bg-amber-100 text-amber-800 rounded-xl text-lg shadow-xs">
+                    <Microscope className="w-6 h-6" />
                   </span>
                   <div>
                     <h3 className="text-base font-extrabold text-gray-900 m-0">Plant.id AI Scanner</h3>
-                    <span className="text-xs font-black text-[#5c4033] uppercase tracking-widest">Leaf Diagnostics</span>
+                    <span className="text-xs font-black text-amber-700 uppercase tracking-widest">Leaf Diagnostics</span>
                   </div>
                 </div>
+                <span className="px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 text-[10px] font-black tracking-wider animate-pulse border border-amber-300">⚡ ELECTRIC AI</span>
               </div>
               <div className="flex-1 flex flex-col justify-between">
                 <DiseaseScanner />
@@ -204,17 +252,18 @@ function MainHome() {
             </div>
 
             {/* Card 5: Smart Irrigation Engine */}
-            <div className="bg-white rounded-lg border border-[#e2dcd0] p-6 flex flex-col space-y-4">
-              <div className="flex items-center justify-between border-b border-[#e2dcd0] pb-3">
+            <div className="glass-panel rounded-2xl p-6 flex flex-col space-y-4 shadow-lg hover:shadow-xl transition-all duration-300 border border-cyan-500/20">
+              <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                 <div className="flex items-center gap-3">
-                  <span className="p-2.5 bg-[#f9f8f6] text-[#0ea5e9] border border-[#e2dcd0] rounded-md text-lg">
-                    <CloudRain className="w-5 h-5" />
+                  <span className="p-2.5 bg-cyan-100 text-cyan-800 rounded-xl text-lg shadow-xs">
+                    <CloudRain className="w-6 h-6" />
                   </span>
                   <div>
-                    <h3 className="text-base font-extrabold text-[#2d5a27] m-0">Smart Irrigation Engine</h3>
-                    <span className="text-xs font-black text-[#0ea5e9] uppercase tracking-widest">Weather Rules</span>
+                    <h3 className="text-base font-extrabold text-gray-900 m-0">Smart Irrigation Engine</h3>
+                    <span className="text-xs font-black text-cyan-700 uppercase tracking-widest">Weather Rules</span>
                   </div>
                 </div>
+                <span className="px-2.5 py-1 rounded-full bg-cyan-100 text-cyan-800 text-[10px] font-black tracking-wider animate-pulse border border-cyan-300">⚡ ELECTRIC AI</span>
               </div>
               <div className="flex-1 flex flex-col justify-between">
                 <SmartIrrigation />
@@ -222,17 +271,18 @@ function MainHome() {
             </div>
 
             {/* Card 6: Feature Phone SMS / IVR Advisory */}
-            <div id="advisory" className="bg-white rounded-lg border border-[#e2dcd0] p-6 flex flex-col space-y-4">
-              <div className="flex items-center justify-between border-b border-[#e2dcd0] pb-3">
+            <div id="advisory" className="glass-panel rounded-2xl p-6 flex flex-col space-y-4 shadow-lg hover:shadow-xl transition-all duration-300 border border-emerald-500/20">
+              <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                 <div className="flex items-center gap-3">
-                  <span className="p-2.5 bg-[#f9f8f6] text-[#5c4033] border border-[#e2dcd0] rounded-md text-lg">
-                    <MessageSquare className="w-5 h-5" />
+                  <span className="p-2.5 bg-emerald-100 text-[#2d5a27] rounded-xl text-lg shadow-xs">
+                    <MessageSquare className="w-6 h-6" />
                   </span>
                   <div>
                     <h3 className="text-base font-extrabold text-gray-900 m-0">2G SMS & WhatsApp Bot</h3>
                     <span className="text-xs font-black text-[#5c4033] uppercase tracking-widest">Offline Simulator</span>
                   </div>
                 </div>
+                <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black tracking-wider animate-pulse border border-emerald-300">⚡ ELECTRIC AI</span>
               </div>
               <div className="flex-1 flex flex-col justify-between">
                 <TwilioBotSimulator />
