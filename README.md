@@ -3,6 +3,9 @@
 # KrishiSync
 **Empowering farmers with real-time AI agronomy, geospatial market intelligence, and smart diagnostics.**
 
+[![Live Web App](https://img.shields.io/badge/Live%20Web%20App-krishisync--frontend.onrender.com-brightgreen?style=for-the-badge&logo=render)](https://krishisync-frontend.onrender.com)
+[![Backend API](https://img.shields.io/badge/Backend%20API-krishisync--9k1s.onrender.com-blue?style=for-the-badge&logo=render)](https://krishisync-9k1s.onrender.com)
+
 ![Hackathon Project](https://img.shields.io/badge/Hackathon-Project-brightgreen?style=for-the-badge)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
@@ -12,9 +15,9 @@
 ![Leaflet](https://img.shields.io/badge/Leaflet-199900?style=for-the-badge&logo=Leaflet&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-<br />
-
-<!-- Hero Image Placeholder -->
+### 🌐 Live Deployment
+- **Frontend App:** [https://krishisync-frontend.onrender.com](https://krishisync-frontend.onrender.com)
+- **Backend API:** [https://krishisync-9k1s.onrender.com](https://krishisync-9k1s.onrender.com)
 
 </div>
 
