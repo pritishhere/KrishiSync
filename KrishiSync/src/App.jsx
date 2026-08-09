@@ -7,18 +7,18 @@ import './App.css';
 // Config & Context
 import { API_BASE_URL } from './services/apiConfig';
 import { AppProvider } from './context/AppContext';
-import Layout from './Components/layout/Layout';
+import Layout from './components/layout/Layout';
 
 // Member 1 Pages
 import LoginPage from './pages/Login';
 import DashboardPage from './pages/Dashboard';
 import ScannerPage from './pages/Scanner';
 import MandiPage from './pages/Mandi';
-import AgriPoolPage from './pages/AgriPool';
-import BotGuidePage from './pages/BotGuide';
+import AgriPoolPage from './pages/Agripool';
+import BotGuidePage from './pages/Botguide';
 
 // Member 2 Components
-import './Utils/i18n';
+import './i18n';
 import LanguageSwitcher from './Components/LanguageSwitcher';
 import VoiceSearch from './Components/VoiceSearch';
 import MandiCalculator from './Components/MandiCalculator';
