@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Leaf, LogOut, Menu, X, Home, TrendingUp, Calculator, PhoneCall } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 import { useNavigate, useLocation } from 'react-router-dom';
-import LanguageSwitcher from '../LanguageSwitcher';
+import LanguageSwitcher from '../../Components/LanguageSwitcher';
 
 const TopBar = () => {
   const { t } = useTranslation();
