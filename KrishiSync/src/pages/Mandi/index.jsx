@@ -3,6 +3,7 @@ import { MapPin, Truck, IndianRupee, Sparkles, Calculator, TrendingUp, Globe } f
 import PageHeader from '../../components/layout/PageHeader';
 import Button from '../../components/common/Button';
 import { mandiService } from '../../services/mandiService';
+import MandiMapLocator from '../../Components/MandiMapLocator';
 
 const formatCurrency = (value) => {
   return new Intl.NumberFormat('en-IN', {
@@ -48,16 +49,16 @@ export const MandiPage = () => {
   }, [handleCalculate]);
 
   return (
-    <div className="flex flex-col h-full bg-linear-to-br from-[#f0fdf4] via-[#ecfdf5] to-[#f8fafc] font-body">
+    <div className="flex flex-col h-full bg-[#f9f8f6] font-body">
       <PageHeader title="Mandi Decision & Profit Calculator" showBack={false} />
 
       <div className="flex-1 p-4 space-y-4 overflow-y-auto pb-8">
         <div className="ks-card ks-appear p-5 space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-gray-100">
-            <span className="text-[13px] font-bold text-[#2E7D32] font-heading flex items-center gap-1.5">
+          <div className="flex items-center justify-between pb-2 border-b border-[#e2dcd0]">
+            <span className="text-[13px] font-bold text-[#2d5a27] font-heading flex items-center gap-1.5">
               <Calculator size={16} /> MandiMind Net Revenue Engine
             </span>
-            <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
+            <span className="text-[11px] font-semibold text-[#2d5a27] bg-[#e8e0d5] px-2.5 py-0.5 rounded-md border border-[#e2dcd0] flex items-center gap-1">
               <Globe size={11} /> Real Govt. Prices
             </span>
           </div>
@@ -71,11 +72,11 @@ export const MandiPage = () => {
                 id="crop-select"
                 value={selectedCrop}
                 onChange={(e) => setSelectedCrop(e.target.value)}
-                className="w-full bg-[#F9FAFB] border border-gray-300 text-[#1F2937] text-[14px] font-bold rounded-xl px-3.5 py-2.5 outline-none focus:border-[#2E7D32] focus-visible:ring-2 focus-visible:ring-[#2E7D32] cursor-pointer"
+                className="w-full bg-[#f9f8f6] border border-[#e2dcd0] text-gray-900 text-[14px] font-bold rounded-md px-3.5 py-2.5 outline-none focus:border-[#2d5a27] focus-visible:ring-2 focus-visible:ring-[#2d5a27] cursor-pointer shadow-sm"
               >
                 {crops.map((c) => (
                   <option key={c.id} value={c.id}>
-                    {c.icon} {c.name}
+                    {c.name}
                   </option>
                 ))}
               </select>
@@ -93,9 +94,9 @@ export const MandiPage = () => {
                   step="50"
                   value={quantityKg}
                   onChange={(e) => setQuantityKg(Math.max(1, Number(e.target.value)))}
-                  className="w-full bg-[#F9FAFB] border border-gray-300 text-[#1F2937] text-[15px] font-bold rounded-xl px-3.5 py-2.5 pr-20 outline-none focus:border-[#2E7D32] focus-visible:ring-2 focus-visible:ring-[#2E7D32]"
+                  className="w-full bg-[#f9f8f6] border border-[#e2dcd0] text-gray-900 text-[15px] font-bold rounded-md px-3.5 py-2.5 pr-20 outline-none focus:border-[#2d5a27] focus-visible:ring-2 focus-visible:ring-[#2d5a27] shadow-sm"
                 />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-extrabold text-[#6B7280] font-heading bg-gray-200 px-2 py-0.5 rounded-md pointer-events-none">
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-extrabold text-gray-600 font-heading bg-[#e8e0d5] px-2 py-0.5 rounded-md pointer-events-none border border-[#e2dcd0]">
                   {((Number(quantityKg) || 0) / 100).toFixed(1)} Qtl
                 </span>
               </div>
@@ -115,64 +116,64 @@ export const MandiPage = () => {
         </div>
 
         {error && (
-          <div className="bg-[#FEF2F2] border border-[#EF4444]/30 rounded-2xl p-4 text-[13px] font-semibold text-[#EF4444]">
-            ⚠️ {error}
+          <div className="bg-red-50 border border-red-200 rounded-md p-4 text-[13px] font-semibold text-red-600">
+            Error: {error}
           </div>
         )}
 
         <div className="space-y-3">
           <div className="flex items-center justify-between px-1">
-            <h3 className="text-[17px] font-bold font-heading text-[#1F2937] flex items-center gap-1.5">
-              <TrendingUp size={17} className="text-[#2E7D32]" />
+            <h3 className="text-[17px] font-bold font-heading text-gray-900 flex items-center gap-1.5">
+              <TrendingUp size={17} className="text-[#2d5a27]" />
               Best Selling Mandis ({mandis.length})
             </h3>
-            <span className="text-[12px] font-semibold text-[#6B7280]">Sorted by Net Revenue</span>
+            <span className="text-[12px] font-semibold text-gray-600">Sorted by Net Revenue</span>
           </div>
 
           {mandis.map((mandi, idx) => (
             <div
               key={idx}
-              className={`bg-white/90 rounded-2xl border ${
-                mandi.isBest ? 'border-2 border-[#2E7D32] shadow-xl shadow-emerald-200/50' : 'border-gray-200 shadow-sm'
-              } p-4 space-y-3 relative overflow-hidden hover:-translate-y-0.5 transition-transform duration-200`}
+              className={`bg-white rounded-md border ${
+                mandi.isBest ? 'border-2 border-[#2d5a27]' : 'border-[#e2dcd0] shadow-sm'
+              } p-4 space-y-3 relative overflow-hidden transition-transform duration-200`}
             >
               {mandi.isBest && (
-                <div className="absolute top-0 right-0 bg-linear-to-r from-[#2E7D32] to-[#F57C00] text-white text-[10px] font-extrabold font-heading px-3 py-1 rounded-bl-xl uppercase tracking-wider shadow-md">
-                  Highest Net Revenue ⭐
+                <div className="absolute top-0 right-0 bg-[#2d5a27] text-white text-[10px] font-extrabold font-heading px-3 py-1 rounded-bl-md uppercase tracking-wider shadow-sm">
+                  Highest Net Revenue
                 </div>
               )}
 
               <div>
-                <h4 className="text-[18px] font-extrabold font-heading text-[#1F2937] leading-snug">
+                <h4 className="text-[18px] font-extrabold font-heading text-gray-900 leading-snug">
                   {mandi.mandiName}
                 </h4>
-                <p className="text-[12px] font-semibold text-[#6B7280] flex items-center gap-1 mt-0.5">
-                  <MapPin size={13} className="text-[#2E7D32] shrink-0" />
-                  {mandi.location} • <strong className="text-[#1F2937]">{mandi.distance} away</strong>
+                <p className="text-[12px] font-semibold text-gray-500 flex items-center gap-1 mt-0.5">
+                  <MapPin size={13} className="text-[#2d5a27] shrink-0" />
+                  {mandi.location} • <strong className="text-gray-900">{mandi.distance} away</strong>
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 bg-[#F9FAFB] p-3 rounded-xl border border-gray-200/70 text-[12px]">
+              <div className="grid grid-cols-2 gap-2 bg-[#f9f8f6] p-3 rounded-md border border-[#e2dcd0] text-[12px]">
                 <div>
-                  <span className="text-[#6B7280] font-medium block">Market Rate:</span>
-                  <strong className="text-[#1F2937] text-[14px] font-heading font-extrabold">
+                  <span className="text-gray-600 font-medium block">Market Rate:</span>
+                  <strong className="text-gray-900 text-[14px] font-heading font-extrabold">
                     {formatCurrency(mandi.marketPricePerQtl)}{' '}
-                    <span className="text-[11px] text-[#6B7280] font-normal">/ qtl</span>
+                    <span className="text-[11px] text-gray-500 font-normal">/ qtl</span>
                   </strong>
                 </div>
                 <div>
-                  <span className="text-[#6B7280] font-medium flex items-center gap-1">
-                    <Truck size={12} className="text-[#F57C00] shrink-0" /> Transport:
+                  <span className="text-gray-600 font-medium flex items-center gap-1">
+                    <Truck size={12} className="text-[#5c4033] shrink-0" /> Transport:
                   </span>
-                  <strong className="text-[#EF4444] text-[14px] font-heading font-extrabold">
+                  <strong className="text-red-600 text-[14px] font-heading font-extrabold">
                     - {formatCurrency(mandi.transportCost)}
                   </strong>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                <span className="text-[13px] font-bold text-[#6B7280]">Final Net Revenue:</span>
-                <span className="bg-emerald-50 text-[#2E7D32] text-[16px] font-extrabold font-heading px-3.5 py-1 rounded-xl border border-emerald-200 flex items-center gap-1 shadow-sm">
+              <div className="flex items-center justify-between pt-2 border-t border-[#e2dcd0]">
+                <span className="text-[13px] font-bold text-gray-600">Final Net Revenue:</span>
+                <span className="bg-[#e8e0d5] text-[#2d5a27] text-[16px] font-extrabold font-heading px-3.5 py-1 rounded-md border border-[#e2dcd0] flex items-center gap-1 shadow-sm">
                   <IndianRupee size={16} />
                   {formatCurrency(mandi.netProfit)}
                 </span>
@@ -181,15 +182,29 @@ export const MandiPage = () => {
           ))}
 
           {mandis.length === 0 && !error && !isLoading && (
-            <div className="bg-white/80 rounded-2xl border border-gray-200 p-8 text-center">
-              <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center text-[#2E7D32] mx-auto mb-3 border border-emerald-200">
+            <div className="bg-white rounded-md border border-[#e2dcd0] p-8 text-center shadow-sm">
+              <div className="w-16 h-16 bg-[#f9f8f6] rounded-md flex items-center justify-center text-[#2d5a27] mx-auto mb-3 border border-[#e2dcd0]">
                 <TrendingUp size={28} />
               </div>
-              <p className="text-[14px] font-semibold text-[#6B7280]">
+              <p className="text-[14px] font-semibold text-gray-600">
                 Enter crop & quantity to see real mandi comparison.
               </p>
             </div>
           )}
+        </div>
+
+        {/* ── GPS Mandi Locator ── */}
+        <div className="ks-card ks-appear p-5 bg-white border border-[#e2dcd0] rounded-md shadow-sm">
+          <div className="flex items-center gap-2 pb-3 mb-3 border-b border-[#e2dcd0]">
+            <span className="p-2 bg-[#f9f8f6] text-[#2d5a27] border border-[#e2dcd0] rounded-md flex items-center justify-center">
+              <MapPin size={16} />
+            </span>
+            <div>
+              <h3 className="text-[14px] font-extrabold text-gray-900 m-0 font-heading">GPS Mandi Locator</h3>
+              <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Interactive Map</span>
+            </div>
+          </div>
+          <MandiMapLocator />
         </div>
       </div>
     </div>

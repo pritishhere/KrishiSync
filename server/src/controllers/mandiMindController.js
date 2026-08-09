@@ -105,3 +105,67 @@ export const analyzeBestMandi = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
+// @desc    Profit Estimator - Calculate distance and net profit for a specific target Mandi
+// @route   POST /api/mandimind/estimate
+export const calculateProfitEstimate = async (req, res) => {
+    try {
+        const { userLat, userLng, cropType = 'wheat', harvestKg = 100 } = req.body;
+
+        if (!userLat || !userLng) {
+            return res.status(400).json({ success: false, message: 'User latitude and longitude are required' });
+        }
+
+        // Hardcoded target: Kolkata Central Mandi
+        const targetLat = 22.5726;
+        const targetLng = 88.3639;
+        const mandiName = "Kolkata Central Mandi";
+
+        // Calculate distance
+        const distanceKm = calculateDistance(userLat, userLng, targetLat, targetLng);
+
+        // Fetch live crop price
+        const apiKey = process.env.MANDI_API_KEY;
+        let pricePerKg = 30; // Fallback price
+        
+        if (apiKey && apiKey !== 'YOUR_MANDI_API_KEY') {
+            const govtUrl = `https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=${apiKey}&format=json&filters[state]=West Bengal&filters[commodity]=${cropType}&limit=1`;
+            try {
+                const govtResponse = await fetch(govtUrl);
+                const govtData = await govtResponse.json();
+                if (govtResponse.ok && govtData.records && govtData.records.length > 0) {
+                    // Modal price is usually per quintal (100kg)
+                    const pricePerQuintal = parseFloat(govtData.records[0].modal_price);
+                    if (!isNaN(pricePerQuintal) && pricePerQuintal > 0) {
+                        pricePerKg = parseFloat((pricePerQuintal / 100).toFixed(2));
+                    }
+                }
+            } catch (err) {
+                console.warn("Failed to fetch live price for estimate, using fallback:", err.message);
+            }
+        }
+
+        // Calculations
+        const transportCostPerKm = 12; // Base rate
+        // Optional weight factor: if harvestKg > 500, maybe rate goes up. We'll keep it simple:
+        const weightFactor = Math.max(1, harvestKg / 100); 
+        const totalTransportCost = Math.round(distanceKm * transportCostPerKm * weightFactor);
+        
+        const grossRevenue = pricePerKg * harvestKg;
+        const netProfit = grossRevenue - totalTransportCost;
+
+        res.status(200).json({
+            success: true,
+            data: {
+                mandiName,
+                distanceKm,
+                pricePerKg,
+                totalTransportCost,
+                grossRevenue,
+                netProfit
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};

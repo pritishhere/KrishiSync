@@ -7,9 +7,17 @@ export default function SmartIrrigation() {
   const [loading, setLoading] = useState(false);
   const [advisory, setAdvisory] = useState(null);
 
-  const fetchAdvisory = () => {
+  const [locationError, setLocationError] = useState('');
+  const [coords, setCoords] = useState(null);
+
+  const fetchAdvisory = (lat = null, lon = null) => {
     setLoading(true);
-    fetch(`${API_BASE_URL}/api/irrigation/advisory?cropType=${cropType}&soilType=${soilType}`)
+    let url = `${API_BASE_URL}/api/irrigation/advisory?cropType=${cropType}&soilType=${soilType}`;
+    if (lat && lon) {
+      url += `&lat=${lat}&lon=${lon}`;
+    }
+
+    fetch(url)
       .then((res) => res.json())
       .then((data) => {
         setAdvisory(data);
@@ -21,8 +29,35 @@ export default function SmartIrrigation() {
       });
   };
 
+  const handleRefresh = () => {
+    if ("geolocation" in navigator) {
+      setLocationError('');
+      setLoading(true);
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          setCoords({ lat, lon });
+          fetchAdvisory(lat, lon);
+        },
+        (error) => {
+          console.warn("Geolocation error:", error.message);
+          setLocationError('Location access denied or failed. Using default region.');
+          fetchAdvisory(coords?.lat, coords?.lon);
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      );
+    } else {
+      fetchAdvisory(coords?.lat, coords?.lon);
+    }
+  };
+
   useEffect(() => {
-    fetchAdvisory();
+    if (coords) {
+      fetchAdvisory(coords.lat, coords.lon);
+    } else {
+      handleRefresh();
+    }
   }, [cropType, soilType]);
 
   return (
@@ -64,7 +99,7 @@ export default function SmartIrrigation() {
 
       <button
         type="button"
-        onClick={fetchAdvisory}
+        onClick={handleRefresh}
         className="w-full bg-[#166534] hover:bg-green-800 text-white font-bold py-2.5 px-4 rounded-xl transition shadow-sm text-xs flex items-center justify-center gap-2"
       >
         {loading ? '🌧️ Calculating Weather Data...' : '🔄 Refresh Weather & Water Advisory'}
@@ -81,9 +116,15 @@ export default function SmartIrrigation() {
             </span>
           </div>
 
-          <div className="text-[11px] text-gray-600 pt-1 border-t border-teal-200/60 flex justify-between">
-            <span>⏰ Best Time: <strong>{advisory.advisory?.bestTime}</strong></span>
-            <span>🌡️ {advisory.weather?.temp}°C | {advisory.weather?.description}</span>
+          <div className="text-[11px] text-gray-600 pt-1 border-t border-teal-200/60 flex flex-col gap-1">
+            <div className="flex justify-between">
+              <span>⏰ Best Time: <strong>{advisory.advisory?.bestTime}</strong></span>
+              <span className="text-right">🌡️ {advisory.weather?.temp}°C | {advisory.weather?.description}</span>
+            </div>
+            <div className="flex justify-between items-center text-[10px]">
+              <span className="text-teal-700 font-semibold truncate max-w-[70%]">📍 {advisory.location}</span>
+              {locationError && <span className="text-red-500 font-medium italic">{locationError}</span>}
+            </div>
           </div>
         </div>
       )}

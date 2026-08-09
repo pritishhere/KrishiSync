@@ -15,7 +15,7 @@ const MobileBottomNavigation = () => {
   ];
 
   return (
-    <nav className="h-[72px] bg-[#FFFFFF] border-t border-gray-200 sticky bottom-0 z-40 w-full shrink-0 font-body pb-safe shadow-[0_-4px_12px_rgba(0,0,0,0.04)]">
+    <nav className="h-[72px] bg-white border-t border-[#e2dcd0] sticky bottom-0 z-40 w-full shrink-0 font-body pb-safe shadow-sm">
       <div className="flex justify-around items-center h-full px-1">
         {navItems.map((item) => {
           const isActive = location.pathname.startsWith(item.path);
@@ -28,16 +28,16 @@ const MobileBottomNavigation = () => {
               className="flex flex-col items-center justify-center flex-1 h-[56px] mx-0.5 rounded-xl transition-all duration-150 relative cursor-pointer"
             >
               {/* Active Indicator Top Bar */}
-              {isActive && <div className="absolute top-0 w-8 h-1 bg-[#2E7D32] rounded-b-full" />}
+              {isActive && <div className="absolute top-0 w-8 h-1 bg-[#2d5a27] rounded-b-full" />}
               
               <Icon 
                 size={22} 
                 strokeWidth={isActive ? 2.5 : 2}
-                className={`mb-1 transition-all duration-150 ${isActive ? 'text-[#2E7D32]' : 'text-[#6B7280]'}`} 
+                className={`mb-1 transition-all duration-150 ${isActive ? 'text-[#2d5a27]' : 'text-gray-500'}`} 
               />
               <span 
                 className={`text-[12px] font-heading tracking-tight transition-all duration-150 ${
-                  isActive ? 'text-[#2E7D32] font-bold' : 'text-[#6B7280] font-medium'
+                  isActive ? 'text-[#2d5a27] font-bold' : 'text-gray-500 font-medium'
                 }`}
               >
                 {item.label}

@@ -56,25 +56,25 @@ const TopBar = () => {
   const avatarLetter = displayName ? displayName.charAt(0).toUpperCase() : 'F';
 
   return (
-    <header className="bg-[#02140c]/90 backdrop-blur-md sticky top-0 z-50 px-4 sm:px-8 py-3 border-b border-emerald-950/80 shadow-md">
+    <header className="bg-white/90 backdrop-blur-md sticky top-0 z-50 px-4 sm:px-8 py-3 border-b border-[#e2dcd0] shadow-sm">
       <div className="flex items-center justify-between gap-4">
         {/* Brand Logo - Subtle & Understated */}
         <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigate('/')}>
-          <div className="bg-emerald-900/80 border border-emerald-700/50 p-2 rounded-xl text-emerald-400 flex items-center justify-center">
+          <div className="bg-[#f9f8f6] border border-[#e2dcd0] p-2 rounded-md text-[#2d5a27] flex items-center justify-center">
             <Leaf size={20} />
           </div>
           <div>
-            <span className="text-xl font-bold tracking-tight block leading-none text-gray-200">
-              Krishi<span className="text-emerald-400">Sync</span>
+            <span className="text-xl font-bold tracking-tight block leading-none text-gray-900">
+              Krishi<span className="text-[#2d5a27]">Sync</span>
             </span>
-            <span className="text-[10px] font-medium text-emerald-500/80 uppercase tracking-widest hidden sm:block mt-0.5">
+            <span className="text-[10px] font-medium text-gray-500 uppercase tracking-widest hidden sm:block mt-0.5">
               Agricultural Platform
             </span>
           </div>
         </div>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-1 bg-[#011a0f] p-1 rounded-xl border border-emerald-950">
+        <nav className="hidden md:flex items-center gap-1 bg-[#f9f8f6] p-1 rounded-md border border-[#e2dcd0]">
           {navItems.map((item) => {
             const isActive = currentPath === item.id;
             const Icon = item.icon;
@@ -82,11 +82,10 @@ const TopBar = () => {
               <button
                 key={item.label}
                 onClick={() => handleNavClick(item)}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs lg:text-sm font-semibold transition-all duration-200 ${
-                  isActive
-                    ? 'bg-emerald-800/90 text-white border border-emerald-700/60 shadow-xs'
-                    : 'text-emerald-300/70 hover:text-white hover:bg-emerald-900/40'
-                }`}
+                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-md text-xs lg:text-sm font-semibold transition-all duration-200 ${isActive
+                    ? 'bg-white text-[#2d5a27] border border-[#e2dcd0] shadow-sm'
+                    : 'text-gray-500 hover:text-gray-900 hover:bg-[#e8e0d5]/50'
+                  }`}
               >
                 <Icon size={15} />
                 <span>{item.label}</span>
@@ -97,20 +96,20 @@ const TopBar = () => {
 
         {/* Far Right: Language Switcher & Actions */}
         <div className="hidden lg:flex items-center gap-3">
-          <div className="bg-[#011a0f] p-0.5 rounded-xl border border-emerald-950">
+          <div className="bg-white p-0.5 rounded-md border border-[#e2dcd0]">
             <LanguageSwitcher />
           </div>
 
           {user ? (
-            <div className="flex items-center gap-2 border-l border-emerald-900/80 pl-3">
-              <div className="w-8 h-8 bg-emerald-900 border border-emerald-700/60 rounded-full flex items-center justify-center text-emerald-300 font-bold text-xs">
+            <div className="flex items-center gap-2 border-l border-[#e2dcd0] pl-3">
+              <div className="w-8 h-8 bg-[#f9f8f6] border border-[#e2dcd0] rounded-full flex items-center justify-center text-[#2d5a27] font-bold text-xs">
                 {avatarLetter}
               </div>
               <button
                 type="button"
                 onClick={handleLogout}
                 title="Logout"
-                className="p-2 rounded-lg bg-emerald-950 hover:bg-red-950 text-emerald-400 hover:text-red-300 transition duration-200 flex items-center justify-center border border-emerald-900"
+                className="p-2 rounded-md bg-[#f9f8f6] hover:bg-red-50 text-gray-500 hover:text-red-600 transition duration-200 flex items-center justify-center border border-[#e2dcd0]"
               >
                 <LogOut size={16} />
               </button>
@@ -126,7 +125,7 @@ const TopBar = () => {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-xl bg-[#011a0f] text-emerald-400 border border-emerald-900 hover:bg-emerald-900/50 transition active:scale-95"
+            className="p-2 rounded-md bg-[#f9f8f6] text-gray-700 border border-[#e2dcd0] hover:bg-gray-100 transition active:scale-95"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -136,9 +135,9 @@ const TopBar = () => {
 
       {/* Collapsible Mobile Menu Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden mt-3 pt-3 border-t border-emerald-900 space-y-3 bg-[#02140c] rounded-2xl p-4 shadow-xl border border-emerald-900 text-white">
-          <div className="sm:hidden pb-2 border-b border-emerald-900">
-            <p className="text-[10px] font-semibold text-emerald-500 uppercase tracking-widest mb-1">Select Language</p>
+        <div className="lg:hidden mt-3 pt-3 border-t border-[#e2dcd0] space-y-3 bg-white rounded-md p-4 shadow-sm border border-[#e2dcd0] text-gray-900">
+          <div className="sm:hidden pb-2 border-b border-[#e2dcd0]">
+            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-widest mb-1">Select Language</p>
             <LanguageSwitcher />
           </div>
 
@@ -149,9 +148,9 @@ const TopBar = () => {
                 <button
                   key={item.label}
                   onClick={() => handleNavClick(item)}
-                  className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-emerald-200 hover:bg-emerald-900/50 hover:text-white transition text-left"
+                  className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-semibold text-gray-700 hover:bg-[#f9f8f6] hover:text-gray-900 transition text-left"
                 >
-                  <Icon size={16} className="text-emerald-400" />
+                  <Icon size={16} className="text-[#2d5a27]" />
                   <span>{item.label}</span>
                 </button>
               );
@@ -159,12 +158,12 @@ const TopBar = () => {
           </nav>
 
           {user && (
-            <div className="pt-2 border-t border-emerald-900 flex items-center justify-between">
-              <span className="text-xs font-semibold text-emerald-300">{displayName}</span>
+            <div className="pt-2 border-t border-[#e2dcd0] flex items-center justify-between">
+              <span className="text-xs font-semibold text-gray-700">{displayName}</span>
               <button
                 type="button"
                 onClick={handleLogout}
-                className="px-3 py-1 bg-red-950 text-red-300 text-xs font-semibold rounded-lg border border-red-900"
+                className="px-3 py-1 bg-red-50 text-red-600 text-xs font-semibold rounded-md border border-red-200"
               >
                 Logout
               </button>

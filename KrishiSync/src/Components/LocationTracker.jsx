@@ -6,7 +6,10 @@ export default function LocationTracker({ onLocationFound }) {
 
   const getLocation = () => {
     if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser!");
+      const fallback = { lat: 22.5726, lng: 88.3639 };
+      setCoords(fallback);
+      if (onLocationFound) onLocationFound(fallback);
+      alert("Geolocation is not supported by your browser. Using default location (Kolkata).");
       return;
     }
 
@@ -27,7 +30,10 @@ export default function LocationTracker({ onLocationFound }) {
       },
       (_error) => {
         setLoading(false);
-        alert("Unable to fetch location. Please enable location permissions in browser.");
+        const fallback = { lat: 22.5726, lng: 88.3639 };
+        setCoords(fallback);
+        if (onLocationFound) onLocationFound(fallback);
+        alert("Unable to fetch location. Using default location (Kolkata).");
       }
     );
   };

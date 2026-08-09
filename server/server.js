@@ -73,4 +73,4 @@ app.get('/api/health', (req, res) => {
 // Server Listen
 app.listen(PORT, () => {
   console.log(`🚀 KrishiSync Server running on port ${PORT} & Connected to MongoDB Atlas Cloud!`);
-});
+});

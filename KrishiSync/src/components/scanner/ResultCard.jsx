@@ -10,14 +10,14 @@ export const ResultCard = ({
   onReset,
 }) => {
   return (
-    <div className="w-full bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-4 font-body">
+    <div className="w-full bg-white rounded-md border border-[#e2dcd0] shadow-sm p-5 space-y-4 font-body">
       {/* Header Badge */}
       <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-        <div className="flex items-center gap-2 text-[#2E7D32] font-bold text-[13px] font-heading">
-          <ShieldCheck size={18} className="text-[#2E7D32]" />
+        <div className="flex items-center gap-2 text-[#2d5a27] font-bold text-[13px] font-heading">
+          <ShieldCheck size={18} className="text-[#2d5a27]" />
           <span>Diagnostic Result</span>
         </div>
-        <span className="bg-emerald-50 text-[#10B981] font-bold text-[12px] px-2.5 py-0.5 rounded-full border border-emerald-200 font-heading">
+        <span className="bg-[#e8e0d5] text-[#2d5a27] font-bold text-[12px] px-2.5 py-0.5 rounded-md border border-[#e2dcd0] font-heading">
           Match Found
         </span>
       </div>
@@ -28,10 +28,10 @@ export const ResultCard = ({
           <img
             src={imageUrl}
             alt="Scanned crop"
-            className="w-20 h-20 object-cover rounded-xl border border-gray-200 shrink-0"
+            className="w-20 h-20 object-cover rounded-md border border-[#e2dcd0] shrink-0"
           />
         ) : (
-          <div className="w-20 h-20 bg-emerald-50 text-[#2E7D32] rounded-xl flex items-center justify-center shrink-0 border border-emerald-200">
+          <div className="w-20 h-20 bg-[#f9f8f6] text-[#2d5a27] rounded-md flex items-center justify-center shrink-0 border border-[#e2dcd0]">
             <Sparkles size={32} />
           </div>
         )}
@@ -42,7 +42,7 @@ export const ResultCard = ({
           </h3>
 
           {/* Confidence Badge */}
-          <div className="inline-flex items-center gap-1.5 bg-emerald-50 text-[#10B981] text-[13px] font-bold px-2.5 py-1 rounded-lg border border-emerald-200">
+          <div className="inline-flex items-center gap-1.5 bg-[#e8e0d5] text-[#2d5a27] text-[13px] font-bold px-2.5 py-1 rounded-md border border-[#e2dcd0]">
             <CheckCircle2 size={15} />
             <span>{confidence}% Confidence</span>
           </div>
@@ -50,8 +50,8 @@ export const ResultCard = ({
       </div>
 
       {/* Recommended Cure Section */}
-      <div className="bg-[#F9FAFB] rounded-xl p-4 border border-gray-200/80 space-y-1.5">
-        <h4 className="text-[13px] font-bold uppercase tracking-wider text-[#2E7D32] font-heading flex items-center gap-1.5">
+      <div className="bg-[#F9FAFB] rounded-md p-4 border border-gray-200/80 space-y-1.5">
+        <h4 className="text-[13px] font-bold uppercase tracking-wider text-[#2d5a27] font-heading flex items-center gap-1.5">
           <AlertCircle size={15} />
           Recommended Cure
         </h4>

@@ -11,13 +11,11 @@ export const voiceService = {
    * @param {{lat:number, lng:number}} coords
    * @param {string} lang - 'hi' | 'bn' | 'en'
    */
-  ask: async (text, coords = { lat: 22.5726, lng: 88.3639 }, lang = 'hi') => {
+  askAgronomist: async (query, lang = 'hi') => {
     const data = await apiFetch('/api/voice/ask', {
       method: 'POST',
       body: {
-        text,
-        lat: coords.lat,
-        lng: coords.lng,
+        text: query,
         lang,
       },
     });
@@ -27,7 +25,7 @@ export const voiceService = {
     }
 
     return {
-      reply: data.reply,
+      answer: data.answer,
       answeredBy: data.answeredBy,
       language: data.language,
       receivedQuery: data.receivedQuery,
