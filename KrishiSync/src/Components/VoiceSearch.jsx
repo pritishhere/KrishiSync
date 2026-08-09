@@ -10,7 +10,7 @@ export default function VoiceSearch() {
   const [aiResponse, setAiResponse] = useState(null);
   const [statusText, setStatusText] = useState('');
   
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const startListening = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -87,8 +87,8 @@ export default function VoiceSearch() {
   return (
     <div className="bg-white/10 backdrop-blur-md p-4 rounded-lg border border-white/20 space-y-3 w-full">
       <div className="text-sm font-bold text-white uppercase tracking-wider flex items-center justify-between">
-        <span className="flex items-center gap-2"><Mic className="w-4 h-4" /> Voice & Text AI Agronomist Query</span>
-        <span className="text-[10px] bg-white/20 text-white px-2 py-0.5 rounded-md border border-white/30">Ask Anything</span>
+        <span className="flex items-center gap-2"><Mic className="w-4 h-4" /> {t('voice_title') || 'Voice & Text AI Agronomist Query'}</span>
+        <span className="text-[10px] bg-white/20 text-white px-2 py-0.5 rounded-md border border-white/30">{t('ask_anything') || 'Ask Anything'}</span>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-2">
@@ -97,7 +97,7 @@ export default function VoiceSearch() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleAskAI()}
-          placeholder="Ask about wheat rust, tomato prices, or water schedule..."
+          placeholder={t('voice_search_placeholder') || "Ask about wheat rust, tomato prices, or water schedule..."}
           className="flex-1 px-4 py-3 rounded-md bg-white text-gray-900 text-sm font-semibold border border-white/60 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#2d5a27]"
         />
         <div className="flex gap-2">
@@ -105,7 +105,7 @@ export default function VoiceSearch() {
           <button 
             type="button"
             onClick={startListening}
-            title="Use Voice Search"
+            title={t('voice_search_title') || "Use Voice Search"}
             className={`w-full sm:w-auto px-4 py-2.5 rounded-md font-bold text-sm transition-all flex items-center justify-center gap-2 border ${
               isListening 
                 ? 'bg-red-50 text-red-600 hover:bg-red-100 border-red-200 animate-pulse' 
@@ -113,7 +113,7 @@ export default function VoiceSearch() {
             }`}
           >
             <Mic className="w-4 h-4" />
-            <span>{isListening ? 'Listening...' : 'Voice Search'}</span>
+            <span>{isListening ? (t('listening') || 'Listening...') : (t('voice_search') || 'Voice Search')}</span>
           </button>
           
           {/* Ask AI Button */}

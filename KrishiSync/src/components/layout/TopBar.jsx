@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Leaf, LogOut, Menu, X, Home, TrendingUp, Calculator, PhoneCall } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import LanguageSwitcher from '../LanguageSwitcher';
 
 const TopBar = () => {
+  const { t } = useTranslation();
   let user = null;
   let logout = null;
   try {
@@ -27,10 +29,10 @@ const TopBar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { id: '/', label: 'Home', icon: Home, anchor: '#home' },
-    { id: '/mandi', label: 'Mandi Prices', icon: TrendingUp, anchor: '#mandi' },
-    { id: '#calculator', label: 'Profit Calculator', icon: Calculator, anchor: '#calculator' },
-    { id: '#advisory', label: 'SMS/Voice Advisory', icon: PhoneCall, anchor: '#advisory' },
+    { id: '/', label: t('nav_home') || 'Home', icon: Home, anchor: '#home' },
+    { id: '/mandi', label: t('nav_mandi') || 'Mandi Prices', icon: TrendingUp, anchor: '#mandi' },
+    { id: '#calculator', label: t('nav_calc') || 'Profit Calculator', icon: Calculator, anchor: '#calculator' },
+    { id: '#advisory', label: t('nav_advisory') || 'SMS/Voice Advisory', icon: PhoneCall, anchor: '#advisory' },
   ];
 
   const handleNavClick = (item) => {

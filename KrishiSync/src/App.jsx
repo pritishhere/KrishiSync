@@ -60,7 +60,7 @@ function MainHome() {
           <div className="lg:col-span-7 space-y-6 text-left">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-950/70 border border-emerald-400/40 text-emerald-300 text-xs sm:text-sm font-extrabold tracking-wide shadow-inner backdrop-blur-md">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-              🌾 AI-Powered Indian Farming Ecosystem
+              🌾 {t('eyebrow') || 'AI-Powered Indian Farming Ecosystem'}
             </span>
 
             {/* HUGE SHIMMER TITLE */}
@@ -69,12 +69,12 @@ function MainHome() {
                 Krishi<span className="text-shimmer">Sync</span>
               </h1>
               <p className="text-lg sm:text-2xl font-bold text-emerald-100 tracking-tight font-heading">
-                Smart Agriculture Intelligence for Every Farmer
+                {t('subtitle') || 'Smart Agriculture Intelligence for Every Farmer'}
               </p>
             </div>
 
             <p className="text-base sm:text-lg text-emerald-100/90 max-w-xl leading-relaxed font-medium">
-              Access real-time Mandi price intelligence, Plant.id AI leaf diagnostics, evapotranspiration water advisories, and 2G SMS connectivity.
+              {t('hero_desc') || 'Access real-time Mandi price intelligence, Plant.id AI leaf diagnostics, evapotranspiration water advisories, and 2G SMS connectivity.'}
             </p>
 
             {/* Integrated Voice & Text Search Drawer */}
@@ -86,15 +86,15 @@ function MainHome() {
             <div className="grid grid-cols-3 gap-3 pt-6 border-t border-emerald-400/20">
               <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/10 text-center">
                 <span className="text-xl sm:text-3xl font-black text-amber-300 block">10,000+</span>
-                <span className="text-[11px] text-emerald-100 font-bold uppercase tracking-wider">Active Farmers</span>
+                <span className="text-[11px] text-emerald-100 font-bold uppercase tracking-wider">{t('active_farmers') || 'Active Farmers'}</span>
               </div>
               <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/10 text-center">
                 <span className="text-xl sm:text-3xl font-black text-emerald-300 block">54 Mandis</span>
-                <span className="text-[11px] text-emerald-100 font-bold uppercase tracking-wider">Live Rates</span>
+                <span className="text-[11px] text-emerald-100 font-bold uppercase tracking-wider">{t('live_mandis') || 'Live Rates'}</span>
               </div>
               <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/10 text-center">
                 <span className="text-xl sm:text-3xl font-black text-cyan-300 block">98.4%</span>
-                <span className="text-[11px] text-emerald-100 font-bold uppercase tracking-wider">AI Accuracy</span>
+                <span className="text-[11px] text-emerald-100 font-bold uppercase tracking-wider">{t('ai_accuracy') || 'AI Accuracy'}</span>
               </div>
             </div>
           </div>
@@ -106,10 +106,10 @@ function MainHome() {
               {/* Badge Overlay */}
               <div className="flex items-center justify-between mb-3 px-2">
                 <span className="text-xs font-black uppercase tracking-widest text-amber-300 flex items-center gap-1.5 font-heading">
-                  🌾 Indian Farmer Pride
+                  🌾 {t('farmer_pride') || 'Indian Farmer Pride'}
                 </span>
                 <span className="text-[10px] bg-emerald-500/40 text-emerald-100 px-3 py-1 rounded-full font-black border border-emerald-400/40 tracking-wider">
-                  VERIFIED KRISHI PARTNER
+                  {t('verified_partner') || 'VERIFIED KRISHI PARTNER'}
                 </span>
               </div>
               
@@ -131,7 +131,7 @@ function MainHome() {
               {/* Bottom Caption */}
               <div className="mt-3 bg-black/30 backdrop-blur-md p-3 rounded-2xl border border-white/15 text-center">
                 <p className="text-xs text-emerald-100 font-extrabold flex items-center justify-center gap-2 m-0">
-                  <span>🌾 Empowering 10,000+ Indian Farmers with Smart AI Intelligence</span>
+                  <span>🌾 {t('empowering_caption') || 'Empowering 10,000+ Indian Farmers with Smart AI Intelligence'}</span>
                 </p>
               </div>
             </div>
