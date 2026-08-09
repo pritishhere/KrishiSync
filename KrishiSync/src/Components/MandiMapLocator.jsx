@@ -59,17 +59,34 @@ async function fetchNearbyMarkets(lat, lng, radiusM = 15000) {
     out center tags;
   `;
 
-  const res = await fetch('https://overpass-api.de/api/interpreter', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: 'data=' + encodeURIComponent(query),
-  });
+  const endpoints = [
+    'https://overpass-api.de/api/interpreter',
+    'https://lz4.overpass-api.de/api/interpreter',
+    'https://z.overpass-api.de/api/interpreter'
+  ];
 
-  if (!res.ok) throw new Error('Overpass API error');
-  const json = await res.json();
-  return json.elements || [];
+  let lastError;
+
+  for (const endpoint of endpoints) {
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'data=' + encodeURIComponent(query),
+      });
+
+      if (!res.ok) throw new Error(`Overpass API error at ${endpoint}: ${res.status}`);
+      const json = await res.json();
+      return json.elements || [];
+    } catch (e) {
+      lastError = e;
+      console.warn(`Failed to fetch from ${endpoint}, trying next...`, e);
+    }
+  }
+
+  throw lastError;
 }
 
 // ─── Parse raw OSM elements into clean market objects ────────────────────────
@@ -149,9 +166,9 @@ export default function MandiMapLocator() {
   const [totalFound, setTotalFound] = useState(0);
 
   // ── Fetch from Overpass with auto-expand if too few results ──────────────
-  const loadMarkets = async (coords, radiusM) => {
+  const loadMarkets = async (coords, radiusM, preserveError = false) => {
     setFetchingMarkets(true);
-    setError('');
+    if (!preserveError) setError('');
     try {
       let elements = await fetchNearbyMarkets(coords.lat, coords.lng, radiusM);
       let parsed = parseMarkets(elements, coords.lat, coords.lng);
@@ -167,10 +184,10 @@ export default function MandiMapLocator() {
       setTotalFound(parsed.length);
 
       if (parsed.length === 0) {
-        setError('No vegetable markets found within 40 km. Try a different location.');
+        setError(prev => prev ? prev + ' | No markets found.' : 'No vegetable markets found within 40 km. Try a different location.');
       }
     } catch (e) {
-      setError('Could not fetch live market data. Check your internet connection.');
+      setError(prev => prev ? prev + ' | Data fetch failed.' : 'Could not fetch live market data. Check your internet connection.');
     } finally {
       setFetchingMarkets(false);
     }
@@ -182,7 +199,7 @@ export default function MandiMapLocator() {
       setUserCoords(fallback);
       setLoading(false);
       setError('Geolocation not supported (HTTP). Showing markets near Kolkata centre.');
-      loadMarkets(fallback, 15000);
+      loadMarkets(fallback, 15000, true);
       return;
     }
     setLoading(true);
@@ -196,15 +213,16 @@ export default function MandiMapLocator() {
         setLoading(false);
         await loadMarkets(coords, 15000);
       },
-      () => {
+      (err) => {
         // Fallback to Kolkata centre
         const fallback = { lat: 22.5726, lng: 88.3639 };
         setUserCoords(fallback);
         setLoading(false);
-        setError('Location permission denied — showing markets near Kolkata centre.');
-        loadMarkets(fallback, 15000);
+        const reason = err.code === 3 ? 'timed out' : 'permission denied';
+        setError(`Location ${reason} — showing markets near Kolkata centre.`);
+        loadMarkets(fallback, 15000, true);
       },
-      { timeout: 10000 }
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
     );
   };
 
