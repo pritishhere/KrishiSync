@@ -4,12 +4,12 @@ import Button from '../common/Button';
 
 export const DashboardError = ({ onRetry }) => {
   return (
-    <div className="w-full bg-[#FEF2F2] border border-[#EF4444]/30 rounded-2xl p-6 text-center shadow-xs flex flex-col items-center justify-center my-4 font-body">
-      <div className="w-14 h-14 bg-[#EF4444]/15 text-[#EF4444] border border-[#EF4444]/20 rounded-2xl flex items-center justify-center mb-4 shadow-xs">
+    <div className="w-full bg-[#fef2f2] border border-[#fca5a5] rounded-md p-6 text-center shadow-sm flex flex-col items-center justify-center my-4 font-body">
+      <div className="w-14 h-14 bg-[#fee2e2] text-[#991b1b] border border-[#fca5a5] rounded-md flex items-center justify-center mb-4 shadow-sm">
         <WifiOff size={28} strokeWidth={2.2} />
       </div>
 
-      <h3 className="text-[18px] font-extrabold font-heading text-[#EF4444] tracking-tight mb-1">
+      <h3 className="text-[18px] font-extrabold font-heading text-[#991b1b] tracking-tight mb-1">
         Unable to Load Weather
       </h3>
 

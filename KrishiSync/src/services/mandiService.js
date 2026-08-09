@@ -6,13 +6,10 @@
 import { apiFetch } from './apiConfig';
 
 const CROPS = [
-  { id: 'wheat', name: 'Wheat (गेहूँ)', icon: '🌾' },
-  { id: 'paddy', name: 'Paddy / Rice (धान)', icon: '🌾' },
-  { id: 'potato', name: 'Potato (आलू)', icon: '🥔' },
-  { id: 'mustard', name: 'Mustard (सरसों)', icon: '🌼' },
-  { id: 'cotton', name: 'Cotton (कपास)', icon: '☁️' },
-  { id: 'tomato', name: 'Tomato (टमाटर)', icon: '🍅' },
-  { id: 'rice', name: 'Rice (चावल)', icon: '🍚' },
+  { id: 'wheat', name: 'Wheat (गेहूँ)' },
+  { id: 'rice', name: 'Rice (चावल)' },
+  { id: 'mustard', name: 'Mustard (सरसों)' },
+  { id: 'tomato', name: 'Tomato (टमाटर)' },
 ];
 
 export const mandiService = {
@@ -61,6 +58,21 @@ export const mandiService = {
     (data.otherOptions || []).forEach((opt) => results.push(mapOption(opt, false)));
 
     return results;
+  },
+
+  /**
+   * Fetch a profit estimate for a specific harvest and user location.
+   * @param {{userLat:number, userLng:number, cropType:string, harvestKg:number}} payload
+   */
+  fetchProfitEstimate: async (payload) => {
+    const data = await apiFetch('/api/mandimind/estimate', {
+      method: 'POST',
+      body: payload,
+    });
+    if (!data || !data.success) {
+      throw new Error(data?.message || 'Failed to fetch profit estimate.');
+    }
+    return data.data;
   },
 
   /**

@@ -138,8 +138,8 @@ export const ScannerPage = () => {
 
         {/* STATE 1: EMPTY STATE */}
         {scanState === 'EMPTY' && (
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-xs p-6 flex flex-col items-center text-center space-y-5 my-2">
-            <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center text-[#2E7D32] border-2 border-green-200/80 shadow-inner my-2">
+          <div className="bg-white rounded-md border border-[#e2dcd0] shadow-sm p-6 flex flex-col items-center text-center space-y-5 my-2">
+            <div className="w-24 h-24 bg-[#f9f8f6] rounded-md flex items-center justify-center text-[#2d5a27] border-2 border-[#e2dcd0] my-2">
               <Scan size={48} strokeWidth={2} />
             </div>
 
@@ -153,8 +153,8 @@ export const ScannerPage = () => {
             </div>
 
             {voiceNotice && (
-              <div className="bg-emerald-50 text-[#2E7D32] border border-emerald-200 px-3 py-1.5 rounded-xl text-[12px] font-semibold flex items-center gap-1.5">
-                <Mic size={14} className={isListening ? 'animate-pulse text-[#F57C00]' : ''} />
+              <div className="bg-[#f9f8f6] text-[#2d5a27] border border-[#e2dcd0] px-3 py-1.5 rounded-md text-[12px] font-semibold flex items-center gap-1.5">
+                <Mic size={14} className={isListening ? 'animate-pulse text-[#5c4033]' : ''} />
                 <span>{voiceNotice}</span>
               </div>
             )}
@@ -177,7 +177,7 @@ export const ScannerPage = () => {
                 disabled={isListening}
                 className="text-[14px] flex items-center justify-center gap-2"
               >
-                <Mic size={18} className={isListening ? 'text-[#F57C00] animate-bounce' : 'text-[#2E7D32]'} />
+                <Mic size={18} className={isListening ? 'text-[#5c4033] animate-bounce' : 'text-[#2d5a27]'} />
                 {isListening ? 'Listening...' : 'Use Voice Command'}
               </Button>
             </div>
@@ -186,21 +186,21 @@ export const ScannerPage = () => {
 
         {/* STATE 2: IMAGE_SELECTED STATE */}
         {scanState === 'IMAGE_SELECTED' && selectedImage && (
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-xs p-5 space-y-4">
+          <div className="bg-white rounded-md border border-[#e2dcd0] shadow-sm p-5 space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-[13px] font-bold text-[#2E7D32] font-heading flex items-center gap-1">
+              <span className="text-[13px] font-bold text-[#2d5a27] font-heading flex items-center gap-1">
                 <CheckCircle2 size={16} /> Image Selected
               </span>
               <button
                 onClick={triggerFileInput}
-                className="text-[12px] font-bold text-[#F57C00] hover:underline flex items-center gap-1 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F57C00] rounded-md px-1"
+                className="text-[12px] font-bold text-[#5c4033] hover:underline flex items-center gap-1 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5c4033] rounded-md px-1"
                 aria-label="Replace selected photo"
               >
                 <Upload size={13} /> Replace Photo
               </button>
             </div>
 
-            <div className="w-full aspect-4/3 rounded-xl border border-gray-200 overflow-hidden relative bg-black/5">
+            <div className="w-full aspect-4/3 rounded-md border border-[#e2dcd0] overflow-hidden relative bg-black/5">
               <img
                 src={selectedImage}
                 alt="Selected crop preview"
@@ -222,22 +222,22 @@ export const ScannerPage = () => {
 
         {/* STATE 3: ANALYZING STATE */}
         {scanState === 'ANALYZING' && (
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-xs p-6 flex flex-col items-center text-center space-y-5">
+          <div className="bg-white rounded-md border border-[#e2dcd0] shadow-sm p-6 flex flex-col items-center text-center space-y-5">
             {selectedImage && (
-              <div className="w-full max-w-[280px] aspect-square rounded-2xl border-2 border-[#2E7D32] overflow-hidden relative shadow-md">
+              <div className="w-full max-w-[280px] aspect-square rounded-md border-2 border-[#2d5a27] overflow-hidden relative shadow-sm">
                 <img
                   src={selectedImage}
                   alt="Analyzing crop"
                   className="w-full h-full object-cover max-w-full"
                 />
-                <div className="absolute inset-x-0 h-1 bg-[#D8FF36] shadow-[0_0_15px_#D8FF36] animate-pulse top-1/2" />
-                <div className="absolute inset-0 bg-[#2E7D32]/10 backdrop-contrast-125" />
+                <div className="absolute inset-x-0 h-1 bg-[#2d5a27] shadow-[0_0_15px_#2d5a27] animate-pulse top-1/2" />
+                <div className="absolute inset-0 bg-[#2d5a27]/10 backdrop-contrast-125" />
               </div>
             )}
 
             <div className="space-y-2">
-              <div className="flex items-center justify-center gap-2 text-[#2E7D32] font-heading font-extrabold text-[18px]">
-                <Loader2 size={24} className="animate-spin text-[#2E7D32]" />
+              <div className="flex items-center justify-center gap-2 text-[#2d5a27] font-heading font-extrabold text-[18px]">
+                <Loader2 size={24} className="animate-spin text-[#2d5a27]" />
                 <span>Analyzing your plant...</span>
               </div>
               <p className="text-[13px] font-medium text-[#6B7280]">
@@ -264,8 +264,8 @@ export const ScannerPage = () => {
 
         {/* STATE 5: ERROR STATE */}
         {scanState === 'ERROR' && (
-          <div className="bg-[#FEF2F2] rounded-2xl border border-[#EF4444]/30 p-6 text-center space-y-4 font-body shadow-xs">
-            <div className="w-16 h-16 bg-[#EF4444]/15 text-[#EF4444] rounded-2xl flex items-center justify-center mx-auto border border-[#EF4444]/20 shadow-xs">
+          <div className="bg-red-50 rounded-md border border-red-200 p-6 text-center space-y-4 font-body shadow-sm">
+            <div className="w-16 h-16 bg-white text-red-600 rounded-md flex items-center justify-center mx-auto border border-red-200 shadow-sm">
               <AlertTriangle size={32} strokeWidth={2.2} />
             </div>
 
@@ -294,8 +294,8 @@ export const ScannerPage = () => {
 
         {/* STATE 6: NOT_A_PLANT STATE */}
         {scanState === 'NOT_A_PLANT' && (
-          <div className="bg-[#FFF8F0] rounded-2xl border border-[#F57C00]/30 p-6 text-center space-y-4 font-body shadow-xs">
-            <div className="w-16 h-16 bg-[#F57C00]/15 text-[#F57C00] rounded-2xl flex items-center justify-center mx-auto border border-[#F57C00]/20 shadow-xs">
+          <div className="bg-orange-50 rounded-md border border-orange-200 p-6 text-center space-y-4 font-body shadow-sm">
+            <div className="w-16 h-16 bg-white text-orange-600 rounded-md flex items-center justify-center mx-auto border border-orange-200 shadow-sm">
               <FileQuestion size={32} strokeWidth={2.2} />
             </div>
 

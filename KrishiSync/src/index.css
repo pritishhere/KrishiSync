@@ -3,17 +3,17 @@
 @layer base {
   :root {
     /* Exact KrishiSync Design Tokens */
-    --color-primary: #2E7D32;        /* Forest Green */
-    --color-secondary: #F57C00;      /* Harvest Orange */
-    --color-bg-base: #F9FAFB;        /* Off-White / Light Gray */
+    --color-primary: #2d5a27;        /* Deep Forest Green */
+    --color-secondary: #e8e0d5;      /* Earthy Beige */
+    --color-bg-base: #f9f8f6;        /* Warm Off-White */
     --color-surface: #FFFFFF;        /* Pure White */
-    --color-text-primary: #1F2937;   /* Dark Charcoal */
-    --color-text-secondary: #6B7280; /* Slate Gray */
-    --color-success: #10B981;        /* Emerald Success */
-    --color-danger: #EF4444;         /* Signal Red / Danger */
+    --color-text-primary: #111827;   /* text-gray-900 */
+    --color-text-secondary: #374151; /* text-gray-700 */
+    --color-success: #2d5a27;        
+    --color-danger: #EF4444;         
 
-    --font-heading: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
-    --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+    --font-heading: 'Inter', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
   }
 
   body {
@@ -25,11 +25,11 @@
 }
 
 .font-heading {
-  font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
 .font-body {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
 .pb-safe {
