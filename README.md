@@ -15,7 +15,6 @@
 <br />
 
 <!-- Hero Image Placeholder -->
-![KrishiSync Hero](https://via.placeholder.com/1000x500.png?text=KrishiSync+Hero+Section+-+Add+Screenshot+Here)
 
 </div>
 
